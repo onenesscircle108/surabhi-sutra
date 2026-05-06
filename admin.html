@@ -133,6 +133,7 @@ body{font-family:Arial,sans-serif;background:var(--beige);min-height:100vh;}
       <li><button class="nav-btn" onclick="showSection('welcome',this)">👋 Welcome Screen</button></li>
       <li><button class="nav-btn" onclick="showSection('bundle',this)">🎁 Bundle</button></li>
       <li><button class="nav-btn" onclick="showSection('productpage',this)">📄 Product Page</button></li>
+      <li><button class="nav-btn" onclick="showSection('fomo',this)">📣 FOMO</button></li>
       <li><button class="nav-btn" onclick="showSection('orders',this)">🛒 Orders</button></li>
       <li><button class="nav-btn" onclick="showSection('about',this)">📖 About Page</button></li>
       <li><button class="nav-btn" onclick="showSection('account',this)">👤 Account</button></li>
@@ -524,6 +525,40 @@ body{font-family:Arial,sans-serif;background:var(--beige);min-height:100vh;}
       </div>
     </div>
 
+    <!-- FOMO -->
+    <div id="fomo" class="section">
+      <div class="page-title">FOMO Popup Settings</div>
+
+      <div class="form-box">
+        <h3>Timing</h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div class="form-group" style="margin:0;">
+            <label>Show popup every (seconds)</label>
+            <input type="number" id="fomo-interval" min="10" max="300" value="28">
+            <small style="color:var(--text-mid);font-size:11px;">Recommended: 25–30 sec</small>
+          </div>
+          <div class="form-group" style="margin:0;">
+            <label>Keep visible for (seconds)</label>
+            <input type="number" id="fomo-duration" min="2" max="30" value="5">
+            <small style="color:var(--text-mid);font-size:11px;">Recommended: 4–6 sec</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-box">
+        <h3>Names by Region</h3>
+        <p style="font-size:13px;color:var(--text-mid);margin-bottom:10px;">
+          Format: <code style="background:var(--beige);padding:2px 6px;border-radius:3px;">Region{Name1, Name2, Name3}; Region2{Name4, Name5}</code><br>
+          Example: <code style="background:var(--beige);padding:2px 6px;border-radius:3px;">Karnataka{Anuj Rao, Shreya Shetty}; Goa{Praful D Silva, Anjali}</code>
+        </p>
+        <textarea id="fomo-names-raw" style="min-height:160px;font-size:13px;font-family:monospace;" placeholder="Karnataka{Anuj Rao, Shreya Shetty, Pooja Naik}; Goa{Praful D Silva, Anjali Dessai}; Delhi{Rahul Sharma, Priya Mehta}"></textarea>
+      </div>
+
+      <div id="fomo-alert" style="margin-bottom:8px;"></div>
+      <button class="btn" onclick="saveFomoSettings()">Save FOMO Settings</button>
+      <button class="btn btn-grey" onclick="resetFomoSettings()" style="margin-left:8px;">Reset</button>
+    </div>
+
     <!-- ORDERS -->
     <div id="orders" class="section">
       <div class="page-title">Customer Orders</div>
@@ -834,6 +869,7 @@ async function showSection(id, btn) {
   if (id === 'bundle')      renderBundleEditor();
   if (id === 'productpage') { await loadProducts(); renderProductPageEditor(); }
   if (id === 'orders')      { await loadOrders(); renderOrders(); }
+  if (id === 'fomo')        renderFomoEditor();
   if (id === 'about')       renderAboutEditor();
   if (id === 'account')     { renderAboutEditor(); await loadAdmins(); }
 }
@@ -1630,6 +1666,41 @@ function resetProductPageSettings() {
   renderProductPageEditor();
   const al = document.getElementById('pp-alert');
   if (al) { al.innerHTML = '<div class="alert alert-success">Settings reset to defaults.</div>'; setTimeout(() => al.innerHTML = '', 2000); }
+}
+
+// ─── FOMO SETTINGS ─────────────────────────────────────────
+const DEFAULT_FOMO = {
+  interval:  28,
+  duration:  5,
+  names_raw: 'Karnataka{Anuj Rao, Shreya Shetty, Pooja Naik}; Goa{Praful D Silva, Anjali Dessai}; Delhi{Rahul Sharma, Priya Mehta}; Mumbai{Siddharth Joshi, Neha Kulkarni}; Tamil Nadu{Kavya Rajan, Arun Babu}'
+};
+
+function getFomoSettings() {
+  try { return { ...DEFAULT_FOMO, ...JSON.parse(localStorage.getItem('surabhi_fomo_settings') || '{}') }; }
+  catch { return { ...DEFAULT_FOMO }; }
+}
+
+function renderFomoEditor() {
+  const s = getFomoSettings();
+  document.getElementById('fomo-interval').value   = s.interval;
+  document.getElementById('fomo-duration').value   = s.duration;
+  document.getElementById('fomo-names-raw').value  = s.names_raw;
+}
+
+function saveFomoSettings() {
+  const settings = {
+    interval:  parseInt(document.getElementById('fomo-interval').value)  || DEFAULT_FOMO.interval,
+    duration:  parseInt(document.getElementById('fomo-duration').value)  || DEFAULT_FOMO.duration,
+    names_raw: (document.getElementById('fomo-names-raw').value || '').trim()
+  };
+  localStorage.setItem('surabhi_fomo_settings', JSON.stringify(settings));
+  showAlert('fomo-alert', 'FOMO settings saved!', 'success');
+}
+
+function resetFomoSettings() {
+  localStorage.removeItem('surabhi_fomo_settings');
+  renderFomoEditor();
+  showAlert('fomo-alert', 'Reset to defaults.', 'success');
 }
 
 // ─── ABOUT PAGE ────────────────────────────────────────────

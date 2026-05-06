@@ -463,6 +463,29 @@
   <button class="pd-sticky-atc" onclick="addToCartPage();openCartDrawer()">Add to Cart</button>
 </div>
 
+<!-- Floating Buy Bar (appears after scrolling past bundle) -->
+<div id="pd-float-bar" class="pd-float-bar">
+  <div class="pd-float-bar-inner">
+    <img id="float-bar-img" src="" alt="" class="pd-float-bar-img">
+    <div class="pd-float-bar-info">
+      <div id="float-bar-name" class="pd-float-bar-name"></div>
+      <div class="pd-float-bar-tag">🔥 Popular right now</div>
+    </div>
+    <div id="float-bar-price" class="pd-float-bar-price"></div>
+    <button class="pd-float-bar-btn" onclick="addToCartPage();openCartDrawer()">Add to Cart</button>
+  </div>
+</div>
+
+<!-- FOMO Badge -->
+<div id="fomo-badge" class="fomo-badge">
+  <div class="fomo-avatar" id="fomo-avatar">A</div>
+  <div class="fomo-text">
+    <div class="fomo-name-line"><strong id="fomo-name">Anuj Rao</strong> from <span id="fomo-location">Karnataka</span></div>
+    <div class="fomo-sub">bought this <span id="fomo-mins">3</span> min ago</div>
+  </div>
+  <button class="fomo-close" onclick="closeFomo()">×</button>
+</div>
+
 <script src="js/product-detail.js"></script>
 </body>
 </html>

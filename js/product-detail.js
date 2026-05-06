@@ -713,6 +713,7 @@ function renderProduct(p) {
 
   renderGallery(p.images || []);
   renderBundle(p);
+  populateFloatBar(p);
 }
 
 // ─────────────────────────────
@@ -1077,4 +1078,104 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') closeCartDrawer();
   });
+
+  initFloatBar();
+  initFomo();
 });
+
+// ─────────────────────────────
+// FLOATING BUY BAR
+// ─────────────────────────────
+function initFloatBar() {
+  const bundleWrap = document.getElementById('pd-bundle-wrap');
+  const bar        = document.getElementById('pd-float-bar');
+  if (!bundleWrap || !bar) return;
+  window.addEventListener('scroll', () => {
+    const bottom = bundleWrap.getBoundingClientRect().bottom;
+    bar.classList.toggle('visible', bottom < 0);
+  }, { passive: true });
+}
+
+function populateFloatBar(p) {
+  const imgEl   = document.getElementById('float-bar-img');
+  const nameEl  = document.getElementById('float-bar-name');
+  const priceEl = document.getElementById('float-bar-price');
+  try {
+    const imgs = typeof p.images === 'string' ? JSON.parse(p.images) : (p.images || []);
+    if (imgEl && imgs[0]) imgEl.src = driveThumb(imgs[0], 96);
+  } catch {}
+  if (nameEl)  nameEl.textContent = p.name || '';
+  if (priceEl) {
+    const price = parseFloat(p.price) || 0;
+    const orig  = Math.round(price / 0.85);
+    priceEl.innerHTML = `₹${price} <s style="color:var(--text-light);font-size:.8em;font-weight:400;">₹${orig}</s>`;
+  }
+}
+
+// ─────────────────────────────
+// FOMO BADGE
+// ─────────────────────────────
+function getFomoSettings() {
+  try {
+    const s = JSON.parse(localStorage.getItem('surabhi_fomo_settings') || '{}');
+    return {
+      interval: s.interval || 28,
+      duration: s.duration || 5,
+      names_raw: s.names_raw || ''
+    };
+  } catch { return { interval: 28, duration: 5, names_raw: '' }; }
+}
+
+function parseFomoNames(raw) {
+  const entries = [];
+  if (!raw) return entries;
+  raw.split(';').forEach(block => {
+    const m = block.trim().match(/^(.+?)\{(.+)\}$/);
+    if (!m) return;
+    const location = m[1].trim();
+    m[2].split(',').map(n => n.trim()).filter(Boolean).forEach(name => {
+      entries.push({ location, name });
+    });
+  });
+  return entries;
+}
+
+let _fomoTimer = null;
+
+function initFomo() {
+  const s       = getFomoSettings();
+  const entries = parseFomoNames(s.names_raw);
+  if (!entries.length) return;
+
+  function showFomo() {
+    const entry = entries[Math.floor(Math.random() * entries.length)];
+    const mins  = Math.floor(Math.random() * 22) + 2;
+    const badge = document.getElementById('fomo-badge');
+    const avatarEl   = document.getElementById('fomo-avatar');
+    const nameEl     = document.getElementById('fomo-name');
+    const locationEl = document.getElementById('fomo-location');
+    const minsEl     = document.getElementById('fomo-mins');
+    if (!badge) return;
+
+    if (avatarEl)   avatarEl.textContent   = entry.name.charAt(0).toUpperCase();
+    if (nameEl)     nameEl.textContent     = entry.name;
+    if (locationEl) locationEl.textContent = entry.location;
+    if (minsEl)     minsEl.textContent     = mins;
+
+    badge.classList.remove('fomo-out');
+    badge.classList.add('fomo-in');
+
+    clearTimeout(_fomoTimer);
+    _fomoTimer = setTimeout(() => closeFomo(), s.duration * 1000);
+  }
+
+  setInterval(showFomo, s.interval * 1000);
+  setTimeout(showFomo,  s.interval * 1000);
+}
+
+function closeFomo() {
+  const badge = document.getElementById('fomo-badge');
+  if (!badge) return;
+  badge.classList.remove('fomo-in');
+  badge.classList.add('fomo-out');
+}
