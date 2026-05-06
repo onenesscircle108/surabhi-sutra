@@ -87,8 +87,11 @@ body{font-family:Arial,sans-serif;background:var(--beige);min-height:100vh;}
 .pp-benefit-row-edit,.pp-usage-item-edit,.pp-ing-item-edit{display:grid;gap:6px;background:#fff;border:1px solid var(--border);border-radius:6px;padding:10px;position:relative;}
 .pp-benefit-row-edit{grid-template-columns:1fr 1fr auto;}
 .pp-usage-item-edit{grid-template-columns:1fr;}
-.pp-ing-item-edit{grid-template-columns:48px 1fr 1fr auto;}
+.pp-ing-item-edit{grid-template-columns:1fr 1fr auto;}
 .pp-ing-item-edit textarea{grid-column:1/-1;}
+.pp-ing-img-row{display:flex;align-items:center;gap:8px;grid-column:1/-2;}
+.pp-ing-img-row img{width:40px;height:40px;object-fit:cover;border-radius:4px;border:1px solid var(--border);display:none;}
+.pp-ing-img-row img.visible{display:block;}
 .pp-row-remove{width:28px;height:28px;border:none;background:#fee2e2;color:#dc2626;border-radius:4px;cursor:pointer;font-size:16px;line-height:1;align-self:start;margin-top:2px;}
 .pp-check-item{display:flex;align-items:center;gap:8px;padding:8px 10px;background:#fff;border:1px solid var(--border);border-radius:4px;font-size:13px;cursor:pointer;}
 .pp-check-item input{width:16px;height:16px;accent-color:var(--sage);flex-shrink:0;}
@@ -1357,13 +1360,18 @@ function readFeatureCards() {
 
 // ── Ingredients Editor ──
 function ingItemHTML(item) {
+  const hasImg = item.image && item.image.trim();
   return `
     <div class="pp-ing-item-edit">
-      <input type="text" placeholder="🌿" value="${escA(item.emoji)}" style="font-size:20px;text-align:center;padding:4px;">
       <input type="text" placeholder="Badge (e.g. Exfoliant)" value="${escA(item.badge)}">
       <input type="text" placeholder="Ingredient name" value="${escA(item.name)}">
       <button class="pp-row-remove" onclick="removePPRow(this)" title="Remove">×</button>
-      <textarea placeholder="Short description (1–2 sentences)" style="resize:vertical;min-height:52px;">${escA(item.desc)}</textarea>
+      <div class="pp-ing-img-row" style="grid-column:1/-1;">
+        <img src="${escA(item.image||'')}" class="${hasImg?'visible':''}" alt="preview" onerror="this.classList.remove('visible')" onload="this.classList.add('visible')">
+        <input type="url" placeholder="Image URL (optional — leave empty to use emoji)" value="${escA(item.image||'')}" style="flex:1;" oninput="updateIngImgPreview(this)">
+        <input type="text" placeholder="🌿 Emoji (fallback)" value="${escA(item.emoji)}" style="width:90px;font-size:18px;text-align:center;">
+      </div>
+      <textarea placeholder="Short description (1–2 sentences)" style="resize:vertical;min-height:52px;grid-column:1/-1;">${escA(item.desc)}</textarea>
     </div>`;
 }
 
@@ -1376,8 +1384,15 @@ function renderIngredientsEditor() {
   wrap.innerHTML = (s.ingredients.items || []).map(ingItemHTML).join('');
 }
 
+function updateIngImgPreview(input) {
+  const img = input.closest('.pp-ing-img-row')?.querySelector('img');
+  if (!img) return;
+  img.src = input.value.trim();
+  if (!input.value.trim()) img.classList.remove('visible');
+}
+
 function addPPIngItem() {
-  document.getElementById('pp-ing-items')?.insertAdjacentHTML('beforeend', ingItemHTML({emoji:'🌿',badge:'',name:'',desc:''}));
+  document.getElementById('pp-ing-items')?.insertAdjacentHTML('beforeend', ingItemHTML({emoji:'🌿',badge:'',name:'',desc:'',image:''}));
 }
 
 function readIngredients() {
@@ -1387,10 +1402,11 @@ function readIngredients() {
     items:   Array.from(document.querySelectorAll('#pp-ing-items .pp-ing-item-edit')).map(row => {
       const inputs = row.querySelectorAll('input');
       return {
-        emoji: inputs[0]?.value.trim() || '🌿',
-        badge: inputs[1]?.value.trim() || '',
-        name:  inputs[2]?.value.trim() || '',
-        desc:  row.querySelector('textarea')?.value.trim() || ''
+        badge:  inputs[0]?.value.trim() || '',
+        name:   inputs[1]?.value.trim() || '',
+        image:  inputs[2]?.value.trim() || '',
+        emoji:  inputs[3]?.value.trim() || '🌿',
+        desc:   row.querySelector('textarea')?.value.trim() || ''
       };
     })
   };
