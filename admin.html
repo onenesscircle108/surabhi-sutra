@@ -481,6 +481,23 @@ body{font-family:Arial,sans-serif;background:var(--beige);min-height:100vh;}
           <label>Section Title</label>
           <input type="text" id="cmp-title">
         </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;">
+          <div class="form-group" style="margin:0;">
+            <label>Column 1 Header</label>
+            <input type="text" id="cmp-col1" placeholder="Feature">
+          </div>
+          <div class="form-group" style="margin:0;">
+            <label>Column 2 Header</label>
+            <input type="text" id="cmp-col2" placeholder="Your Product">
+          </div>
+          <div class="form-group" style="margin:0;">
+            <label>Column 3 Header</label>
+            <input type="text" id="cmp-col3" placeholder="Regular Face Wash">
+          </div>
+        </div>
+        <label style="font-weight:600;font-size:.85rem;display:block;margin-bottom:6px;">Table Rows</label>
+        <div id="cmp-rows-list"></div>
+        <button class="btn btn-sm" onclick="addCmpRow()" style="margin-top:6px;">+ Add Row</button>
       </div>
 
       <!-- USAGE & SAFETY EDITOR -->
@@ -1211,7 +1228,20 @@ const DEFAULT_ING = { eyebrow:"What's Inside", title:'Bitter, active, fresh & wh
   {emoji:'🥜', badge:'Exfoliant', name:'Real Dals & Besan', desc:'Gently exfoliates dead skin cells, absorbs excess sebum, and delivers plant-based proteins.'},
   {emoji:'🪵', badge:'Soothing', name:'Sandalwood', desc:'Cools, soothes, and imparts a subtle natural fragrance while toning the skin.'}
 ]};
-const DEFAULT_CMP = { eyebrow:'Why Choose Tikta', title:'Bitter is Better Than Every Face Wash!' };
+const DEFAULT_CMP = {
+  eyebrow: 'Why Choose Tikta',
+  title:   'Bitter is Better Than Every Face Wash!',
+  col1:    'Feature',
+  col2:    'Your Product',
+  col3:    'Regular Face Wash',
+  rows: [
+    { feature: 'Cleansing Power',   yours: '✅ Deep pore, gentle',      theirs: '⚠️ Surface only' },
+    { feature: 'Non-Drying',        yours: '✅ Moisture balanced',      theirs: '❌ Often strips barrier' },
+    { feature: 'Long Term Effect',  yours: '✅ Visible brightening',    theirs: '❌ No cumulative benefit' },
+    { feature: 'Ingredients',       yours: '✅ 100% real botanicals',   theirs: '❌ Synthetic surfactants' },
+    { feature: 'Paraben & Sulfate', yours: '✅ Zero',                   theirs: '❌ Usually present' }
+  ]
+};
 const DEFAULT_USG = { eyebrow:'How to Use', title:'Usage & Safety', items:[
   {title:'How to Use', content:'Use twice a day — morning and evening. Apply to damp skin, massage for 60 seconds, rinse with lukewarm water.'},
   {title:'Patch Test', content:'Apply a small amount to the inner forearm and wait 24 hours before facial use. Discontinue if irritation occurs.'},
@@ -1236,7 +1266,14 @@ function getPPSettings() {
       delivery_items:  stored.delivery_items  ?? DEFAULT_DELIVERY_ITEMS,
       feature_cards:   stored.feature_cards   ?? DEFAULT_FC,
       ingredients:     stored.ingredients     ?? DEFAULT_ING,
-      compare:         stored.compare         ?? DEFAULT_CMP,
+      compare:         (() => { const c = stored.compare || {}; return {
+        eyebrow: c.eyebrow ?? DEFAULT_CMP.eyebrow,
+        title:   c.title   ?? DEFAULT_CMP.title,
+        col1:    c.col1    ?? DEFAULT_CMP.col1,
+        col2:    c.col2    ?? DEFAULT_CMP.col2,
+        col3:    c.col3    ?? DEFAULT_CMP.col3,
+        rows:    (c.rows && c.rows.length) ? c.rows : DEFAULT_CMP.rows
+      }; })(),
       usage:           stored.usage           ?? DEFAULT_USG
     };
   } catch { return { ...DEFAULT_PP_SETTINGS }; }
@@ -1430,6 +1467,43 @@ function readDeliveryItems() {
   })).filter(d => d.text);
 }
 
+function cmpRowHTML(row, i) {
+  return `<div class="pp-fc-card" id="cmp-row-${i}" style="margin-bottom:8px;">
+    <div style="display:flex;gap:6px;align-items:center;margin-bottom:4px;">
+      <span style="font-size:.78rem;font-weight:600;color:var(--text-mid);min-width:22px;">#${i+1}</span>
+      <input type="text" placeholder="Feature" value="${(row.feature||'').replace(/"/g,'&quot;')}" style="flex:1;" id="cmp-row-${i}-feat">
+      <button class="btn btn-sm btn-danger" onclick="document.getElementById('cmp-row-${i}').remove()">✕</button>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+      <input type="text" placeholder="Your product value" value="${(row.yours||'').replace(/"/g,'&quot;')}" id="cmp-row-${i}-yours">
+      <input type="text" placeholder="Their product value" value="${(row.theirs||'').replace(/"/g,'&quot;')}" id="cmp-row-${i}-theirs">
+    </div>
+  </div>`;
+}
+
+function renderCmpRows(rows) {
+  const wrap = document.getElementById('cmp-rows-list');
+  if (!wrap) return;
+  wrap.innerHTML = rows.map((r, i) => cmpRowHTML(r, i)).join('');
+}
+
+function addCmpRow() {
+  const rows = readCmpRows();
+  rows.push({ feature: '', yours: '', theirs: '' });
+  renderCmpRows(rows);
+}
+
+function readCmpRows() {
+  const rows = [];
+  document.querySelectorAll('#cmp-rows-list .pp-fc-card').forEach((el, i) => {
+    const feat   = el.querySelector(`#cmp-row-${i}-feat`);
+    const yours  = el.querySelector(`#cmp-row-${i}-yours`);
+    const theirs = el.querySelector(`#cmp-row-${i}-theirs`);
+    if (feat) rows.push({ feature: feat.value.trim(), yours: (yours?.value||'').trim(), theirs: (theirs?.value||'').trim() });
+  });
+  return rows;
+}
+
 function renderUsageEditor() {
   const s    = getPPSettings();
   const wrap = document.getElementById('pp-usg-items');
@@ -1486,8 +1560,15 @@ function renderProductPageEditor() {
   // Comparison
   const cmpE = document.getElementById('cmp-eyebrow');
   const cmpT = document.getElementById('cmp-title');
-  if (cmpE) cmpE.value = s.compare.eyebrow || '';
-  if (cmpT) cmpT.value = s.compare.title   || '';
+  const cmpC1 = document.getElementById('cmp-col1');
+  const cmpC2 = document.getElementById('cmp-col2');
+  const cmpC3 = document.getElementById('cmp-col3');
+  if (cmpE)  cmpE.value  = s.compare.eyebrow || '';
+  if (cmpT)  cmpT.value  = s.compare.title   || '';
+  if (cmpC1) cmpC1.value = s.compare.col1    || '';
+  if (cmpC2) cmpC2.value = s.compare.col2    || '';
+  if (cmpC3) cmpC3.value = s.compare.col3    || '';
+  renderCmpRows(s.compare.rows || DEFAULT_CMP.rows);
   renderUsageEditor();
 }
 
@@ -1509,7 +1590,11 @@ function saveProductPageSettings() {
     ingredients:    readIngredients(),
     compare: {
       eyebrow: document.getElementById('cmp-eyebrow')?.value.trim() || '',
-      title:   document.getElementById('cmp-title')?.value.trim()   || ''
+      title:   document.getElementById('cmp-title')?.value.trim()   || '',
+      col1:    document.getElementById('cmp-col1')?.value.trim()    || '',
+      col2:    document.getElementById('cmp-col2')?.value.trim()    || '',
+      col3:    document.getElementById('cmp-col3')?.value.trim()    || '',
+      rows:    readCmpRows()
     },
     usage: readUsage()
   };

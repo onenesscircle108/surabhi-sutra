@@ -125,7 +125,17 @@ const DEFAULT_PD_CONTENT = {
   },
   compare: {
     eyebrow: 'Why Choose Tikta',
-    title: 'Bitter is Better Than Every Face Wash!'
+    title:   'Bitter is Better Than Every Face Wash!',
+    col1:    'Feature',
+    col2:    'Your Product',
+    col3:    'Regular Face Wash',
+    rows: [
+      { feature: 'Cleansing Power',    yours: '✅ Deep pore, gentle',      theirs: '⚠️ Surface only' },
+      { feature: 'Non-Drying',         yours: '✅ Moisture balanced',      theirs: '❌ Often strips barrier' },
+      { feature: 'Long Term Effect',   yours: '✅ Visible brightening',    theirs: '❌ No cumulative benefit' },
+      { feature: 'Ingredients',        yours: '✅ 100% real botanicals',   theirs: '❌ Synthetic surfactants' },
+      { feature: 'Paraben & Sulfate',  yours: '✅ Zero',                   theirs: '❌ Usually present' }
+    ]
   },
   usage: {
     eyebrow: 'How to Use',
@@ -149,14 +159,23 @@ function getPDContent() {
   try {
     const s = JSON.parse(localStorage.getItem('surabhi_product_page_settings') || '{}');
     const rawDelivery = s.delivery_items || DEFAULT_PD_CONTENT.delivery_items;
+    const rawCmp      = s.compare        || {};
+    const defCmp      = DEFAULT_PD_CONTENT.compare;
     return {
-      subtitle:       s.subtitle       || DEFAULT_PD_CONTENT.subtitle,
-      trust_badges:   s.trust_badges   || DEFAULT_PD_CONTENT.trust_badges,
+      subtitle:       s.subtitle      || DEFAULT_PD_CONTENT.subtitle,
+      trust_badges:   s.trust_badges  || DEFAULT_PD_CONTENT.trust_badges,
       delivery_items: rawDelivery.map(normalizeDeliveryItem),
-      feature_cards:  s.feature_cards  || DEFAULT_PD_CONTENT.feature_cards,
-      ingredients:    s.ingredients    || DEFAULT_PD_CONTENT.ingredients,
-      compare:        s.compare        || DEFAULT_PD_CONTENT.compare,
-      usage:          s.usage          || DEFAULT_PD_CONTENT.usage
+      feature_cards:  s.feature_cards || DEFAULT_PD_CONTENT.feature_cards,
+      ingredients:    s.ingredients   || DEFAULT_PD_CONTENT.ingredients,
+      compare: {
+        eyebrow: rawCmp.eyebrow || defCmp.eyebrow,
+        title:   rawCmp.title   || defCmp.title,
+        col1:    rawCmp.col1    || defCmp.col1,
+        col2:    rawCmp.col2    || defCmp.col2,
+        col3:    rawCmp.col3    || defCmp.col3,
+        rows:    (rawCmp.rows && rawCmp.rows.length) ? rawCmp.rows : defCmp.rows
+      },
+      usage: s.usage || DEFAULT_PD_CONTENT.usage
     };
   } catch { return DEFAULT_PD_CONTENT; }
 }
@@ -354,6 +373,10 @@ function renderCompare() {
   if (!wrap) return;
   const { compare } = getPDContent();
 
+  const rows = (compare.rows || []).map(r =>
+    `<tr><td>${esc(r.feature)}</td><td>${esc(r.yours)}</td><td>${esc(r.theirs)}</td></tr>`
+  ).join('');
+
   wrap.innerHTML = `
     <div class="pd-compare-section">
       <div class="pd-container pd-compare-inner">
@@ -363,18 +386,12 @@ function renderCompare() {
           <table class="pd-compare-table">
             <thead>
               <tr>
-                <th style="text-align:left;">Feature</th>
-                <th>Your Product</th>
-                <th>Regular Face Wash</th>
+                <th style="text-align:left;">${esc(compare.col1 || 'Feature')}</th>
+                <th>${esc(compare.col2 || 'Your Product')}</th>
+                <th>${esc(compare.col3 || 'Regular Face Wash')}</th>
               </tr>
             </thead>
-            <tbody>
-              <tr><td>Cleansing Power</td><td>✅ Deep pore, gentle</td><td>⚠️ Surface only</td></tr>
-              <tr><td>Non-Drying</td><td>✅ Moisture balanced</td><td>❌ Often strips barrier</td></tr>
-              <tr><td>Long Term Effect</td><td>✅ Visible brightening</td><td>❌ No cumulative benefit</td></tr>
-              <tr><td>Ingredients</td><td>✅ 100% real botanicals</td><td>❌ Synthetic surfactants</td></tr>
-              <tr><td>Paraben &amp; Sulfate</td><td>✅ Zero</td><td>❌ Usually present</td></tr>
-            </tbody>
+            <tbody>${rows}</tbody>
           </table>
         </div>
       </div>
