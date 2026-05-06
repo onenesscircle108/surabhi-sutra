@@ -1,0 +1,11 @@
+# Keep Apps Script source files off the public repo
+# (they contain your Sheet ID and server logic)
+apps_script.md
+Code.gs
+
+# macOS
+.DS_Store
+
+# Editor
+.vscode/
+*.swp

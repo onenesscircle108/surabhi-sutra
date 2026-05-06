@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About Us — Surabhi Sutra</title>
+  <link rel="stylesheet" href="css/product-detail.css">
+  <style>
+    /* ── ABOUT HERO ── */
+    .ab-hero{
+      background:var(--text-dark);
+      color:#fff;
+      padding:5rem 1.5rem 4rem;
+      text-align:center;
+      position:relative;
+      overflow:hidden;
+    }
+    .ab-hero::before{
+      content:'';
+      position:absolute;inset:0;
+      background:linear-gradient(135deg,rgba(74,124,89,.35) 0%,transparent 60%);
+      pointer-events:none;
+    }
+    .ab-hero-inner{position:relative;z-index:1;max-width:680px;margin:auto;}
+    .ab-hero-eyebrow{
+      font-size:11px;letter-spacing:4px;text-transform:uppercase;
+      color:var(--sage-light);margin-bottom:1rem;
+      font-family:Georgia,'Times New Roman',serif;
+    }
+    .ab-hero-heading{
+      font-size:clamp(2rem,5vw,3rem);
+      color:#fff;line-height:1.2;margin-bottom:1.25rem;
+      font-family:Georgia,'Times New Roman',serif;
+      white-space:pre-line;
+    }
+    .ab-hero-sub{
+      font-size:15px;color:rgba(255,255,255,.75);
+      line-height:1.8;
+    }
+
+    /* ── STORY ── */
+    .ab-story{
+      max-width:800px;margin:0 auto;
+      padding:4rem 1.5rem;
+      text-align:center;
+    }
+    .ab-story-title{
+      font-size:clamp(1.4rem,3vw,1.9rem);
+      color:var(--text-dark);margin-bottom:1.5rem;
+      font-family:Georgia,'Times New Roman',serif;
+    }
+    .ab-story-text{
+      font-size:15px;color:var(--text-mid);
+      line-height:1.9;
+    }
+
+    /* ── VALUES ── */
+    .ab-values{
+      background:var(--beige);
+      padding:4rem 1.5rem;
+    }
+    .ab-values-inner{max-width:1100px;margin:auto;}
+    .ab-values-eyebrow{
+      font-size:11px;letter-spacing:3px;text-transform:uppercase;
+      color:var(--text-light);margin-bottom:.5rem;text-align:center;
+      font-family:Georgia,'Times New Roman',serif;
+    }
+    .ab-values-title{
+      font-size:clamp(1.4rem,3vw,1.9rem);
+      color:var(--text-dark);text-align:center;margin-bottom:2.5rem;
+      font-family:Georgia,'Times New Roman',serif;
+    }
+    .ab-values-grid{
+      display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;
+    }
+    @media(max-width:900px){.ab-values-grid{grid-template-columns:1fr 1fr;}}
+    @media(max-width:480px){.ab-values-grid{grid-template-columns:1fr;}}
+    .ab-value-card{
+      background:#fff;border:1px solid var(--border);
+      border-radius:6px;padding:2rem 1.5rem;
+      text-align:center;
+    }
+    .ab-value-icon{
+      width:52px;height:52px;border-radius:50%;
+      background:#e8f5e9;margin:0 auto 1rem;
+      display:flex;align-items:center;justify-content:center;
+    }
+    .ab-value-icon svg{
+      width:24px;height:24px;stroke:var(--sage);
+      fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;
+    }
+    .ab-value-title{
+      font-size:15px;font-weight:700;color:var(--text-dark);
+      font-family:Georgia,'Times New Roman',serif;margin-bottom:.6rem;
+    }
+    .ab-value-desc{font-size:13px;color:var(--text-mid);line-height:1.7;}
+
+    /* ── FOUNDER ── */
+    .ab-founder{
+      max-width:900px;margin:0 auto;
+      padding:4rem 1.5rem;
+      display:grid;grid-template-columns:220px 1fr;gap:3rem;
+      align-items:center;
+    }
+    @media(max-width:700px){
+      .ab-founder{grid-template-columns:1fr;text-align:center;}
+      .ab-founder-img-wrap{margin:0 auto;}
+    }
+    .ab-founder-img-wrap{
+      width:200px;height:200px;border-radius:50%;
+      overflow:hidden;background:var(--beige);
+      border:4px solid #e8f5e9;
+      display:flex;align-items:center;justify-content:center;
+      font-size:4rem;
+      flex-shrink:0;
+    }
+    .ab-founder-img-wrap img{width:100%;height:100%;object-fit:cover;}
+    .ab-founder-eyebrow{
+      font-size:11px;letter-spacing:3px;text-transform:uppercase;
+      color:var(--sage);margin-bottom:.5rem;
+      font-family:Georgia,'Times New Roman',serif;
+    }
+    .ab-founder-note{
+      font-size:15px;color:var(--text-mid);
+      line-height:1.9;font-style:italic;margin-bottom:1.25rem;
+    }
+    .ab-founder-sig{
+      font-size:14px;font-weight:700;color:var(--text-dark);
+      font-family:Georgia,'Times New Roman',serif;
+    }
+    .ab-founder-role{font-size:12px;color:var(--text-light);margin-top:3px;}
+
+    /* ── DIVIDER ── */
+    .ab-divider{
+      width:60px;height:2px;background:var(--sage);
+      margin:1.5rem auto;
+    }
+    .ab-divider.left{margin:1.5rem 0;}
+  </style>
+</head>
+<body>
+
+<!-- ─── PROMO BAR ─── -->
+<div class="pd-promo-bar">
+  <div class="pd-promo-msg" id="promo-msg">
+    <span>FLAT 40% OFF on orders above ₹799 | Use Code</span>
+    <span class="pd-promo-code" onclick="copyPromo('SUMMER40',this)">SUMMER40</span>
+  </div>
+</div>
+
+<!-- ─── NAV ─── -->
+<nav class="pd-nav">
+  <div class="pd-nav-logo" onclick="window.location.href='index.html'">SURABHI SUTRA</div>
+  <ul class="pd-nav-links">
+    <li><a onclick="window.location.href='index.html'">Home</a></li>
+    <li><a onclick="window.location.href='index.html'">Shop</a></li>
+    <li><a onclick="window.location.href='about.html'" style="color:var(--sage);">About</a></li>
+  </ul>
+  <button class="pd-nav-cart" onclick="window.location.href='index.html?goto=cart'">
+    Cart (<span id="cart-count">0</span>)
+  </button>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="ab-hero">
+  <div class="ab-hero-inner">
+    <p class="ab-hero-eyebrow" id="ab-eyebrow">Our Story</p>
+    <h1 class="ab-hero-heading" id="ab-heading">Born from Ancient Wisdom,
+Made for Modern Skin</h1>
+    <p class="ab-hero-sub" id="ab-subtext">Surabhi Sutra began as a quiet conviction — that the plants and rituals our grandmothers swore by hold answers that no laboratory has bettered.</p>
+  </div>
+</section>
+
+<!-- ─── BRAND STORY ─── -->
+<section class="ab-story">
+  <h2 class="ab-story-title" id="ab-story-title">Why Surabhi Sutra Exists</h2>
+  <div class="ab-divider"></div>
+  <p class="ab-story-text" id="ab-story-text">We started Surabhi Sutra because we were tired of reading ingredient lists we couldn't pronounce. Raised on Ayurvedic home remedies, we knew that turmeric, neem, and rose water worked — not because of marketing, but because generations of women had proved it. Every product we make starts with a question: what would a wise grandmother recommend? Then we listen.</p>
+</section>
+
+<!-- ─── VALUES ─── -->
+<section class="ab-values">
+  <div class="ab-values-inner">
+    <p class="ab-values-eyebrow">What We Stand For</p>
+    <h2 class="ab-values-title">Our Values</h2>
+    <div class="ab-values-grid" id="ab-values-grid">
+      <!-- filled by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOUNDER ─── -->
+<div class="ab-founder">
+  <div>
+    <div class="ab-founder-img-wrap" id="ab-founder-img-wrap">
+      🌿
+    </div>
+  </div>
+  <div>
+    <p class="ab-founder-eyebrow">A Word from the Founder</p>
+    <div class="ab-divider left"></div>
+    <p class="ab-founder-note" id="ab-founder-note">I started Surabhi Sutra in my kitchen, surrounded by herbs my mother taught me to trust. Years later, the philosophy has not changed — only the reach. Every jar that leaves our workshop carries that same quiet intention: to give your skin what it was always meant to have.</p>
+    <p class="ab-founder-sig" id="ab-founder-name">Priya Sharma</p>
+    <p class="ab-founder-role" id="ab-founder-role">Founder &amp; Chief Herbalist</p>
+  </div>
+</div>
+
+<!-- ─── FOOTER ─── -->
+<footer class="pd-footer">
+  <div class="pd-footer-inner">
+    <div class="pd-footer-brand">
+      <h4>Surabhi Sutra</h4>
+      <p>Surabhi Sutra brings five thousand years of Ayurvedic wisdom into your daily skincare ritual. Every product is made fresh, in small batches, with ingredients your skin was always meant to meet.</p>
+      <div class="pd-footer-socials">
+        <a href="#" title="Telegram">T</a>
+        <a href="#" title="Facebook">f</a>
+        <a href="#" title="Instagram">ig</a>
+      </div>
+    </div>
+    <div>
+      <h4>Shop For</h4>
+      <ul>
+        <li><a href="index.html">Face Care</a></li>
+        <li><a href="index.html">Hair Care</a></li>
+        <li><a href="index.html">Body Care</a></li>
+        <li><a href="index.html">Baby Care</a></li>
+        <li><a href="index.html">Men's Range</a></li>
+        <li><a href="index.html">Gifting</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Useful Links</h4>
+      <ul>
+        <li><a href="#">FAQs</a></li>
+        <li><a href="#">Track Order</a></li>
+        <li><a href="#">Blogs</a></li>
+        <li><a href="#">Returns Policy</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="admin.html" style="opacity:.3;">Admin</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Contact Us</h4>
+      <ul>
+        <li><a href="#">WhatsApp Us</a></li>
+        <li><a href="#">hello@surabhisutra.in</a></li>
+      </ul>
+      <h4 style="margin-top:1.5rem;">Office</h4>
+      <p style="font-size:12px;opacity:.6;line-height:1.8;">Surabhi Sutra Naturals<br>New Delhi, India — 110001</p>
+    </div>
+  </div>
+  <div class="pd-footer-bottom">
+    © 2025 Surabhi Sutra · All rights reserved · Made with love in India
+  </div>
+</footer>
+
+<script>
+const VALUE_ICONS = [
+  `<svg viewBox="0 0 24 24"><path d="M12 2C6 2 3 8 3 12c0 5 4 9 9 9s9-4 9-9C21 7 17 2 12 2z"/><path d="M12 2c0 0 0 10-6 14"/></svg>`,
+  `<svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 1 9 9v1H3v-1a9 9 0 0 1 9-9z"/><path d="M12 3v10"/></svg>`,
+  `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>`,
+  `<svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`
+];
+
+function getAboutSettings() {
+  const DEFAULT = {
+    eyebrow:      'Our Story',
+    heading:      'Born from Ancient Wisdom,\nMade for Modern Skin',
+    subtext:      'Surabhi Sutra began as a quiet conviction — that the plants and rituals our grandmothers swore by hold answers that no laboratory has bettered.',
+    story_title:  'Why Surabhi Sutra Exists',
+    story:        'We started Surabhi Sutra because we were tired of reading ingredient lists we couldn\'t pronounce. Raised on Ayurvedic home remedies, we knew that turmeric, neem, and rose water worked — not because of marketing, but because generations of women had proved it. Every product we make starts with a question: what would a wise grandmother recommend? Then we listen.',
+    values: [
+      { title: '100% Natural',    desc: 'Every botanical is plant-derived and ethically sourced. No synthetic chemicals, artificial fragrances, or harmful preservatives — ever.' },
+      { title: 'Small Batch',     desc: 'Crafted in small batches to preserve the integrity and potency of each ingredient. Freshness is not a marketing word here — it is the whole point.' },
+      { title: 'Ayurveda Rooted', desc: 'Formulas inspired by five thousand years of Ayurvedic wisdom, thoughtfully adapted for contemporary skin without losing the soul of the tradition.' },
+      { title: 'Cruelty Free',    desc: 'Certified cruelty-free and vegan. We believe beauty should never come at the cost of another living being\'s well-being.' }
+    ],
+    founder_name: 'Priya Sharma',
+    founder_role: 'Founder & Chief Herbalist',
+    founder_note: 'I started Surabhi Sutra in my kitchen, surrounded by herbs my mother taught me to trust. Years later, the philosophy has not changed — only the reach. Every jar that leaves our workshop carries that same quiet intention: to give your skin what it was always meant to have.',
+    founder_img:  ''
+  };
+  try {
+    const stored = JSON.parse(localStorage.getItem('surabhi_about_settings') || '{}');
+    return { ...DEFAULT, ...stored, values: (stored.values?.length === 4 ? stored.values : DEFAULT.values) };
+  } catch { return DEFAULT; }
+}
+
+function driveThumb(url) {
+  const m = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+  return m ? `https://drive.google.com/thumbnail?id=${m[1]}&sz=w400` : url;
+}
+
+function render() {
+  const s = getAboutSettings();
+
+  document.title = 'About Us — Surabhi Sutra';
+
+  const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+  set('ab-eyebrow',      s.eyebrow);
+  set('ab-story-title',  s.story_title);
+  set('ab-story-text',   s.story);
+  set('ab-founder-note', s.founder_note);
+  set('ab-founder-name', s.founder_name);
+  set('ab-founder-role', s.founder_role);
+
+  const headingEl = document.getElementById('ab-heading');
+  if (headingEl) headingEl.textContent = s.heading.replace(/\\n/g, '\n');
+
+  const subtextEl = document.getElementById('ab-subtext');
+  if (subtextEl) subtextEl.textContent = s.subtext;
+
+  // Founder image
+  const imgWrap = document.getElementById('ab-founder-img-wrap');
+  if (imgWrap && s.founder_img) {
+    imgWrap.innerHTML = `<img src="${driveThumb(s.founder_img)}" alt="${s.founder_name}" onerror="this.parentElement.innerHTML='🌿'">`;
+  }
+
+  // Values grid
+  const grid = document.getElementById('ab-values-grid');
+  if (grid) {
+    grid.innerHTML = s.values.map((v, i) => `
+      <div class="ab-value-card">
+        <div class="ab-value-icon">${VALUE_ICONS[i]}</div>
+        <div class="ab-value-title">${v.title}</div>
+        <div class="ab-value-desc">${v.desc}</div>
+      </div>`).join('');
+  }
+
+  // Cart count
+  try {
+    const cart = JSON.parse(localStorage.getItem('surabhi_cart') || '[]');
+    const count = cart.reduce((s, i) => s + (i.qty || 1), 0);
+    const el = document.getElementById('cart-count');
+    if (el) el.textContent = count;
+  } catch {}
+}
+
+function copyPromo(code, el) {
+  navigator.clipboard.writeText(code).catch(() => {});
+  const orig = el.textContent;
+  el.textContent = 'COPIED!';
+  setTimeout(() => { el.textContent = orig; }, 1500);
+}
+
+render();
+</script>
+</body>
+</html>

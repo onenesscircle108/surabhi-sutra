@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Surabhi Sutra</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+
+<!-- ─────────────────────────────
+     WELCOME SCREEN
+───────────────────────────── -->
+<div id="welcome-screen">
+  <div class="welcome-logo">Surabhi Sutra</div>
+  <div class="welcome-divider"></div>
+  <h1 class="welcome-title" id="welcome-title">Welcome to<br>Surabhi Sutra</h1>
+  <p class="welcome-tagline" id="welcome-tagline">Explore the Sanatan way of living</p>
+  <div class="welcome-loader"></div>
+</div>
+
+<!-- ─────────────────────────────
+     TOAST
+───────────────────────────── -->
+<div id="toast-container"></div>
+
+<!-- ─────────────────────────────
+     NAV
+───────────────────────────── -->
+<nav>
+  <div class="nav-logo" onclick="showPage('home')">SURABHI SUTRA</div>
+
+  <ul class="nav-links">
+    <li><a onclick="showPage('home')">Home</a></li>
+    <li><a onclick="showPage('shop')">Shop</a></li>
+    <li><a onclick="window.location.href='about.html'">About</a></li>
+  </ul>
+
+  <button class="nav-cart" onclick="showPage('cart')">
+    Cart (<span id="cart-count">0</span>)
+  </button>
+</nav>
+
+
+<!-- ═══════════════════════════
+     HOME PAGE
+═══════════════════════════ -->
+<div id="home" class="page active">
+
+  <!-- HERO -->
+  <section class="hero">
+    <p class="hero-eyebrow" id="hero-eyebrow">Ayurveda Inspired</p>
+    <h1 class="hero-title" id="hero-title">
+      Loved by Skin, <span>Powered by Nature</span>
+    </h1>
+    <p class="hero-sub" id="hero-sub">
+      Pure ingredients. Honest formulations. Skincare rooted in tradition.
+    </p>
+    <button onclick="showPage('shop')" class="btn-primary">
+      Shop the Collection
+    </button>
+  </section>
+
+  <!-- MARQUEE BAR -->
+  <div class="marquee-bar">
+    <div class="marquee-track" id="marquee-track">
+      <!-- JS populates from localStorage site content -->
+      <span>Free from parabens</span>
+      <span class="marquee-dot">·</span>
+      <span>Cruelty free</span>
+      <span class="marquee-dot">·</span>
+      <span>Sustainably sourced</span>
+      <span class="marquee-dot">·</span>
+      <span>Ayurveda inspired</span>
+      <span class="marquee-dot">·</span>
+      <span>Small batch crafted</span>
+      <span class="marquee-dot">·</span>
+      <!-- Duplicate set for seamless loop -->
+      <span>Free from parabens</span>
+      <span class="marquee-dot">·</span>
+      <span>Cruelty free</span>
+      <span class="marquee-dot">·</span>
+      <span>Sustainably sourced</span>
+      <span class="marquee-dot">·</span>
+      <span>Ayurveda inspired</span>
+      <span class="marquee-dot">·</span>
+      <span>Small batch crafted</span>
+      <span class="marquee-dot">·</span>
+    </div>
+  </div>
+
+  <!-- BESTSELLERS -->
+  <section class="section">
+    <div class="container">
+      <p class="section-label" id="bestsellers-label">Bestsellers</p>
+      <h2 class="section-title" id="bestsellers-title">Customer favorites</h2>
+
+      <div id="home-products" class="products-grid">
+        <p class="loading-text">Loading products...</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- OUR PROMISE -->
+  <section class="section values-section">
+    <div class="container">
+      <p class="section-label" id="promise-label">Our Promise</p>
+      <h2 class="section-title" id="promise-title">What we stand for</h2>
+
+      <!-- JS re-renders this from localStorage; static fallback shown on first load -->
+      <div class="values-grid" id="promise-cards">
+
+        <div class="value-card">
+          <div class="value-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2C6 2 3 8 3 12c0 5 4 9 9 9s9-4 9-9C21 7 17 2 12 2z"/>
+              <path d="M12 2c0 0 0 10-6 14"/>
+            </svg>
+          </div>
+          <h4 class="value-title">100% Natural</h4>
+          <p class="value-desc">Every ingredient is plant-derived, ethically sourced and free from synthetic chemicals.</p>
+        </div>
+
+        <div class="value-card">
+          <div class="value-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+          </div>
+          <h4 class="value-title">Cruelty Free</h4>
+          <p class="value-desc">We never test on animals. Our products are certified cruelty-free and vegan.</p>
+        </div>
+
+        <div class="value-card">
+          <div class="value-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <rect x="7" y="2" width="10" height="3" rx="1"/>
+              <path d="M6 5h12l1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L6 5z"/>
+              <line x1="9" y1="10" x2="15" y2="10"/>
+            </svg>
+          </div>
+          <h4 class="value-title">Small Batch</h4>
+          <p class="value-desc">Crafted in small batches to ensure maximum freshness and potency in every product.</p>
+        </div>
+
+        <div class="value-card">
+          <div class="value-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 22c0 0-7-5-7-11a7 7 0 0 1 14 0c0 6-7 11-7 11z"/>
+              <path d="M12 11c0 0-3-3-3-6a3 3 0 0 1 6 0c0 3-3 6-3 6z"/>
+            </svg>
+          </div>
+          <h4 class="value-title">Ayurveda Rooted</h4>
+          <p class="value-desc">Formulas inspired by 5,000 years of Ayurvedic wisdom, adapted for modern skin.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</div><!-- end #home -->
+
+
+<!-- ═══════════════════════════
+     SHOP PAGE
+═══════════════════════════ -->
+<div id="shop" class="page">
+  <section class="section">
+    <div class="container">
+      <p class="section-label">THE COLLECTION</p>
+      <h2 class="section-title">Discover your ritual</h2>
+
+      <div id="shop-products" class="products-grid">
+        <p class="loading-text">Loading products...</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+<!-- ═══════════════════════════
+     PRODUCT PAGE
+═══════════════════════════ -->
+<div id="product" class="page">
+  <section class="section">
+    <div class="container">
+
+      <div class="back-link" onclick="showPage('shop')">
+        ← Back to Shop
+      </div>
+
+      <!-- Two-column product layout — rendered by JS into this wrapper -->
+      <div id="product-content"></div>
+
+      <!-- RELATED PRODUCTS -->
+      <div class="section">
+        <p class="section-label">COMPLETE YOUR RITUAL</p>
+        <h2 class="section-title">Explore complementary botanicals</h2>
+        <div id="related-products" class="products-grid"></div>
+      </div>
+
+    </div>
+  </section>
+</div><!-- end #product -->
+
+
+<!-- ═══════════════════════════
+     CART PAGE
+═══════════════════════════ -->
+<div id="cart" class="page">
+  <section class="section">
+    <div class="container">
+      <p class="section-label">YOUR RITUAL</p>
+      <h2 class="section-title">Review your selections</h2>
+      <div id="cart-content"></div>
+    </div>
+  </section>
+</div>
+
+
+<!-- ═══════════════════════════
+     CHECKOUT PAGE
+═══════════════════════════ -->
+<div id="checkout" class="page">
+  <section class="section">
+    <div class="container">
+      <p class="section-label">FINALIZE</p>
+      <h2 class="section-title">Complete your ritual</h2>
+
+      <div id="checkout-alert"></div>
+
+      <div class="checkout-form" id="checkout-form-wrap">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="co-name" placeholder="e.g. Priya Sharma" required/>
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="co-email" placeholder="priya@example.com" required/>
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" id="co-phone" placeholder="+91 98765 43210" required/>
+        </div>
+        <div class="form-group">
+          <label>Delivery Address</label>
+          <textarea id="co-address" placeholder="Full address with PIN code" required></textarea>
+        </div>
+
+        <div class="checkout-order-summary" id="checkout-summary"></div>
+
+        <button class="btn-primary" id="place-order-btn" onclick="placeOrder()">
+          Place Order
+        </button>
+      </div>
+
+      <!-- Confirmation — shown after successful order -->
+      <div id="order-confirmation" style="display:none;" class="order-confirmation">
+        <div class="confirmation-icon">✓</div>
+        <h3>Ritual Complete</h3>
+        <p id="confirmation-msg">Thank you. Your journey with Surabhi Sutra begins now.</p>
+        <button class="btn-primary" onclick="showPage('shop')" style="margin-top:1.5rem;">
+          Continue Shopping
+        </button>
+      </div>
+
+    </div>
+  </section>
+</div><!-- end #checkout -->
+
+
+<!-- ═══════════════════════════
+     FOOTER
+═══════════════════════════ -->
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <div class="site-footer-brand">
+      <h4>Surabhi Sutra</h4>
+      <p>Surabhi Sutra brings five thousand years of Ayurvedic wisdom into your daily skincare ritual. Every product is made fresh, in small batches, with ingredients your skin was always meant to meet. No shortcuts. No synthetics. Just nature, distilled.</p>
+      <div class="site-footer-socials">
+        <a href="#" title="Telegram">T</a>
+        <a href="#" title="Facebook">f</a>
+        <a href="#" title="Instagram">ig</a>
+      </div>
+    </div>
+    <div>
+      <h4>Shop For</h4>
+      <ul>
+        <li><a onclick="showPage('shop')">Face Care</a></li>
+        <li><a onclick="showPage('shop')">Hair Care</a></li>
+        <li><a onclick="showPage('shop')">Body Care</a></li>
+        <li><a onclick="showPage('shop')">Baby Care</a></li>
+        <li><a onclick="showPage('shop')">Men's Range</a></li>
+        <li><a onclick="showPage('shop')">Gifting</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Useful Links</h4>
+      <ul>
+        <li><a href="#">FAQs</a></li>
+        <li><a href="#">Track Order</a></li>
+        <li><a href="#">Blogs</a></li>
+        <li><a href="#">Returns Policy</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="admin.html" style="opacity:.3;">Admin</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Contact Us</h4>
+      <ul>
+        <li><a href="#">WhatsApp Us</a></li>
+        <li><a href="#">hello@surabhisutra.in</a></li>
+      </ul>
+      <h4 style="margin-top:1.5rem;">Office</h4>
+      <p style="font-size:12px;opacity:.6;line-height:1.8;">Surabhi Sutra Naturals<br>New Delhi, India — 110001</p>
+    </div>
+  </div>
+  <div class="site-footer-bottom">
+    © 2025 Surabhi Sutra · All rights reserved · Made with love in India
+  </div>
+</footer>
+
+
+<!-- ─────────────────────────────
+     JS
+───────────────────────────── -->
+<script src="js/app.js"></script>
+
+</body>
+</html>

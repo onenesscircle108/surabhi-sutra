@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title id="page-title">Product — Surabhi Sutra</title>
+  <link rel="stylesheet" href="css/product-detail.css">
+</head>
+<body>
+
+<!-- TOAST -->
+<div id="pd-toast"></div>
+
+<!-- ─── CART DRAWER ─── -->
+<div id="cart-drawer" class="pd-cart-drawer" aria-hidden="true">
+  <div class="pd-cart-overlay" onclick="closeCartDrawer()"></div>
+  <div class="pd-cart-panel">
+    <div class="pd-cart-panel-head">
+      <h3>Your Cart</h3>
+      <button class="pd-cart-panel-close" onclick="closeCartDrawer()">&#10005;</button>
+    </div>
+    <div class="pd-cart-panel-body" id="cart-panel-body">
+      <p class="pd-cart-empty">Your bag is empty.</p>
+    </div>
+    <div class="pd-cart-panel-foot" id="cart-panel-foot" style="display:none;">
+      <div class="pd-cart-subtotal-row">
+        <span>Subtotal</span>
+        <span id="cart-panel-subtotal">₹0</span>
+      </div>
+      <button class="pd-cart-checkout-btn" onclick="window.location.href='index.html?goto=checkout'">Proceed to Checkout</button>
+      <button class="pd-cart-continue-btn" onclick="closeCartDrawer()">Continue Shopping</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── PROMO BAR ─── -->
+<div class="pd-promo-bar">
+  <div class="pd-promo-msg" id="promo-msg">
+    <span>FLAT 40% OFF on orders above ₹799 | Use Code</span>
+    <span class="pd-promo-code" onclick="copyPromo('SUMMER40', this)">SUMMER40</span>
+  </div>
+</div>
+
+<!-- ─── NAV ─── -->
+<nav class="pd-nav">
+  <div class="pd-nav-logo" onclick="window.location.href='index.html'">SURABHI SUTRA</div>
+  <ul class="pd-nav-links">
+    <li><a onclick="window.location.href='index.html'">Home</a></li>
+    <li><a onclick="window.location.href='index.html'">Shop</a></li>
+    <li><a onclick="window.location.href='about.html'">About</a></li>
+  </ul>
+  <button class="pd-nav-cart" onclick="openCartDrawer()">
+    Cart (<span id="cart-badge">0</span>)
+  </button>
+</nav>
+
+<!-- ─── HERO ─── -->
+<div class="pd-hero">
+
+  <!-- LEFT: Gallery -->
+  <div class="pd-gallery">
+    <div class="pd-gallery-main" id="gallery-main">
+      <img id="main-img" src="" alt="Product" fetchpriority="high" loading="eager">
+      <button class="pd-gallery-arrow prev" onclick="prevImg()">&#8249;</button>
+      <button class="pd-gallery-arrow next" onclick="nextImg()">&#8250;</button>
+      <button class="pd-share-btn" onclick="shareProduct()" title="Share">
+        <svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+      </button>
+    </div>
+    <div class="pd-thumbs" id="thumbs-strip"></div>
+  </div>
+
+  <!-- RIGHT: Info -->
+  <div class="pd-info">
+    <div class="pd-breadcrumb">
+      <a href="index.html">Home</a><span>/</span>
+      <a href="index.html">Face</a><span>/</span>
+      <span id="bc-category">Fresh Daily Tikta</span><span>/</span>
+      <span id="bc-name">Brightening Ubtan Tikta Face Wash</span>
+    </div>
+
+    <h1 class="pd-product-name pd-skeleton" id="detail-name">&nbsp;</h1>
+    <p class="pd-product-subtitle" id="detail-subtitle"></p>
+
+    <div class="pd-rating-row" id="pd-rating-row" style="visibility:hidden;">
+      <span class="pd-stars" id="pd-stars">★★★★★</span>
+      <span class="pd-rating-val" id="pd-rating-val">0.0</span>
+      <a class="pd-rating-count" id="pd-rating-count" href="#reviews">0 Reviews</a>
+    </div>
+
+    <p class="pd-short-desc" id="detail-desc">
+      A 100% natural face wash made with real dals, besan, wild turmeric, and sandalwood.
+      Rooted in ancient Ubtan wisdom, this daily cleanser brightens, detans, and balances
+      your skin without stripping its natural oils. Fresh-made in small batches for
+      maximum potency.
+    </p>
+
+    <!-- Trust badges — rendered by JS -->
+    <div class="pd-trust-row" id="pd-trust-row"></div>
+
+    <!-- Price -->
+    <div class="pd-price-row pd-skeleton-row" id="price-row">
+      <span class="pd-price-current" id="detail-price">₹—</span>
+      <span class="pd-price-original" id="detail-original"></span>
+      <span class="pd-discount-badge" id="detail-discount" style="display:none"></span>
+    </div>
+
+    <!-- Qty + ATC -->
+    <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1rem;flex-wrap:wrap;">
+      <div class="pd-qty-row">
+        <button class="pd-qty-btn" onclick="changeQty(-1)">−</button>
+        <div class="pd-qty-val" id="qty-val">1</div>
+        <button class="pd-qty-btn" onclick="changeQty(1)">+</button>
+      </div>
+      <button class="pd-atc-btn" id="atc-btn" onclick="addToCartPage()" style="flex:1;min-width:160px;">
+        Add to Cart
+      </button>
+    </div>
+
+    <!-- Bundle section — rendered by JS only if bundle_enabled === yes -->
+    <div id="pd-bundle-wrap"></div>
+
+    <!-- Delivery — rendered by JS -->
+    <div class="pd-delivery-box" id="pd-delivery-box"></div>
+
+  </div>
+</div><!-- end .pd-hero -->
+
+<!-- ─── S2–S4: Feature Cards (rendered by JS) ─── -->
+<div id="pd-feature-cards-wrap"></div>
+
+<!-- ─── S5: Ingredients (rendered by JS) ─── -->
+<div id="pd-ingredients-wrap"></div>
+
+<!-- ─── S7: Comparison (rendered by JS) ─── -->
+<div id="pd-compare-wrap"></div>
+
+<!-- ─── S8: Usage & Safety (rendered by JS) ─── -->
+<div id="pd-usage-wrap"></div>
+
+<!-- ─── S9: Explore the Range ─── -->
+<div class="pd-section" id="section-cleanser" style="display:none;">
+  <div class="pd-container">
+    <p class="pd-eyebrow">Explore the Range</p>
+    <h2 class="pd-section-title" style="margin-bottom:1.5rem;">You May Also Like</h2>
+    <div class="pd-product-carousel" id="cleanser-row"><!-- populated by JS --></div>
+  </div>
+</div>
+
+<!-- ─── S10: Why It Matters ─── -->
+<div class="pd-section pd-beige-bg">
+  <div class="pd-container">
+    <div class="pd-expand-card" id="card-why">
+      <div class="pd-expand-card-bg" style="background-image:linear-gradient(135deg,#2C1F14,#4A7C59);"></div>
+      <div class="pd-expand-card-inner">
+        <p class="pd-expand-eyebrow">The Bigger Picture</p>
+        <h2 class="pd-expand-title">Why It Really Matters Which Face Wash You Use</h2>
+        <button class="pd-expand-toggle-btn" onclick="toggleExpand('card-why', this)">
+          Click to Know More ▾
+        </button>
+        <div class="pd-expand-body">
+          <div class="pd-benefit-rows">
+            <div class="pd-benefit-row">
+              <div class="pd-benefit-icon">
+                <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </div>
+              <div class="pd-benefit-text">
+                <h4>Your Barrier is Everything</h4>
+                <p>The skin barrier is your first line of defence. Harsh surfactants in conventional cleansers strip away ceramides, leaving skin vulnerable to dehydration and inflammation.</p>
+              </div>
+            </div>
+            <div class="pd-benefit-row">
+              <div class="pd-benefit-icon">
+                <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+              </div>
+              <div class="pd-benefit-text">
+                <h4>Cleansing is Cumulative</h4>
+                <p>Twice a day, 365 days a year — the ingredient profile of your face wash adds up. Choosing real over synthetic is the highest-leverage switch in any skincare routine.</p>
+              </div>
+            </div>
+            <div class="pd-benefit-row">
+              <div class="pd-benefit-icon">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              </div>
+              <div class="pd-benefit-text">
+                <h4>Ayurveda Has 5,000 Years of Data</h4>
+                <p>Tikta rasa (bitter taste) has been documented as a skin purifier in classical Ayurvedic texts. This is not trend — it is tested, generational wisdom in every sachet.</p>
+              </div>
+            </div>
+            <div class="pd-benefit-row">
+              <div class="pd-benefit-icon">
+                <svg viewBox="0 0 24 24"><path d="M12 2C6 2 3 8 3 12c0 5 4 9 9 9s9-4 9-9C21 7 17 2 12 2z"/></svg>
+              </div>
+              <div class="pd-benefit-text">
+                <h4>Nature Knows Your Skin</h4>
+                <p>Your skin evolved alongside plants, not petrochemicals. Botanicals communicate with your skin's own biology in ways that synthetic molecules simply cannot replicate.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── S11: More Information ─── -->
+<div class="pd-section">
+  <div class="pd-container">
+    <p class="pd-eyebrow">Details</p>
+    <h2 class="pd-section-title" style="margin-bottom:1.5rem;">More Information</h2>
+    <div class="pd-accordion" id="more-info">
+      <div class="pd-accordion-item">
+        <div class="pd-accordion-head" onclick="toggleAccordion(this)">
+          <h4>Full Ingredient List</h4><span class="pd-accordion-icon">+</span>
+        </div>
+        <div class="pd-accordion-body">
+          <div class="pd-accordion-content">
+            Wild Turmeric (Curcuma aromatica), Chickpea Flour (Cicer arietinum), Red Lentil Powder (Lens culinaris), Green Gram Flour (Vigna radiata), Sandalwood Powder (Santalum album), Rose Water (Rosa damascena), Neem Leaf Extract (Azadirachta indica), Honey (Apis mellifera), Vegetable Glycerin, Xanthan Gum (natural thickener). No parabens, SLS, SLES, artificial fragrances, or synthetic colorants.
+          </div>
+        </div>
+      </div>
+      <div class="pd-accordion-item">
+        <div class="pd-accordion-head" onclick="toggleAccordion(this)">
+          <h4>Storage &amp; Expiry</h4><span class="pd-accordion-icon">+</span>
+        </div>
+        <div class="pd-accordion-body">
+          <div class="pd-accordion-content">
+            Store in a cool, dry place away from direct sunlight. Best used within 6 months of manufacture. Do not store in humid bathrooms for extended periods. Manufactured date is printed on the base of the packaging. Shelf life: 12 months from date of manufacture.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── S13: Science ─── -->
+<div class="pd-section">
+  <div class="pd-container">
+    <div class="pd-expand-card" id="card-science">
+      <div class="pd-expand-card-bg" style="background-image:linear-gradient(135deg,#2C1F14,#C8922A);"></div>
+      <div class="pd-expand-card-inner">
+        <p class="pd-expand-eyebrow">Research-Backed</p>
+        <h2 class="pd-expand-title">Science Behind Cellular Brightening</h2>
+        <button class="pd-expand-toggle-btn" onclick="toggleExpand('card-science', this)">
+          Click to Know More ▾
+        </button>
+        <div class="pd-expand-body">
+          <div class="pd-benefit-rows">
+            <div class="pd-benefit-row">
+              <div class="pd-benefit-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></div>
+              <div class="pd-benefit-text">
+                <h4>Melanin Pathway Regulation</h4>
+                <p>Curcuminoids in wild turmeric inhibit tyrosinase — the enzyme responsible for melanin synthesis — at the source, preventing tan and dark spots before they form.</p>
+              </div>
+            </div>
+            <div class="pd-benefit-row">
+              <div class="pd-benefit-icon"><svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
+              <div class="pd-benefit-text">
+                <h4>Accelerated Cell Turnover</h4>
+                <p>Lentil saponins gently accelerate the natural desquamation (shedding) process, revealing fresh epidermal cells underneath at a healthier, more consistent rate.</p>
+              </div>
+            </div>
+            <div class="pd-benefit-row">
+              <div class="pd-benefit-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+              <div class="pd-benefit-text">
+                <h4>Oxidative Defence</h4>
+                <p>Polyphenols from sandalwood and turmeric neutralise free radicals generated by UV exposure and pollution, protecting cellular DNA from oxidative damage.</p>
+              </div>
+            </div>
+            <div class="pd-benefit-row">
+              <div class="pd-benefit-icon"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+              <div class="pd-benefit-text">
+                <h4>Inflammation Modulation</h4>
+                <p>Curcumin's anti-inflammatory action downregulates NF-κB — a key inflammation signalling molecule — reducing post-acne redness and chronic skin inflammation.</p>
+              </div>
+            </div>
+            <div class="pd-benefit-row">
+              <div class="pd-benefit-icon"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+              <div class="pd-benefit-text">
+                <h4>Barrier Health</h4>
+                <p>Honey's humectant properties draw moisture into the skin while creating a protective film that prevents transepidermal water loss (TEWL) after cleansing.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── S15: Also Buy ─── -->
+<div class="pd-section" id="section-alsobuy" style="display:none;">
+  <div class="pd-container">
+    <p class="pd-eyebrow">Loved by Natural Lovers</p>
+    <h2 class="pd-section-title" style="margin-bottom:1.5rem;">Natural Lovers Also Buy!</h2>
+    <div class="pd-product-carousel" id="also-buy-row"><!-- populated by JS --></div>
+  </div>
+</div>
+
+<!-- ─── S16: Blog ─── -->
+<div class="pd-section pd-alt-bg">
+  <div class="pd-container">
+    <p class="pd-eyebrow">Learn More</p>
+    <h2 class="pd-section-title" style="margin-bottom:1.5rem;">Read &amp; Know More!</h2>
+    <div class="pd-blog-row">
+      <div class="pd-blog-card"><div class="pd-blog-img">📖</div><div class="pd-blog-body"><p class="pd-blog-title">The Ancient History of Ubtan: India's Original Skincare Secret</p><a class="pd-blog-link" href="#">Read blog →</a></div></div>
+      <div class="pd-blog-card"><div class="pd-blog-img">🌿</div><div class="pd-blog-body"><p class="pd-blog-title">Why Besan is the Best Natural Cleanser for Indian Skin</p><a class="pd-blog-link" href="#">Read blog →</a></div></div>
+      <div class="pd-blog-card"><div class="pd-blog-img">☀️</div><div class="pd-blog-body"><p class="pd-blog-title">Detan at Home: 5 Ayurvedic Rituals That Actually Work</p><a class="pd-blog-link" href="#">Read blog →</a></div></div>
+      <div class="pd-blog-card"><div class="pd-blog-img">🔬</div><div class="pd-blog-body"><p class="pd-blog-title">The Science Behind Turmeric's Skin Brightening Properties</p><a class="pd-blog-link" href="#">Read blog →</a></div></div>
+      <div class="pd-blog-card"><div class="pd-blog-img">💆</div><div class="pd-blog-body"><p class="pd-blog-title">Morning vs Evening Cleansing: What Ayurveda Recommends</p><a class="pd-blog-link" href="#">Read blog →</a></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── S17: Reviews ─── -->
+<div class="pd-section" id="reviews">
+  <div class="pd-container">
+    <p class="pd-eyebrow">Customer Reviews</p>
+    <h2 class="pd-section-title" style="margin-bottom:1.5rem;">What Our Customers Say</h2>
+    <div id="reviews-summary-wrap"></div>
+    <div id="reviews-list">
+      <p style="color:var(--text-light);font-size:13px;text-align:center;padding:2rem 0;">Loading reviews...</p>
+    </div>
+    <div class="pd-review-form-wrap">
+      <h3 class="pd-review-form-title">Write a Review</h3>
+      <div id="review-form-alert"></div>
+      <div class="pd-review-form">
+        <div class="pd-rform-row">
+          <div class="pd-rform-group">
+            <label>Your Name *</label>
+            <input type="text" id="rev-name" placeholder="e.g. Priya Sharma"/>
+          </div>
+          <div class="pd-rform-group">
+            <label>Email Address *</label>
+            <input type="email" id="rev-email" placeholder="priya@example.com"/>
+          </div>
+        </div>
+        <div class="pd-rform-group">
+          <label>Your Rating *</label>
+          <div class="pd-star-picker" id="star-picker">
+            <span class="pd-star-opt" data-val="1">&#9733;</span>
+            <span class="pd-star-opt" data-val="2">&#9733;</span>
+            <span class="pd-star-opt" data-val="3">&#9733;</span>
+            <span class="pd-star-opt" data-val="4">&#9733;</span>
+            <span class="pd-star-opt" data-val="5">&#9733;</span>
+          </div>
+          <input type="hidden" id="rev-stars" value="0"/>
+        </div>
+        <div class="pd-rform-group">
+          <label>Your Review *</label>
+          <textarea id="rev-comment" placeholder="Share your experience with this product..." rows="4"></textarea>
+        </div>
+        <button class="pd-submit-review-btn" id="submit-review-btn" onclick="submitReview()">
+          Submit Review
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── S18: Other in Range ─── -->
+<div class="pd-section pd-beige-bg" id="section-range" style="display:none;">
+  <div class="pd-container">
+    <p class="pd-eyebrow">Explore More</p>
+    <h2 class="pd-section-title" style="margin-bottom:1.5rem;">Other Products in this Range</h2>
+    <div class="pd-product-carousel" id="range-row"><!-- populated by JS --></div>
+  </div>
+</div>
+
+<!-- ─── S19: Frequently Bought Together ─── -->
+<div class="pd-section" id="section-fbt" style="display:none;">
+  <div class="pd-container">
+    <p class="pd-eyebrow">Bundles</p>
+    <h2 class="pd-section-title" style="margin-bottom:1.5rem;">Frequently Bought Together</h2>
+    <div class="pd-product-carousel" id="fbt-row"><!-- populated by JS --></div>
+  </div>
+</div>
+
+<!-- ─── S20: Promo Banner Slider ─── -->
+<div class="pd-banner-slider">
+  <div class="pd-banner-track" id="banner-track">
+    <div class="pd-banner-slide">
+      <h3>Free Delivery on Orders Above ₹339</h3>
+      <p>No code needed — discount applied automatically at checkout.</p>
+      <button onclick="addToCartPage()">Shop Now</button>
+    </div>
+    <div class="pd-banner-slide">
+      <h3>SUMMER40 — Flat 40% Off Above ₹799</h3>
+      <p>Limited time offer. Use code at checkout.</p>
+      <button onclick="copyPromo('SUMMER40', this)">Copy Code</button>
+    </div>
+    <div class="pd-banner-slide">
+      <h3>Fresh Made Daily. Delivered to Your Door.</h3>
+      <p>Every batch made fresh in our Ayurvedic kitchen for maximum potency.</p>
+      <button onclick="window.location.href='index.html'">Explore All Products</button>
+    </div>
+  </div>
+  <div class="pd-banner-dots" id="banner-dots">
+    <div class="pd-banner-dot active" onclick="goBanner(0)"></div>
+    <div class="pd-banner-dot" onclick="goBanner(1)"></div>
+    <div class="pd-banner-dot" onclick="goBanner(2)"></div>
+  </div>
+</div>
+
+<!-- ─── FOOTER ─── -->
+<footer class="pd-footer">
+  <div class="pd-footer-inner">
+    <div class="pd-footer-brand">
+      <h4>Surabhi Sutra</h4>
+      <p>Surabhi Sutra brings five thousand years of Ayurvedic wisdom into your daily skincare ritual. Every product is made fresh, in small batches, with ingredients your skin was always meant to meet. No shortcuts. No synthetics. Just nature, distilled.</p>
+      <div class="pd-footer-socials">
+        <a href="#" title="Telegram">T</a>
+        <a href="#" title="Facebook">f</a>
+        <a href="#" title="Instagram">ig</a>
+      </div>
+    </div>
+    <div>
+      <h4>Shop For</h4>
+      <ul>
+        <li><a href="index.html">Face Care</a></li>
+        <li><a href="index.html">Hair Care</a></li>
+        <li><a href="index.html">Body Care</a></li>
+        <li><a href="index.html">Baby Care</a></li>
+        <li><a href="index.html">Men's Range</a></li>
+        <li><a href="index.html">Gifting</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Useful Links</h4>
+      <ul>
+        <li><a href="#">FAQs</a></li>
+        <li><a href="#">Track Order</a></li>
+        <li><a href="#">Blogs</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Returns Policy</a></li>
+        <li><a href="admin.html" style="opacity:.3;">Admin</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Contact Us</h4>
+      <ul>
+        <li><a href="#">WhatsApp Us</a></li>
+        <li><a href="#">hello@surabhisutra.in</a></li>
+      </ul>
+      <h4 style="margin-top:1.5rem;">Office</h4>
+      <p style="font-size:12px;opacity:.6;line-height:1.8;">Surabhi Sutra Naturals<br>New Delhi, India — 110001</p>
+    </div>
+  </div>
+  <div class="pd-footer-bottom">
+    © 2025 Surabhi Sutra · All rights reserved · Made with love in India
+  </div>
+</footer>
+
+<!-- ─── STICKY BOTTOM BAR ─── -->
+<div class="pd-sticky-bar" id="sticky-bar">
+  <div class="pd-sticky-thumb" id="sticky-thumb">
+    <img id="sticky-img" src="" alt="">
+  </div>
+  <div class="pd-sticky-info">
+    <div class="pd-sticky-name" id="sticky-name">Brightening Ubtan Tikta Face Wash</div>
+    <div class="pd-sticky-price" id="sticky-price">₹269</div>
+  </div>
+  <button class="pd-sticky-atc" onclick="addToCartPage();openCartDrawer()">Add to Cart</button>
+</div>
+
+<script src="js/product-detail.js"></script>
+</body>
+</html>
