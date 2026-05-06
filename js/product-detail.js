@@ -53,17 +53,30 @@ const TRUST_SVGS = [
   `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
   `<svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`
 ];
+// Convert a Google Drive share URL → direct thumbnail src
+function driveThumb(url, size = 48) {
+  if (!url) return '';
+  const m = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+  return m ? `https://drive.google.com/thumbnail?id=${m[1]}&sz=w${size}` : url;
+}
+
+// Fallback SVGs indexed 0-3 (used when no icon URL is set)
 const DELIVERY_SVGS = [
-  `<svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>`,
-  `<svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>`,
-  `<svg viewBox="0 0 24 24"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>`,
-  `<svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>`
+  `<svg viewBox="0 0 24 24" width="20" height="20" stroke="var(--sage)" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>`,
+  `<svg viewBox="0 0 24 24" width="20" height="20" stroke="var(--sage)" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>`,
+  `<svg viewBox="0 0 24 24" width="20" height="20" stroke="var(--sage)" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>`,
+  `<svg viewBox="0 0 24 24" width="20" height="20" stroke="var(--sage)" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>`
 ];
 
 const DEFAULT_PD_CONTENT = {
   subtitle: 'Brightening & Detan with Real Dals & Besan',
   trust_badges: ['100% Natural', 'Ayurveda Certified', 'Fresh Made Daily', 'Derma Tested'],
-  delivery_items: ['<b>Delhi/NCR:</b> 2–3 business days', '<b>Pan India:</b> 4–5 business days', 'Free shipping above ₹339', 'Cash on Delivery available'],
+  delivery_items: [
+    { icon: '', text: '<b>Delhi/NCR:</b> 2–3 business days' },
+    { icon: '', text: '<b>Pan India:</b> 4–5 business days' },
+    { icon: '', text: 'Free shipping above ₹339' },
+    { icon: '', text: 'Cash on Delivery available' }
+  ],
   feature_cards: [
     {
       enabled: true,
@@ -126,13 +139,20 @@ const DEFAULT_PD_CONTENT = {
   }
 };
 
+// Normalise a delivery item to always be {icon, text}
+function normalizeDeliveryItem(item) {
+  if (typeof item === 'string') return { icon: '', text: item };
+  return { icon: item.icon || '', text: item.text || '' };
+}
+
 function getPDContent() {
   try {
     const s = JSON.parse(localStorage.getItem('surabhi_product_page_settings') || '{}');
+    const rawDelivery = s.delivery_items || DEFAULT_PD_CONTENT.delivery_items;
     return {
       subtitle:       s.subtitle       || DEFAULT_PD_CONTENT.subtitle,
       trust_badges:   s.trust_badges   || DEFAULT_PD_CONTENT.trust_badges,
-      delivery_items: s.delivery_items || DEFAULT_PD_CONTENT.delivery_items,
+      delivery_items: rawDelivery.map(normalizeDeliveryItem),
       feature_cards:  s.feature_cards  || DEFAULT_PD_CONTENT.feature_cards,
       ingredients:    s.ingredients    || DEFAULT_PD_CONTENT.ingredients,
       compare:        s.compare        || DEFAULT_PD_CONTENT.compare,
@@ -161,11 +181,12 @@ function renderHeroTexts() {
 
   const deliveryBox = document.getElementById('pd-delivery-box');
   if (deliveryBox) {
-    deliveryBox.innerHTML = c.delivery_items.map((text, i) => `
-      <div class="pd-delivery-row">
-        ${DELIVERY_SVGS[i] || DELIVERY_SVGS[0]}
-        <div>${text}</div>
-      </div>`).join('');
+    deliveryBox.innerHTML = c.delivery_items.map((item, i) => {
+      const iconHTML = item.icon
+        ? `<img src="${driveThumb(item.icon, 40)}" alt="" class="pd-delivery-icon-img" onerror="this.style.display='none'">`
+        : (DELIVERY_SVGS[i] || DELIVERY_SVGS[0]);
+      return `<div class="pd-delivery-row">${iconHTML}<div>${item.text}</div></div>`;
+    }).join('');
   }
 }
 

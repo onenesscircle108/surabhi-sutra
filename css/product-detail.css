@@ -327,9 +327,13 @@ button{ cursor:pointer; border:none; background:none; font-family:inherit; }
 }
 .pd-delivery-row:last-child{border-bottom:none;}
 .pd-delivery-row svg{
-  width:16px;height:16px;flex-shrink:0;margin-top:1px;
+  width:20px;height:20px;flex-shrink:0;margin-top:1px;
   stroke:var(--sage);fill:none;stroke-width:2;
   stroke-linecap:round;stroke-linejoin:round;
+}
+.pd-delivery-icon-img{
+  width:24px;height:24px;flex-shrink:0;margin-top:1px;
+  object-fit:contain;border-radius:2px;
 }
 .pd-delivery-row strong{color:var(--text-dark);}
 

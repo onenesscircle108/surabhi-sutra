@@ -444,7 +444,7 @@ body{font-family:Arial,sans-serif;background:var(--beige);min-height:100vh;}
           <label>Delivery Info Items</label>
           <div id="pp-delivery-items" class="pp-usage-list" style="margin-bottom:8px;"></div>
           <button class="btn btn-sm" onclick="addPPDeliveryItem()">+ Add Item</button>
-          <p style="font-size:11px;color:#999;margin-top:4px;">Tip: wrap text in &lt;b&gt;...&lt;/b&gt; for bold, e.g. &lt;b&gt;Delhi/NCR:&lt;/b&gt; 2–3 days</p>
+          <p style="font-size:11px;color:#999;margin-top:4px;">Icon URL: paste any image link (Google Drive share URL, imgur, etc.) — leave blank to use the default SVG icon. Text: use &lt;b&gt;...&lt;/b&gt; for bold.</p>
         </div>
       </div>
 
@@ -1191,7 +1191,12 @@ function showAlert(containerId, msg, type) {
 // ─── PRODUCT PAGE SETTINGS ─────────────────────────────────
 const DEFAULT_SUBTITLE       = 'Brightening & Detan with Real Dals & Besan';
 const DEFAULT_TRUST_BADGES   = ['100% Natural', 'Ayurveda Certified', 'Fresh Made Daily', 'Derma Tested'];
-const DEFAULT_DELIVERY_ITEMS = ['<b>Delhi/NCR:</b> 2–3 business days', '<b>Pan India:</b> 4–5 business days', 'Free shipping above ₹339', 'Cash on Delivery available'];
+const DEFAULT_DELIVERY_ITEMS = [
+  { icon: '', text: '<b>Delhi/NCR:</b> 2–3 business days' },
+  { icon: '', text: '<b>Pan India:</b> 4–5 business days' },
+  { icon: '', text: 'Free shipping above ₹339' },
+  { icon: '', text: 'Cash on Delivery available' }
+];
 
 const DEFAULT_FC = [
   { enabled:true, eyebrow:'Patented Formula', title:'With Patented LentiClear™ Technology', gradient:'linear-gradient(135deg,#7D5A3C,#C8922A)',
@@ -1367,14 +1372,44 @@ function usageItemHTML(item) {
 }
 
 // ── Delivery Items Editor ──
-function deliveryItemHTML(text) {
+function normalizeDeliveryItem(item) {
+  if (typeof item === 'string') return { icon: '', text: item };
+  return { icon: item.icon || '', text: item.text || '' };
+}
+
+function deliveryItemHTML(item) {
+  const d = normalizeDeliveryItem(item);
+  const previewStyle = d.icon ? '' : 'display:none;';
   return `
-    <div class="pp-usage-item-edit">
-      <div style="display:flex;gap:8px;align-items:start;">
-        <input type="text" placeholder="e.g. &lt;b&gt;Delhi/NCR:&lt;/b&gt; 2–3 business days" value="${escA(text)}" style="flex:1;">
+    <div class="pp-usage-item-edit" style="gap:8px;">
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:6px;">
+        <img class="delivery-icon-preview" src="${escA(d.icon)}" alt=""
+             style="width:32px;height:32px;object-fit:contain;border-radius:4px;border:1px solid var(--border);background:#fafafa;flex-shrink:0;${previewStyle}"
+             onerror="this.style.display='none'">
+        <input type="text" data-field="icon" placeholder="Icon image URL (Google Drive, imgur, etc.)"
+               value="${escA(d.icon)}" style="flex:1;font-size:12px;"
+               oninput="updateDeliveryIconPreview(this)">
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <input type="text" data-field="text" placeholder="e.g. &lt;b&gt;Delhi/NCR:&lt;/b&gt; 2–3 business days"
+               value="${escA(d.text)}" style="flex:1;">
         <button class="pp-row-remove" onclick="removePPRow(this)" title="Remove">×</button>
       </div>
     </div>`;
+}
+
+function updateDeliveryIconPreview(input) {
+  const wrap   = input.closest('.pp-usage-item-edit');
+  const preview = wrap.querySelector('.delivery-icon-preview');
+  const url = input.value.trim();
+  if (!preview) return;
+  if (url) {
+    const m = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+    preview.src = m ? `https://drive.google.com/thumbnail?id=${m[1]}&sz=w64` : url;
+    preview.style.display = '';
+  } else {
+    preview.style.display = 'none';
+  }
 }
 
 function renderDeliveryEditor() {
@@ -1385,13 +1420,14 @@ function renderDeliveryEditor() {
 }
 
 function addPPDeliveryItem() {
-  document.getElementById('pp-delivery-items')?.insertAdjacentHTML('beforeend', deliveryItemHTML(''));
+  document.getElementById('pp-delivery-items')?.insertAdjacentHTML('beforeend', deliveryItemHTML({ icon: '', text: '' }));
 }
 
 function readDeliveryItems() {
-  return Array.from(document.querySelectorAll('#pp-delivery-items .pp-usage-item-edit')).map(row =>
-    row.querySelector('input')?.value.trim() || ''
-  ).filter(Boolean);
+  return Array.from(document.querySelectorAll('#pp-delivery-items .pp-usage-item-edit')).map(row => ({
+    icon: row.querySelector('[data-field="icon"]')?.value.trim() || '',
+    text: row.querySelector('[data-field="text"]')?.value.trim() || ''
+  })).filter(d => d.text);
 }
 
 function renderUsageEditor() {
