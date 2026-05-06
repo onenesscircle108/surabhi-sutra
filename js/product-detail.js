@@ -347,7 +347,7 @@ function renderIngredients() {
   const { ingredients } = getPDContent();
   const cards = (ingredients.items || []).map(item => `
     <div class="pd-ingredient-card">
-      <div class="pd-ingredient-img">${item.image ? `<img src="${esc(item.image)}" alt="${esc(item.name)}" style="width:100%;height:100%;object-fit:cover;">` : esc(item.emoji)}</div>
+      <div class="pd-ingredient-img">${item.image ? `<img src="${esc(driveThumb(item.image, 400))}" alt="${esc(item.name)}" style="width:100%;height:100%;object-fit:cover;">` : esc(item.emoji)}</div>
       <div class="pd-ingredient-body">
         <span class="pd-ingredient-badge">${esc(item.badge)}</span>
         <h4 class="pd-ingredient-name">${esc(item.name)}</h4>

@@ -1367,7 +1367,7 @@ function ingItemHTML(item) {
       <input type="text" placeholder="Ingredient name" value="${escA(item.name)}">
       <button class="pp-row-remove" onclick="removePPRow(this)" title="Remove">×</button>
       <div class="pp-ing-img-row" style="grid-column:1/-1;">
-        <img src="${escA(item.image||'')}" class="${hasImg?'visible':''}" alt="preview" onerror="this.classList.remove('visible')" onload="this.classList.add('visible')">
+        <img src="${escA(ingThumb(item.image||''))}" class="${hasImg?'visible':''}" alt="preview" onerror="this.classList.remove('visible')" onload="this.classList.add('visible')">
         <input type="url" placeholder="Image URL (optional — leave empty to use emoji)" value="${escA(item.image||'')}" style="flex:1;" oninput="updateIngImgPreview(this)">
         <input type="text" placeholder="🌿 Emoji (fallback)" value="${escA(item.emoji)}" style="width:90px;font-size:18px;text-align:center;">
       </div>
@@ -1384,11 +1384,18 @@ function renderIngredientsEditor() {
   wrap.innerHTML = (s.ingredients.items || []).map(ingItemHTML).join('');
 }
 
+function ingThumb(url) {
+  if (!url) return '';
+  const m = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+  return m ? `https://drive.google.com/thumbnail?id=${m[1]}&sz=w200` : url;
+}
+
 function updateIngImgPreview(input) {
   const img = input.closest('.pp-ing-img-row')?.querySelector('img');
   if (!img) return;
-  img.src = input.value.trim();
-  if (!input.value.trim()) img.classList.remove('visible');
+  const url = input.value.trim();
+  if (url) { img.src = ingThumb(url); }
+  else { img.classList.remove('visible'); }
 }
 
 function addPPIngItem() {
