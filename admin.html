@@ -780,10 +780,9 @@ async function doLogin() {
     const data = await res.json();
 
     if (data.success) {
-      sessionStorage.setItem('admin_auth', '1');
-      sessionStorage.setItem('admin_email', data.admin.email);
-      sessionStorage.setItem('admin_name',  data.admin.name || '');
-      sessionStorage.setItem('admin_id',    data.admin.id   || '');
+      _adminEmail = data.admin.email || '';
+      _adminName  = data.admin.name  || '';
+      _adminId    = data.admin.id    || '';
       showAdminApp();
     } else {
       errEl.textContent = data.message || 'Login failed. Please check your credentials.';
@@ -797,29 +796,29 @@ async function doLogin() {
   }
 }
 
+let _adminEmail = '';
+let _adminName  = '';
+let _adminId    = '';
+
 function showAdminApp() {
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('app').style.display = 'grid';
-  const name  = sessionStorage.getItem('admin_name')  || '';
-  const email = sessionStorage.getItem('admin_email') || '';
   const label = document.getElementById('sidebar-admin-email');
-  if (label) label.textContent = name ? `${name} · ${email}` : email;
+  if (label) label.textContent = _adminName ? `${_adminName} · ${_adminEmail}` : _adminEmail;
   const accEmail = document.getElementById('acc-email');
-  if (accEmail) accEmail.value = email;
+  if (accEmail) accEmail.value = _adminEmail;
   initializeAdminData();
 }
 
 function goToSite() { window.location.href = 'index.html'; }
 function doLogout() {
-  sessionStorage.removeItem('admin_auth');
-  sessionStorage.removeItem('admin_email');
-  sessionStorage.removeItem('admin_name');
-  sessionStorage.removeItem('admin_id');
+  _adminEmail = '';
+  _adminName  = '';
+  _adminId    = '';
   document.getElementById('login-screen').style.display = 'flex';
   document.getElementById('app').style.display = 'none';
-}
-if (sessionStorage.getItem('admin_auth') === '1') {
-  showAdminApp();
+  document.getElementById('login-email').value = '';
+  document.getElementById('login-pwd').value   = '';
 }
 
 // ─── SECTION NAV ───────────────────────────────────────────
@@ -1735,7 +1734,7 @@ function renderAdminsTable(admins) {
     tbody.innerHTML = '<tr><td colspan="4" class="empty-state">No admins in the sheet yet. Add one below.</td></tr>';
     return;
   }
-  const currentEmail = (sessionStorage.getItem('admin_email') || '').toLowerCase();
+  const currentEmail = _adminEmail.toLowerCase();
   tbody.innerHTML = admins.map(a => `
     <tr>
       <td><span class="product-id-badge">${a.id}</span></td>
@@ -1790,7 +1789,7 @@ async function doDeleteAdmin(id, email) {
 }
 
 async function doChangePassword() {
-  const email   = sessionStorage.getItem('admin_email') || '';
+  const email   = _adminEmail;
   const oldPwd  = document.getElementById('acc-old-pwd').value;
   const newPwd  = document.getElementById('acc-new-pwd').value;
   const confPwd = document.getElementById('acc-confirm-pwd').value;
