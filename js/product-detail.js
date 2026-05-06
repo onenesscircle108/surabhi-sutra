@@ -513,8 +513,9 @@ function escAttr(v) {
 // GALLERY
 // ─────────────────────────────
 function renderGallery(images) {
-  const mainImg = document.getElementById('main-img');
-  const strip   = document.getElementById('thumbs-strip');
+  const mainImg  = document.getElementById('main-img');
+  const strip    = document.getElementById('thumbs-strip');
+  const galleryEl = document.getElementById('gallery-main');
   if (!mainImg || !strip) return;
 
   const imgs = images.length ? images : [];
@@ -522,9 +523,23 @@ function renderGallery(images) {
 
   if (imgs[0]) {
     mainImg.src = imgs[0];
+    // Remove shimmer once image is actually painted
+    const done = () => {
+      galleryEl && galleryEl.classList.remove('pd-gallery-loading');
+      mainImg.style.opacity = '1';
+    };
+    if (mainImg.complete && mainImg.naturalWidth) {
+      done();
+    } else {
+      mainImg.onload  = done;
+      mainImg.onerror = done; // remove shimmer even if image 404s
+    }
     const stickyImg = document.getElementById('sticky-img');
     if (stickyImg) stickyImg.src = imgs[0];
+  } else {
+    galleryEl && galleryEl.classList.remove('pd-gallery-loading');
   }
+
   mainImg.alt = currentProduct ? currentProduct.name : 'Product';
 
   strip.innerHTML = imgs.map((src, i) => `
@@ -665,43 +680,54 @@ function renderProduct(p) {
 // ─────────────────────────────
 // FETCH ALL DATA
 // ─────────────────────────────
+const CACHE_KEY = 'surabhi_pd_products_v1';
+
+function parseProducts(raw) {
+  const safeParse = (v, fallback = []) => {
+    try { return typeof v === 'string' ? JSON.parse(v) : (v || fallback); }
+    catch { return fallback; }
+  };
+  return raw.map(p => ({
+    id:          p.id,
+    name:        p.name,
+    category:    p.category,
+    description: p.description,
+    price:       p.price,
+    images:      safeParse(p.images, p.image_url ? [p.image_url] : []),
+    benefits:    safeParse(p.benefits, []),
+    bundle:      p.bundle_enabled === 'yes'
+  }));
+}
+
 async function fetchProduct() {
+  const safeParse = (s, fb) => { try { return JSON.parse(s) || fb; } catch { return fb; } };
+
+  // ── STEP 1: render immediately from cache (stale-while-revalidate) ──
+  const cached = safeParse(localStorage.getItem(CACHE_KEY), []);
+  if (cached.length) {
+    allProducts = cached;
+    const hit = cached.find(p => String(p.id) === String(productId)) || cached[0];
+    if (hit) renderProduct(hit);
+    renderCarousels();
+  }
+
+  // ── STEP 2: fetch fresh data, update cache and re-render ──
   try {
     const res  = await fetch(`${API_URL}?action=getProducts`);
     const data = await res.json();
+    if (!data.success) { if (!cached.length) showToast('Failed to load product'); return; }
 
-    if (!data.success) { showToast('Failed to load product'); return; }
-
-    const safeParse = (v, fallback = []) => {
-      try { return typeof v === 'string' ? JSON.parse(v) : (v || fallback); }
-      catch { return fallback; }
-    };
-
-    allProducts = data.products.map(p => ({
-      id:          p.id,
-      name:        p.name,
-      category:    p.category,
-      description: p.description,
-      price:       p.price,
-      images:      safeParse(p.images, p.image_url ? [p.image_url] : []),
-      benefits:    safeParse(p.benefits, []),
-      bundle:      p.bundle_enabled === 'yes'
-    }));
+    allProducts = parseProducts(data.products);
+    localStorage.setItem(CACHE_KEY, JSON.stringify(allProducts));
 
     const found = allProducts.find(p => String(p.id) === String(productId));
-    if (found) {
-      renderProduct(found);
-    } else {
-      // If productId not found, show first product or default content
-      const first = allProducts[0];
-      if (first) renderProduct(first);
-    }
-
+    const target = found || allProducts[0];
+    if (target) renderProduct(target);
     renderCarousels();
 
   } catch (err) {
     console.error(err);
-    showToast('Error loading product data');
+    if (!cached.length) showToast('Error loading product data');
   }
 }
 

@@ -1090,6 +1090,17 @@ button{ cursor:pointer; border:none; background:none; font-family:inherit; }
   font-size:10px;color:var(--text-light);text-align:center;margin-top:.5rem;
 }
 
+/* ── GALLERY LOADING STATE ── */
+.pd-gallery-loading{
+  background:linear-gradient(90deg,var(--beige) 25%,var(--border) 50%,var(--beige) 75%);
+  background-size:200% 100%;
+  animation:pd-shimmer 1.5s infinite;
+}
+.pd-gallery-loading img{
+  opacity:0!important;
+  transition:opacity .4s ease;
+}
+
 /* ── SKELETON LOADING ── */
 @keyframes pd-shimmer{
   0%{background-position:200% 0;}
