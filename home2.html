@@ -3,294 +3,430 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Home Page 2 — Theme Preview | Surabhi Sutra</title>
+  <title>Home Page 2 — Old Theme Preview | Surabhi Sutra</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
 
-  <!-- ── OLD THEME OVERRIDE ──────────────────────────────────────
-       Colors extracted from the old Shopify store's section JSON:
-       · Primary:    #0d6a73  (dark teal  — was sage green #4A7C59)
-       · CTA:        #7a2121  (deep maroon — was terracotta #C4714A)
-       · Background: #fdf8e1  (warm parchment)
-       · Beige:      #f5e9c8  (amber beige)
-       · Accent:     #ffb701  (amber yellow — from marquee highlight)
-  ─────────────────────────────────────────────────────────────── -->
+  <!--
+    ═══════════════════════════════════════════════════════════════
+    OLD SHOPIFY THEME — exact values from settings_data.json
+
+    Main scheme (scheme-44346392-abe9-4f5b-aa1d-057f957efb1a):
+      background:  #fdf8e1   warm parchment
+      foreground:  #28535e   dark teal-green (ALL text incl headings)
+      btn_bg:      #7a2121   deep maroon
+      btn_hover:   #1f5458   darker teal
+      secondary:   #a98b7f   warm mauve (links, outlines)
+
+    Global UI:
+      Font:         Inter 400/700 (not serif)
+      Btn radius:   14px
+      Card radius:  4px
+      H1: 56px · H2: 48px · H3: 32px · H4: 24px · body: 14px
+      Marquee highlight: #ffb70175 (amber, 46% opacity)
+      Footer bg:    #333333 (dark scheme-5)
+    ═══════════════════════════════════════════════════════════════
+  -->
   <style>
-    /* ── THEME VARIABLES ── */
+    /* ── RESET INHERITED VARS ── */
+    *, *::before, *::after { font-family: 'Inter', system-ui, sans-serif; }
+
     :root {
-      --cream:       #fdf8e1;
-      --beige:       #f5e9c8;
-      --sage:        #0d6a73;
-      --sage-light:  #1a8a96;
-      --terracotta:  #7a2121;
-      --brown:       #5a1818;
-      --text-dark:   #1a1a1a;
-      --text-mid:    #555;
-      --text-light:  #888;
-      --border:      #d4c9a8;
-      --amber:       #ffb701;
-      --amber-bg:    #fff8e1;
+      --t-bg:        #fdf8e1;
+      --t-beige:     #f5edcc;
+      --t-fg:        #28535e;
+      --t-fg-mid:    #5a7a82;
+      --t-fg-light:  #a98b7f;
+      --t-maroon:    #7a2121;
+      --t-maroon-dk: #1f5458;
+      --t-amber:     #ffb701;
+      --t-amber-bg:  #ffb70126;
+      --t-sand:      #e0b692;
+      --t-sand-fg:   #1b2e1e;
+      --t-dark:      #333333;
+      --t-border:    rgba(0,0,0,.08);
+      --t-radius:    14px;
+      --t-card-r:    4px;
     }
 
-    /* ── PREVIEW BANNER ── */
-    .theme-preview-bar {
-      background: var(--amber);
-      color: #1a1a1a;
+    body { background: var(--t-bg); color: var(--t-fg); }
+
+    /* ── PREVIEW BADGE ── */
+    .h2-badge {
+      position: fixed; top: 0; right: 0; z-index: 10000;
+      background: var(--t-maroon); color: #fff;
+      font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; padding: 6px 14px;
+      border-bottom-left-radius: 10px;
+    }
+    .h2-back-link {
+      position: fixed; top: 0; left: 0; z-index: 10000;
+      background: var(--t-fg); color: #fff;
+      font-size: 10px; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; padding: 6px 14px;
+      border-bottom-right-radius: 10px;
+      text-decoration: none; transition: background .2s;
+    }
+    .h2-back-link:hover { background: var(--t-maroon); }
+
+    /* ── ANNOUNCEMENT BAR ── */
+    .h2-announce {
+      background: var(--t-fg);
+      color: #fff;
       text-align: center;
       font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      padding: 8px 16px;
-      position: sticky;
-      top: 0;
-      z-index: 9999;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
+      font-weight: 500;
+      letter-spacing: .5px;
+      padding: 9px 16px;
+      margin-top: 28px;
     }
-    .theme-preview-bar a {
-      color: #1a1a1a;
-      text-decoration: underline;
-      font-size: 11px;
-      opacity: .7;
-    }
+    .h2-announce strong { color: var(--t-amber); }
 
     /* ── NAV ── */
     nav {
-      border-bottom: 2px solid var(--amber);
-      background: #fff;
+      background: var(--t-bg);
+      border-bottom: 1px solid var(--t-border);
+      box-shadow: 0 1px 8px rgba(40,83,94,.08);
     }
-    nav .nav-logo { color: var(--sage); letter-spacing: 4px; }
-    nav .nav-links a { color: var(--text-dark); }
-    nav .nav-links a:hover { color: var(--sage); }
+    nav .nav-logo {
+      color: var(--t-fg);
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      letter-spacing: 4px;
+      font-size: 14px;
+    }
+    nav .nav-links a {
+      color: var(--t-fg);
+      font-size: 13px;
+      font-weight: 500;
+    }
+    nav .nav-links a:hover { color: var(--t-maroon); }
     nav .nav-cart {
-      background: var(--sage);
+      background: var(--t-maroon);
       color: #fff;
       border: none;
-      border-radius: 4px;
-      padding: 8px 18px;
+      border-radius: var(--t-radius);
+      padding: 9px 20px;
+      font-size: 13px;
       font-weight: 700;
       cursor: pointer;
       transition: background .2s;
+      font-family: 'Inter', sans-serif;
     }
-    nav .nav-cart:hover { background: var(--terracotta); }
+    nav .nav-cart:hover { background: var(--t-maroon-dk); }
+
+    /* ── WELCOME SCREEN ── */
+    #welcome-screen {
+      background: var(--t-fg);
+    }
+    .welcome-logo, .welcome-title, .welcome-tagline { color: #fff; font-family: 'Inter', sans-serif; }
+    .welcome-divider { background: var(--t-amber); }
+    .welcome-loader { border-color: rgba(255,255,255,.2); border-top-color: var(--t-amber); }
 
     /* ── HERO ── */
     .hero {
-      background: linear-gradient(160deg, #0d6a73 0%, #0a4f5a 55%, #7a2121 100%);
-      color: #fff;
-      min-height: 85vh;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      justify-content: center;
-      padding: 80px 48px;
-      position: relative;
-      overflow: hidden;
-    }
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-      pointer-events: none;
-    }
-    .hero-eyebrow {
-      color: var(--amber);
-      letter-spacing: 3px;
-      font-size: 12px;
-      text-transform: uppercase;
-      margin-bottom: 12px;
-      font-weight: 700;
-    }
-    .hero-title {
-      color: #fff;
-      font-size: clamp(2rem, 5vw, 3.8rem);
-      max-width: 640px;
-      line-height: 1.15;
-    }
-    .hero-title span {
-      color: var(--amber);
-    }
-    .hero-sub {
-      color: rgba(255,255,255,.8);
-      margin-top: 16px;
-      max-width: 520px;
-      font-size: 1.05rem;
-      line-height: 1.7;
-    }
-    .btn-primary {
-      background: var(--terracotta);
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      padding: 14px 32px;
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
-      margin-top: 28px;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      transition: background .2s, transform .15s;
-    }
-    .btn-primary:hover {
-      background: #9a2929;
-      transform: translateY(-1px);
-    }
-    @media(max-width:600px) {
-      .hero { padding: 60px 20px; min-height: 70vh; }
-    }
-
-    /* ── MARQUEE BAR ── */
-    .marquee-bar {
-      background: #0d6a73;
-      color: #fff;
-      padding: 14px 0;
-      overflow: hidden;
-    }
-    .marquee-track span:not(.marquee-dot) {
-      background: #ffb70160;
-      padding: 2px 10px;
-      border-radius: 3px;
-    }
-    .marquee-dot { color: rgba(255,255,255,.4); }
-
-    /* ── SECTION LABELS / TITLES ── */
-    .section-label { color: var(--sage); }
-    .section-title { color: var(--text-dark); }
-
-    /* ── VALUE CARDS ── */
-    .value-card { border-top: 3px solid var(--amber); background: #fff; }
-    .value-icon svg { fill: none; stroke: var(--sage); stroke-width: 1.8; }
-    .value-title { color: var(--sage); }
-    .value-desc { color: var(--text-mid); }
-
-    /* ── PRODUCT CARDS ── */
-    .product-card { border: 1px solid var(--border); border-radius: 6px; overflow: hidden; background: #fff; }
-    .product-price { color: var(--terracotta); font-weight: 800; }
-    .btn-add { background: var(--sage); color: #fff; border: none; border-radius: 4px; }
-    .btn-add:hover { background: var(--terracotta); }
-
-    /* ── EDITORIAL SECTION (old site "Crafted with Care") ── */
-    .editorial-section {
+      background: var(--t-bg);
       display: grid;
       grid-template-columns: 1fr 1fr;
-      min-height: 480px;
+      min-height: 80vh;
+      overflow: hidden;
     }
-    .editorial-media {
-      background: linear-gradient(135deg, #0d6a73 0%, #0a4f5a 100%);
+    .h2-hero-text {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px 56px 80px 48px;
+      gap: 20px;
+    }
+    .h2-hero-visual {
+      background: var(--t-fg);
+      position: relative;
+      overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
-      position: relative;
-      overflow: hidden;
     }
-    .editorial-media-inner {
-      text-align: center;
-      color: rgba(255,255,255,.25);
-      font-size: 5rem;
-    }
-    .editorial-media::after {
+    /* Organic leaf shapes for visual interest since we don't have product photos */
+    .h2-hero-visual::before {
       content: '';
       position: absolute;
-      inset: 0;
-      background: repeating-linear-gradient(
-        45deg,
-        transparent,
-        transparent 20px,
-        rgba(255,255,255,.03) 20px,
-        rgba(255,255,255,.03) 40px
-      );
+      width: 120%; height: 120%;
+      background: radial-gradient(ellipse at 30% 40%, #1f5458 0%, #28535e 40%, #1a3a42 100%);
     }
-    .editorial-content {
-      background: var(--amber-bg);
-      padding: 64px 48px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 24px;
+    .h2-hero-visual::after {
+      content: '🌿';
+      font-size: 10rem;
+      opacity: .15;
+      position: absolute;
+      bottom: -20px; right: -20px;
+      transform: rotate(-20deg);
     }
-    .editorial-eyebrow {
+    .h2-hero-label {
       font-size: 11px;
       font-weight: 700;
       letter-spacing: 3px;
       text-transform: uppercase;
-      color: var(--sage);
+      color: var(--t-fg-light);
     }
-    .editorial-heading {
-      font-size: clamp(1.6rem, 3vw, 2.4rem);
+    .h2-hero-h1 {
+      font-size: clamp(2rem, 4vw, 3.5rem);
       font-weight: 700;
-      color: var(--text-dark);
-      line-height: 1.25;
+      color: var(--t-fg);
+      line-height: 1.1;
+      letter-spacing: -.5px;
     }
-    .editorial-body {
-      color: var(--text-mid);
+    .h2-hero-h1 em {
+      font-style: normal;
+      color: var(--t-maroon);
+    }
+    .h2-hero-sub {
+      font-size: 14px;
+      color: var(--t-fg-mid);
       line-height: 1.75;
       max-width: 440px;
     }
-    .editorial-btn {
-      display: inline-block;
-      background: var(--sage);
+    .btn-primary {
+      background: var(--t-maroon);
       color: #fff;
       border: none;
-      border-radius: 4px;
+      border-radius: var(--t-radius);
+      padding: 14px 28px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      width: fit-content;
+      letter-spacing: .3px;
+      transition: background .2s;
+      font-family: 'Inter', sans-serif;
+    }
+    .btn-primary:hover { background: var(--t-maroon-dk); }
+    @media(max-width:768px) {
+      .hero { grid-template-columns: 1fr; }
+      .h2-hero-visual { min-height: 260px; order: -1; }
+      .h2-hero-text { padding: 40px 24px; }
+    }
+
+    /* ── MARQUEE ── */
+    .marquee-bar {
+      background: var(--t-fg);
+      padding: 14px 0;
+      overflow: hidden;
+    }
+    .marquee-track { color: rgba(255,255,255,.9); }
+    .marquee-track span:not(.marquee-dot) {
+      background: var(--t-amber-bg);
+      padding: 3px 12px;
+      border-radius: 3px;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: .3px;
+    }
+    .marquee-dot { color: rgba(255,255,255,.35); margin: 0 6px; }
+
+    /* ── SECTION COMMON ── */
+    .section { background: var(--t-bg); }
+    .section-label { color: var(--t-fg-light); font-size: 11px; letter-spacing: 3px; }
+    .section-title { color: var(--t-fg); font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 700; letter-spacing: -.3px; }
+
+    /* ── PRODUCT LIST HEADER ── */
+    .h2-collection-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .h2-collection-header h2 {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--t-fg);
+      letter-spacing: -.3px;
+      margin: 0;
+    }
+    .h2-view-all {
+      font-size: 13px;
+      color: var(--t-fg-light);
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      white-space: nowrap;
+      background: none;
+      border: none;
+      font-family: 'Inter', sans-serif;
+    }
+    .h2-view-all:hover { color: var(--t-maroon); }
+
+    /* ── PRODUCT CARDS ── */
+    .product-card {
+      border: none;
+      border-radius: var(--t-card-r);
+      background: #fff;
+      box-shadow: 0 1px 4px rgba(40,83,94,.07);
+      transition: box-shadow .2s;
+    }
+    .product-card:hover { box-shadow: 0 4px 16px rgba(40,83,94,.13); }
+    .product-img { border-radius: var(--t-card-r) var(--t-card-r) 0 0; }
+    .product-name { color: var(--t-fg); font-size: 14px; font-weight: 500; }
+    .product-price { color: var(--t-fg); font-size: 14px; font-weight: 700; }
+    .product-original { color: var(--t-fg-light); }
+    .btn-add {
+      background: var(--t-maroon);
+      color: #fff;
+      border: none;
+      border-radius: var(--t-radius);
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      padding: 10px 18px;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .btn-add:hover { background: var(--t-maroon-dk); }
+
+    /* ── DIVIDER BAND (between product grid and editorial) ── */
+    .h2-band {
+      background: var(--t-sand);
+      color: var(--t-sand-fg);
+      padding: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 32px;
+    }
+    .h2-band-text { max-width: 560px; }
+    .h2-band-label { font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; opacity: .7; margin-bottom: 8px; }
+    .h2-band-heading { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 700; line-height: 1.2; margin-bottom: 12px; }
+    .h2-band-sub { font-size: 14px; line-height: 1.75; opacity: .8; }
+    .h2-band-btn {
+      flex-shrink: 0;
+      background: var(--t-sand-fg);
+      color: #e0b692;
+      border: none;
+      border-radius: var(--t-radius);
       padding: 13px 28px;
       font-size: 14px;
       font-weight: 700;
       cursor: pointer;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      align-self: flex-start;
+      font-family: 'Inter', sans-serif;
+      white-space: nowrap;
+      transition: opacity .2s;
+    }
+    .h2-band-btn:hover { opacity: .85; }
+    @media(max-width:640px) {
+      .h2-band { flex-direction: column; padding: 32px 20px; }
+      .h2-band-btn { width: 100%; text-align: center; }
+    }
+
+    /* ── EDITORIAL (Crafted with care) ── */
+    .h2-editorial {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .h2-ed-media {
+      background: var(--t-fg);
+      min-height: 60svh;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .h2-ed-media-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(40,83,94,.6) 0%, transparent 60%);
+    }
+    .h2-ed-media-icon {
+      font-size: 8rem;
+      opacity: .18;
+      position: relative;
+      z-index: 1;
+    }
+    .h2-ed-content {
+      background: var(--t-bg);
+      padding: 64px 56px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .h2-ed-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--t-fg-light); }
+    .h2-ed-heading { font-size: clamp(1.8rem, 3vw, 2.4rem); font-weight: 700; color: var(--t-fg); letter-spacing: -.3px; line-height: 1.2; }
+    .h2-ed-body { font-size: 14px; color: var(--t-fg-mid); line-height: 1.75; max-width: 440px; }
+    .h2-ed-btn {
+      background: var(--t-maroon);
+      color: #fff;
+      border: none;
+      border-radius: var(--t-radius);
+      padding: 13px 28px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      width: fit-content;
+      font-family: 'Inter', sans-serif;
       transition: background .2s;
     }
-    .editorial-btn:hover { background: var(--terracotta); }
+    .h2-ed-btn:hover { background: var(--t-maroon-dk); }
     @media(max-width:768px) {
-      .editorial-section { grid-template-columns: 1fr; }
-      .editorial-media { min-height: 240px; }
-      .editorial-content { padding: 40px 24px; }
+      .h2-editorial { grid-template-columns: 1fr; }
+      .h2-ed-media { min-height: 220px; }
+      .h2-ed-content { padding: 36px 20px; }
     }
 
-    /* ── VALUES SECTION ── */
-    .values-section { background: var(--amber-bg); }
-    .values-grid { grid-template-columns: repeat(4, 1fr); }
-    @media(max-width:768px) { .values-grid { grid-template-columns: 1fr 1fr; } }
+    /* ── VALUES ── */
+    .values-section { background: var(--t-beige); }
+    .value-card {
+      background: var(--t-bg);
+      border: none;
+      border-radius: 8px;
+      box-shadow: 0 1px 6px rgba(40,83,94,.08);
+    }
+    .value-icon svg { fill: none; stroke: var(--t-fg); stroke-width: 1.5; }
+    .value-title { color: var(--t-fg); font-size: 15px; font-weight: 700; font-family: 'Inter', sans-serif; }
+    .value-desc { color: var(--t-fg-mid); font-size: 13px; line-height: 1.6; }
 
     /* ── FOOTER ── */
-    .site-footer { background: var(--sage); color: rgba(255,255,255,.85); }
-    .site-footer-inner { border-bottom: 1px solid rgba(255,255,255,.15); }
-    .site-footer-inner h4 { color: #fff; }
-    .site-footer-inner a { color: rgba(255,255,255,.7); }
-    .site-footer-inner a:hover { color: var(--amber); }
-    .site-footer-brand h4 { color: #fff; }
+    .site-footer { background: var(--t-dark); color: rgba(255,255,255,.75); }
+    .site-footer-inner { border-bottom: 1px solid rgba(255,255,255,.1); }
+    .site-footer-inner h4 { color: #fff; font-family: 'Inter', sans-serif; }
+    .site-footer-inner a { color: rgba(255,255,255,.6); font-size: 13px; }
+    .site-footer-inner a:hover { color: var(--t-amber); }
+    .site-footer-brand h4 { color: #fff; font-size: 16px; letter-spacing: 2px; }
+    .site-footer-brand p { font-size: 13px; line-height: 1.7; }
     .site-footer-socials a {
-      border-color: rgba(255,255,255,.3);
-      color: rgba(255,255,255,.7);
+      border-color: rgba(255,255,255,.25);
+      color: rgba(255,255,255,.6);
     }
-    .site-footer-socials a:hover { border-color: var(--amber); color: var(--amber); }
-    .site-footer-bottom { color: rgba(255,255,255,.5); border-top: 1px solid rgba(255,255,255,.1); }
+    .site-footer-socials a:hover { border-color: var(--t-amber); color: var(--t-amber); }
+    .site-footer-bottom { color: rgba(255,255,255,.35); font-size: 12px; border-top: 1px solid rgba(255,255,255,.08); }
 
-    /* ── WELCOME SCREEN ── */
-    #welcome-screen {
-      background: linear-gradient(160deg, #0d6a73 0%, #0a4f5a 60%, #7a2121 100%);
+    /* ── FOMO OVERRIDE (match old popup exactly) ── */
+    .fomo-badge {
+      background: #fdf8e1;
+      border: 2px solid #7f171d;
+      border-radius: 8px;
     }
-    .welcome-logo, .welcome-title, .welcome-tagline { color: #fff; }
-    .welcome-divider { background: var(--amber); }
-    .welcome-loader { border-color: rgba(255,255,255,.2); border-top-color: var(--amber); }
+    .fomo-avatar { background: #7a2121; }
+
+    /* ── FLOATING BUY BAR OVERRIDE ── */
+    .pd-float-bar { border-top: 2px solid var(--t-fg); }
+    .pd-float-bar-btn { background: var(--t-maroon); border-radius: 8px; }
+    .pd-float-bar-btn:hover { background: var(--t-maroon-dk); }
+    .pd-float-bar-tag { color: var(--t-fg-light); }
+    .pd-float-bar-name { color: var(--t-fg); font-family: 'Inter', sans-serif; }
   </style>
 </head>
 
 <body>
 
-<!-- THEME PREVIEW BANNER -->
-<div class="theme-preview-bar">
-  ✦ THEME PREVIEW — Home Page 2 (Old Store Theme)
-  <a href="index.html">← Back to current site</a>
-</div>
+<!-- Fixed corner badges -->
+<a class="h2-back-link" href="index.html">← Current Site</a>
+<div class="h2-badge">Theme Preview v2</div>
 
-<!-- ─────────────────────────────
-     WELCOME SCREEN
-───────────────────────────── -->
+<!-- ─── WELCOME SCREEN ─── -->
 <div id="welcome-screen">
   <div class="welcome-logo">Surabhi Sutra</div>
   <div class="welcome-divider"></div>
@@ -299,23 +435,21 @@
   <div class="welcome-loader"></div>
 </div>
 
-<!-- ─────────────────────────────
-     TOAST
-───────────────────────────── -->
 <div id="toast-container"></div>
 
-<!-- ─────────────────────────────
-     NAV
-───────────────────────────── -->
+<!-- ─── ANNOUNCEMENT BAR ─── -->
+<div class="h2-announce">
+  <strong>Sale:</strong> Buy 1 Get 1 Free + 20% Off for a Limited Time · Free shipping above ₹339
+</div>
+
+<!-- ─── NAV ─── -->
 <nav>
   <div class="nav-logo" onclick="showPage('home')">SURABHI SUTRA</div>
-
   <ul class="nav-links">
     <li><a onclick="showPage('home')">Home</a></li>
     <li><a onclick="showPage('shop')">Shop</a></li>
     <li><a onclick="window.location.href='about.html'">About</a></li>
   </ul>
-
   <button class="nav-cart" onclick="showPage('cart')">
     Cart (<span id="cart-count">0</span>)
   </button>
@@ -327,21 +461,22 @@
 ═══════════════════════════ -->
 <div id="home" class="page active">
 
-  <!-- HERO -->
+  <!-- HERO — two-column: text left, teal visual right -->
   <section class="hero">
-    <p class="hero-eyebrow" id="hero-eyebrow">Ayurveda Inspired</p>
-    <h1 class="hero-title" id="hero-title">
-      Loved by Skin, <span>Powered by Nature</span>
-    </h1>
-    <p class="hero-sub" id="hero-sub">
-      Pure ingredients. Honest formulations. Skincare rooted in tradition.
-    </p>
-    <button onclick="showPage('shop')" class="btn-primary">
-      Shop the Collection
-    </button>
+    <div class="h2-hero-text">
+      <p class="h2-hero-label" id="hero-eyebrow">Ayurveda Inspired · Panchagavya Rooted</p>
+      <h1 class="h2-hero-h1" id="hero-title">
+        Loved by Skin,<br><em>Powered by Nature</em>
+      </h1>
+      <p class="h2-hero-sub" id="hero-sub">
+        Pure ingredients. Honest formulations. Skincare rooted in five thousand years of tradition.
+      </p>
+      <button onclick="showPage('shop')" class="btn-primary">Shop the Collection</button>
+    </div>
+    <div class="h2-hero-visual"></div>
   </section>
 
-  <!-- MARQUEE BAR — old theme text -->
+  <!-- MARQUEE — old site text, teal bg, amber highlights -->
   <div class="marquee-bar">
     <div class="marquee-track" id="marquee-track">
       <span>Tan melts</span>
@@ -352,11 +487,11 @@
       <span class="marquee-dot">→</span>
       <span>Sacred glow awakens</span>
       <span class="marquee-dot">·</span>
-      <span>100% natural</span>
+      <span>100% Natural</span>
       <span class="marquee-dot">·</span>
-      <span>Cruelty free</span>
+      <span>Cruelty Free</span>
       <span class="marquee-dot">·</span>
-      <span>Small batch crafted</span>
+      <span>Small Batch Crafted</span>
       <span class="marquee-dot">·</span>
       <!-- duplicate for seamless loop -->
       <span>Tan melts</span>
@@ -367,53 +502,62 @@
       <span class="marquee-dot">→</span>
       <span>Sacred glow awakens</span>
       <span class="marquee-dot">·</span>
-      <span>100% natural</span>
+      <span>100% Natural</span>
       <span class="marquee-dot">·</span>
-      <span>Cruelty free</span>
+      <span>Cruelty Free</span>
       <span class="marquee-dot">·</span>
-      <span>Small batch crafted</span>
+      <span>Small Batch Crafted</span>
       <span class="marquee-dot">·</span>
     </div>
   </div>
 
-  <!-- BESTSELLERS -->
-  <section class="section">
+  <!-- BESTSELLERS — with collection-style header -->
+  <section class="section" style="padding:48px 0;">
     <div class="container">
-      <p class="section-label" id="bestsellers-label">Bestsellers</p>
-      <h2 class="section-title" id="bestsellers-title">Customer favorites</h2>
+      <div class="h2-collection-header">
+        <h2>Our Collection</h2>
+        <button class="h2-view-all" onclick="showPage('shop')">View all →</button>
+      </div>
       <div id="home-products" class="products-grid">
         <p class="loading-text">Loading products...</p>
       </div>
     </div>
   </section>
 
-  <!-- EDITORIAL — "Crafted with Care" (from old site media_with_content section) -->
-  <div class="editorial-section">
-    <div class="editorial-media">
-      <div class="editorial-media-inner">🌿</div>
+  <!-- SAND BAND — "Glow Naturally" promo strip (replaces 2nd hero image) -->
+  <div class="h2-band">
+    <div class="h2-band-text">
+      <p class="h2-band-label">Glow Naturally</p>
+      <h2 class="h2-band-heading">Real ingredients.<br>Real results. No noise.</h2>
+      <p class="h2-band-sub">Panchagavya wisdom meets modern skin science. Every bar, every drop — crafted to let your skin breathe, heal, and glow the way nature intended.</p>
     </div>
-    <div class="editorial-content">
-      <p class="editorial-eyebrow">Shop the collection</p>
-      <h2 class="editorial-heading">Crafted with care</h2>
-      <p class="editorial-body">Transparent labels, thoughtful sourcing, and steady, small-batch quality — no noise, just honesty.</p>
-      <button class="editorial-btn" onclick="showPage('shop')">View Products</button>
+    <button class="h2-band-btn" onclick="showPage('shop')">Buy Now</button>
+  </div>
+
+  <!-- EDITORIAL — "Crafted with Care" (media_with_content section) -->
+  <div class="h2-editorial">
+    <div class="h2-ed-media">
+      <div class="h2-ed-media-overlay"></div>
+      <div class="h2-ed-media-icon">🌿</div>
+    </div>
+    <div class="h2-ed-content">
+      <p class="h2-ed-eyebrow">Shop the collection</p>
+      <h2 class="h2-ed-heading">Crafted with care</h2>
+      <p class="h2-ed-body">Transparent labels, thoughtful sourcing, and steady, small-batch quality — no noise, just honesty.</p>
+      <button class="h2-ed-btn" onclick="showPage('shop')">View Products</button>
     </div>
   </div>
 
-  <!-- OUR PROMISE -->
-  <section class="section values-section">
+  <!-- OUR PROMISE ── values section -->
+  <section class="section values-section" style="padding:64px 0;">
     <div class="container">
       <p class="section-label" id="promise-label">Our Promise</p>
-      <h2 class="section-title" id="promise-title">What we stand for</h2>
-
+      <h2 class="section-title" id="promise-title" style="margin-bottom:32px;">What we stand for</h2>
       <div class="values-grid" id="promise-cards">
 
         <div class="value-card">
           <div class="value-icon">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2C6 2 3 8 3 12c0 5 4 9 9 9s9-4 9-9C21 7 17 2 12 2z"/>
-              <path d="M12 2c0 0 0 10-6 14"/>
-            </svg>
+            <svg viewBox="0 0 24 24"><path d="M12 2C6 2 3 8 3 12c0 5 4 9 9 9s9-4 9-9C21 7 17 2 12 2z"/><path d="M12 2c0 0 0 10-6 14"/></svg>
           </div>
           <h4 class="value-title">100% Natural</h4>
           <p class="value-desc">Every ingredient is plant-derived, ethically sourced and free from synthetic chemicals.</p>
@@ -421,9 +565,7 @@
 
         <div class="value-card">
           <div class="value-icon">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-            </svg>
+            <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
           </div>
           <h4 class="value-title">Cruelty Free</h4>
           <p class="value-desc">We never test on animals. Our products are certified cruelty-free and vegan.</p>
@@ -431,11 +573,7 @@
 
         <div class="value-card">
           <div class="value-icon">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <rect x="7" y="2" width="10" height="3" rx="1"/>
-              <path d="M6 5h12l1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L6 5z"/>
-              <line x1="9" y1="10" x2="15" y2="10"/>
-            </svg>
+            <svg viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="3" rx="1"/><path d="M6 5h12l1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L6 5z"/><line x1="9" y1="10" x2="15" y2="10"/></svg>
           </div>
           <h4 class="value-title">Small Batch</h4>
           <p class="value-desc">Crafted in small batches to ensure maximum freshness and potency in every product.</p>
@@ -443,10 +581,7 @@
 
         <div class="value-card">
           <div class="value-icon">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 22c0 0-7-5-7-11a7 7 0 0 1 14 0c0 6-7 11-7 11z"/>
-              <path d="M12 11c0 0-3-3-3-6a3 3 0 0 1 6 0c0 3-3 6-3 6z"/>
-            </svg>
+            <svg viewBox="0 0 24 24"><path d="M12 22c0 0-7-5-7-11a7 7 0 0 1 14 0c0 6-7 11-7 11z"/><path d="M12 11c0 0-3-3-3-6a3 3 0 0 1 6 0c0 3-3 6-3 6z"/></svg>
           </div>
           <h4 class="value-title">Ayurveda Rooted</h4>
           <p class="value-desc">Formulas inspired by 5,000 years of Ayurvedic wisdom, adapted for modern skin.</p>
@@ -459,9 +594,7 @@
 </div><!-- end #home -->
 
 
-<!-- ═══════════════════════════
-     SHOP PAGE
-═══════════════════════════ -->
+<!-- ═══════════════════════════ SHOP ═══════════════════════════ -->
 <div id="shop" class="page">
   <section class="section">
     <div class="container">
@@ -474,10 +607,7 @@
   </section>
 </div>
 
-
-<!-- ═══════════════════════════
-     PRODUCT PAGE
-═══════════════════════════ -->
+<!-- ═══════════════════════════ PRODUCT ═══════════════════════════ -->
 <div id="product" class="page">
   <section class="section">
     <div class="container">
@@ -492,10 +622,7 @@
   </section>
 </div>
 
-
-<!-- ═══════════════════════════
-     CART PAGE
-═══════════════════════════ -->
+<!-- ═══════════════════════════ CART ═══════════════════════════ -->
 <div id="cart" class="page">
   <section class="section">
     <div class="container">
@@ -506,10 +633,7 @@
   </section>
 </div>
 
-
-<!-- ═══════════════════════════
-     CHECKOUT PAGE
-═══════════════════════════ -->
+<!-- ═══════════════════════════ CHECKOUT ═══════════════════════════ -->
 <div id="checkout" class="page">
   <section class="section">
     <div class="container">
@@ -517,22 +641,10 @@
       <h2 class="section-title">Complete your ritual</h2>
       <div id="checkout-alert"></div>
       <div class="checkout-form" id="checkout-form-wrap">
-        <div class="form-group">
-          <label>Full Name</label>
-          <input type="text" id="co-name" placeholder="e.g. Priya Sharma" required/>
-        </div>
-        <div class="form-group">
-          <label>Email Address</label>
-          <input type="email" id="co-email" placeholder="priya@example.com" required/>
-        </div>
-        <div class="form-group">
-          <label>Phone Number</label>
-          <input type="tel" id="co-phone" placeholder="+91 98765 43210" required/>
-        </div>
-        <div class="form-group">
-          <label>Delivery Address</label>
-          <textarea id="co-address" placeholder="Full address with PIN code" required></textarea>
-        </div>
+        <div class="form-group"><label>Full Name</label><input type="text" id="co-name" placeholder="e.g. Priya Sharma" required/></div>
+        <div class="form-group"><label>Email Address</label><input type="email" id="co-email" placeholder="priya@example.com" required/></div>
+        <div class="form-group"><label>Phone Number</label><input type="tel" id="co-phone" placeholder="+91 98765 43210" required/></div>
+        <div class="form-group"><label>Delivery Address</label><textarea id="co-address" placeholder="Full address with PIN code" required></textarea></div>
         <div class="checkout-order-summary" id="checkout-summary"></div>
         <button class="btn-primary" id="place-order-btn" onclick="placeOrder()">Place Order</button>
       </div>
@@ -546,10 +658,7 @@
   </section>
 </div>
 
-
-<!-- ═══════════════════════════
-     FOOTER
-═══════════════════════════ -->
+<!-- ═══════════════════════════ FOOTER ═══════════════════════════ -->
 <footer class="site-footer">
   <div class="site-footer-inner">
     <div class="site-footer-brand">
@@ -589,14 +698,13 @@
         <li><a href="#">hello@surabhisutra.in</a></li>
       </ul>
       <h4 style="margin-top:1.5rem;">Office</h4>
-      <p style="font-size:12px;opacity:.6;line-height:1.8;">Surabhi Sutra Naturals<br>New Delhi, India — 110001</p>
+      <p style="font-size:12px;opacity:.5;line-height:1.8;">Surabhi Sutra Naturals<br>New Delhi, India — 110001</p>
     </div>
   </div>
   <div class="site-footer-bottom">
     © 2025 Surabhi Sutra · All rights reserved · Made with love in India
   </div>
 </footer>
-
 
 <script src="js/app.js"></script>
 </body>
