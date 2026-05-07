@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Home Page 2 — Theme Preview | Surabhi Sutra</title>
+  <link rel="stylesheet" href="css/styles.css">
+
+  <!-- ── OLD THEME OVERRIDE ──────────────────────────────────────
+       Colors extracted from the old Shopify store's section JSON:
+       · Primary:    #0d6a73  (dark teal  — was sage green #4A7C59)
+       · CTA:        #7a2121  (deep maroon — was terracotta #C4714A)
+       · Background: #fdf8e1  (warm parchment)
+       · Beige:      #f5e9c8  (amber beige)
+       · Accent:     #ffb701  (amber yellow — from marquee highlight)
+  ─────────────────────────────────────────────────────────────── -->
+  <style>
+    /* ── THEME VARIABLES ── */
+    :root {
+      --cream:       #fdf8e1;
+      --beige:       #f5e9c8;
+      --sage:        #0d6a73;
+      --sage-light:  #1a8a96;
+      --terracotta:  #7a2121;
+      --brown:       #5a1818;
+      --text-dark:   #1a1a1a;
+      --text-mid:    #555;
+      --text-light:  #888;
+      --border:      #d4c9a8;
+      --amber:       #ffb701;
+      --amber-bg:    #fff8e1;
+    }
+
+    /* ── PREVIEW BANNER ── */
+    .theme-preview-bar {
+      background: var(--amber);
+      color: #1a1a1a;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 8px 16px;
+      position: sticky;
+      top: 0;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+    .theme-preview-bar a {
+      color: #1a1a1a;
+      text-decoration: underline;
+      font-size: 11px;
+      opacity: .7;
+    }
+
+    /* ── NAV ── */
+    nav {
+      border-bottom: 2px solid var(--amber);
+      background: #fff;
+    }
+    nav .nav-logo { color: var(--sage); letter-spacing: 4px; }
+    nav .nav-links a { color: var(--text-dark); }
+    nav .nav-links a:hover { color: var(--sage); }
+    nav .nav-cart {
+      background: var(--sage);
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 8px 18px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    nav .nav-cart:hover { background: var(--terracotta); }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(160deg, #0d6a73 0%, #0a4f5a 55%, #7a2121 100%);
+      color: #fff;
+      min-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 80px 48px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+    .hero-eyebrow {
+      color: var(--amber);
+      letter-spacing: 3px;
+      font-size: 12px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+    .hero-title {
+      color: #fff;
+      font-size: clamp(2rem, 5vw, 3.8rem);
+      max-width: 640px;
+      line-height: 1.15;
+    }
+    .hero-title span {
+      color: var(--amber);
+    }
+    .hero-sub {
+      color: rgba(255,255,255,.8);
+      margin-top: 16px;
+      max-width: 520px;
+      font-size: 1.05rem;
+      line-height: 1.7;
+    }
+    .btn-primary {
+      background: var(--terracotta);
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 14px 32px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 28px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: background .2s, transform .15s;
+    }
+    .btn-primary:hover {
+      background: #9a2929;
+      transform: translateY(-1px);
+    }
+    @media(max-width:600px) {
+      .hero { padding: 60px 20px; min-height: 70vh; }
+    }
+
+    /* ── MARQUEE BAR ── */
+    .marquee-bar {
+      background: #0d6a73;
+      color: #fff;
+      padding: 14px 0;
+      overflow: hidden;
+    }
+    .marquee-track span:not(.marquee-dot) {
+      background: #ffb70160;
+      padding: 2px 10px;
+      border-radius: 3px;
+    }
+    .marquee-dot { color: rgba(255,255,255,.4); }
+
+    /* ── SECTION LABELS / TITLES ── */
+    .section-label { color: var(--sage); }
+    .section-title { color: var(--text-dark); }
+
+    /* ── VALUE CARDS ── */
+    .value-card { border-top: 3px solid var(--amber); background: #fff; }
+    .value-icon svg { fill: none; stroke: var(--sage); stroke-width: 1.8; }
+    .value-title { color: var(--sage); }
+    .value-desc { color: var(--text-mid); }
+
+    /* ── PRODUCT CARDS ── */
+    .product-card { border: 1px solid var(--border); border-radius: 6px; overflow: hidden; background: #fff; }
+    .product-price { color: var(--terracotta); font-weight: 800; }
+    .btn-add { background: var(--sage); color: #fff; border: none; border-radius: 4px; }
+    .btn-add:hover { background: var(--terracotta); }
+
+    /* ── EDITORIAL SECTION (old site "Crafted with Care") ── */
+    .editorial-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 480px;
+    }
+    .editorial-media {
+      background: linear-gradient(135deg, #0d6a73 0%, #0a4f5a 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .editorial-media-inner {
+      text-align: center;
+      color: rgba(255,255,255,.25);
+      font-size: 5rem;
+    }
+    .editorial-media::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 20px,
+        rgba(255,255,255,.03) 20px,
+        rgba(255,255,255,.03) 40px
+      );
+    }
+    .editorial-content {
+      background: var(--amber-bg);
+      padding: 64px 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 24px;
+    }
+    .editorial-eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--sage);
+    }
+    .editorial-heading {
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 700;
+      color: var(--text-dark);
+      line-height: 1.25;
+    }
+    .editorial-body {
+      color: var(--text-mid);
+      line-height: 1.75;
+      max-width: 440px;
+    }
+    .editorial-btn {
+      display: inline-block;
+      background: var(--sage);
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 13px 28px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      align-self: flex-start;
+      transition: background .2s;
+    }
+    .editorial-btn:hover { background: var(--terracotta); }
+    @media(max-width:768px) {
+      .editorial-section { grid-template-columns: 1fr; }
+      .editorial-media { min-height: 240px; }
+      .editorial-content { padding: 40px 24px; }
+    }
+
+    /* ── VALUES SECTION ── */
+    .values-section { background: var(--amber-bg); }
+    .values-grid { grid-template-columns: repeat(4, 1fr); }
+    @media(max-width:768px) { .values-grid { grid-template-columns: 1fr 1fr; } }
+
+    /* ── FOOTER ── */
+    .site-footer { background: var(--sage); color: rgba(255,255,255,.85); }
+    .site-footer-inner { border-bottom: 1px solid rgba(255,255,255,.15); }
+    .site-footer-inner h4 { color: #fff; }
+    .site-footer-inner a { color: rgba(255,255,255,.7); }
+    .site-footer-inner a:hover { color: var(--amber); }
+    .site-footer-brand h4 { color: #fff; }
+    .site-footer-socials a {
+      border-color: rgba(255,255,255,.3);
+      color: rgba(255,255,255,.7);
+    }
+    .site-footer-socials a:hover { border-color: var(--amber); color: var(--amber); }
+    .site-footer-bottom { color: rgba(255,255,255,.5); border-top: 1px solid rgba(255,255,255,.1); }
+
+    /* ── WELCOME SCREEN ── */
+    #welcome-screen {
+      background: linear-gradient(160deg, #0d6a73 0%, #0a4f5a 60%, #7a2121 100%);
+    }
+    .welcome-logo, .welcome-title, .welcome-tagline { color: #fff; }
+    .welcome-divider { background: var(--amber); }
+    .welcome-loader { border-color: rgba(255,255,255,.2); border-top-color: var(--amber); }
+  </style>
+</head>
+
+<body>
+
+<!-- THEME PREVIEW BANNER -->
+<div class="theme-preview-bar">
+  ✦ THEME PREVIEW — Home Page 2 (Old Store Theme)
+  <a href="index.html">← Back to current site</a>
+</div>
+
+<!-- ─────────────────────────────
+     WELCOME SCREEN
+───────────────────────────── -->
+<div id="welcome-screen">
+  <div class="welcome-logo">Surabhi Sutra</div>
+  <div class="welcome-divider"></div>
+  <h1 class="welcome-title" id="welcome-title">Welcome to<br>Surabhi Sutra</h1>
+  <p class="welcome-tagline" id="welcome-tagline">Explore the Sanatan way of living</p>
+  <div class="welcome-loader"></div>
+</div>
+
+<!-- ─────────────────────────────
+     TOAST
+───────────────────────────── -->
+<div id="toast-container"></div>
+
+<!-- ─────────────────────────────
+     NAV
+───────────────────────────── -->
+<nav>
+  <div class="nav-logo" onclick="showPage('home')">SURABHI SUTRA</div>
+
+  <ul class="nav-links">
+    <li><a onclick="showPage('home')">Home</a></li>
+    <li><a onclick="showPage('shop')">Shop</a></li>
+    <li><a onclick="window.location.href='about.html'">About</a></li>
+  </ul>
+
+  <button class="nav-cart" onclick="showPage('cart')">
+    Cart (<span id="cart-count">0</span>)
+  </button>
+</nav>
+
+
+<!-- ═══════════════════════════
+     HOME PAGE
+═══════════════════════════ -->
+<div id="home" class="page active">
+
+  <!-- HERO -->
+  <section class="hero">
+    <p class="hero-eyebrow" id="hero-eyebrow">Ayurveda Inspired</p>
+    <h1 class="hero-title" id="hero-title">
+      Loved by Skin, <span>Powered by Nature</span>
+    </h1>
+    <p class="hero-sub" id="hero-sub">
+      Pure ingredients. Honest formulations. Skincare rooted in tradition.
+    </p>
+    <button onclick="showPage('shop')" class="btn-primary">
+      Shop the Collection
+    </button>
+  </section>
+
+  <!-- MARQUEE BAR — old theme text -->
+  <div class="marquee-bar">
+    <div class="marquee-track" id="marquee-track">
+      <span>Tan melts</span>
+      <span class="marquee-dot">→</span>
+      <span>Pores detox</span>
+      <span class="marquee-dot">→</span>
+      <span>7 layers heal</span>
+      <span class="marquee-dot">→</span>
+      <span>Sacred glow awakens</span>
+      <span class="marquee-dot">·</span>
+      <span>100% natural</span>
+      <span class="marquee-dot">·</span>
+      <span>Cruelty free</span>
+      <span class="marquee-dot">·</span>
+      <span>Small batch crafted</span>
+      <span class="marquee-dot">·</span>
+      <!-- duplicate for seamless loop -->
+      <span>Tan melts</span>
+      <span class="marquee-dot">→</span>
+      <span>Pores detox</span>
+      <span class="marquee-dot">→</span>
+      <span>7 layers heal</span>
+      <span class="marquee-dot">→</span>
+      <span>Sacred glow awakens</span>
+      <span class="marquee-dot">·</span>
+      <span>100% natural</span>
+      <span class="marquee-dot">·</span>
+      <span>Cruelty free</span>
+      <span class="marquee-dot">·</span>
+      <span>Small batch crafted</span>
+      <span class="marquee-dot">·</span>
+    </div>
+  </div>
+
+  <!-- BESTSELLERS -->
+  <section class="section">
+    <div class="container">
+      <p class="section-label" id="bestsellers-label">Bestsellers</p>
+      <h2 class="section-title" id="bestsellers-title">Customer favorites</h2>
+      <div id="home-products" class="products-grid">
+        <p class="loading-text">Loading products...</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDITORIAL — "Crafted with Care" (from old site media_with_content section) -->
+  <div class="editorial-section">
+    <div class="editorial-media">
+      <div class="editorial-media-inner">🌿</div>
+    </div>
+    <div class="editorial-content">
+      <p class="editorial-eyebrow">Shop the collection</p>
+      <h2 class="editorial-heading">Crafted with care</h2>
+      <p class="editorial-body">Transparent labels, thoughtful sourcing, and steady, small-batch quality — no noise, just honesty.</p>
+      <button class="editorial-btn" onclick="showPage('shop')">View Products</button>
+    </div>
+  </div>
+
+  <!-- OUR PROMISE -->
+  <section class="section values-section">
+    <div class="container">
+      <p class="section-label" id="promise-label">Our Promise</p>
+      <h2 class="section-title" id="promise-title">What we stand for</h2>
+
+      <div class="values-grid" id="promise-cards">
+
+        <div class="value-card">
+          <div class="value-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2C6 2 3 8 3 12c0 5 4 9 9 9s9-4 9-9C21 7 17 2 12 2z"/>
+              <path d="M12 2c0 0 0 10-6 14"/>
+            </svg>
+          </div>
+          <h4 class="value-title">100% Natural</h4>
+          <p class="value-desc">Every ingredient is plant-derived, ethically sourced and free from synthetic chemicals.</p>
+        </div>
+
+        <div class="value-card">
+          <div class="value-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+          </div>
+          <h4 class="value-title">Cruelty Free</h4>
+          <p class="value-desc">We never test on animals. Our products are certified cruelty-free and vegan.</p>
+        </div>
+
+        <div class="value-card">
+          <div class="value-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <rect x="7" y="2" width="10" height="3" rx="1"/>
+              <path d="M6 5h12l1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L6 5z"/>
+              <line x1="9" y1="10" x2="15" y2="10"/>
+            </svg>
+          </div>
+          <h4 class="value-title">Small Batch</h4>
+          <p class="value-desc">Crafted in small batches to ensure maximum freshness and potency in every product.</p>
+        </div>
+
+        <div class="value-card">
+          <div class="value-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 22c0 0-7-5-7-11a7 7 0 0 1 14 0c0 6-7 11-7 11z"/>
+              <path d="M12 11c0 0-3-3-3-6a3 3 0 0 1 6 0c0 3-3 6-3 6z"/>
+            </svg>
+          </div>
+          <h4 class="value-title">Ayurveda Rooted</h4>
+          <p class="value-desc">Formulas inspired by 5,000 years of Ayurvedic wisdom, adapted for modern skin.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</div><!-- end #home -->
+
+
+<!-- ═══════════════════════════
+     SHOP PAGE
+═══════════════════════════ -->
+<div id="shop" class="page">
+  <section class="section">
+    <div class="container">
+      <p class="section-label">THE COLLECTION</p>
+      <h2 class="section-title">Discover your ritual</h2>
+      <div id="shop-products" class="products-grid">
+        <p class="loading-text">Loading products...</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+<!-- ═══════════════════════════
+     PRODUCT PAGE
+═══════════════════════════ -->
+<div id="product" class="page">
+  <section class="section">
+    <div class="container">
+      <div class="back-link" onclick="showPage('shop')">← Back to Shop</div>
+      <div id="product-content"></div>
+      <div class="section">
+        <p class="section-label">COMPLETE YOUR RITUAL</p>
+        <h2 class="section-title">Explore complementary botanicals</h2>
+        <div id="related-products" class="products-grid"></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+<!-- ═══════════════════════════
+     CART PAGE
+═══════════════════════════ -->
+<div id="cart" class="page">
+  <section class="section">
+    <div class="container">
+      <p class="section-label">YOUR RITUAL</p>
+      <h2 class="section-title">Review your selections</h2>
+      <div id="cart-content"></div>
+    </div>
+  </section>
+</div>
+
+
+<!-- ═══════════════════════════
+     CHECKOUT PAGE
+═══════════════════════════ -->
+<div id="checkout" class="page">
+  <section class="section">
+    <div class="container">
+      <p class="section-label">FINALIZE</p>
+      <h2 class="section-title">Complete your ritual</h2>
+      <div id="checkout-alert"></div>
+      <div class="checkout-form" id="checkout-form-wrap">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="co-name" placeholder="e.g. Priya Sharma" required/>
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="co-email" placeholder="priya@example.com" required/>
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" id="co-phone" placeholder="+91 98765 43210" required/>
+        </div>
+        <div class="form-group">
+          <label>Delivery Address</label>
+          <textarea id="co-address" placeholder="Full address with PIN code" required></textarea>
+        </div>
+        <div class="checkout-order-summary" id="checkout-summary"></div>
+        <button class="btn-primary" id="place-order-btn" onclick="placeOrder()">Place Order</button>
+      </div>
+      <div id="order-confirmation" style="display:none;" class="order-confirmation">
+        <div class="confirmation-icon">✓</div>
+        <h3>Ritual Complete</h3>
+        <p id="confirmation-msg">Thank you. Your journey with Surabhi Sutra begins now.</p>
+        <button class="btn-primary" onclick="showPage('shop')" style="margin-top:1.5rem;">Continue Shopping</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+<!-- ═══════════════════════════
+     FOOTER
+═══════════════════════════ -->
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <div class="site-footer-brand">
+      <h4>Surabhi Sutra</h4>
+      <p>Surabhi Sutra brings five thousand years of Ayurvedic wisdom into your daily skincare ritual. Every product is made fresh, in small batches, with ingredients your skin was always meant to meet.</p>
+      <div class="site-footer-socials">
+        <a href="#" title="Telegram">T</a>
+        <a href="#" title="Facebook">f</a>
+        <a href="#" title="Instagram">ig</a>
+      </div>
+    </div>
+    <div>
+      <h4>Shop For</h4>
+      <ul>
+        <li><a onclick="showPage('shop')">Face Care</a></li>
+        <li><a onclick="showPage('shop')">Hair Care</a></li>
+        <li><a onclick="showPage('shop')">Body Care</a></li>
+        <li><a onclick="showPage('shop')">Baby Care</a></li>
+        <li><a onclick="showPage('shop')">Men's Range</a></li>
+        <li><a onclick="showPage('shop')">Gifting</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Useful Links</h4>
+      <ul>
+        <li><a href="#">FAQs</a></li>
+        <li><a href="#">Track Order</a></li>
+        <li><a href="#">Blogs</a></li>
+        <li><a href="#">Returns Policy</a></li>
+        <li><a href="about.html">About Us</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Contact Us</h4>
+      <ul>
+        <li><a href="#">WhatsApp Us</a></li>
+        <li><a href="#">hello@surabhisutra.in</a></li>
+      </ul>
+      <h4 style="margin-top:1.5rem;">Office</h4>
+      <p style="font-size:12px;opacity:.6;line-height:1.8;">Surabhi Sutra Naturals<br>New Delhi, India — 110001</p>
+    </div>
+  </div>
+  <div class="site-footer-bottom">
+    © 2025 Surabhi Sutra · All rights reserved · Made with love in India
+  </div>
+</footer>
+
+
+<script src="js/app.js"></script>
+</body>
+</html>
