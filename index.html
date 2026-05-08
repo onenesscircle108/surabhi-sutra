@@ -51,8 +51,8 @@
     <button class="nav-icon-btn" title="Wishlist" aria-label="Wishlist">
       <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
     </button>
-    <button class="nav-cart" onclick="showPage('cart')">
-      Bag&nbsp;(<span id="cart-count">0</span>)
+    <button class="nav-cart" onclick="openCartDrawer()">
+      Cart&nbsp;(<span id="cart-count">0</span>)
     </button>
     <button class="nav-hamburger" id="nav-hamburger" onclick="toggleMobileMenu()" aria-label="Open menu">
       <span></span><span></span><span></span>
@@ -67,7 +67,7 @@
     <a onclick="showPage('home');toggleMobileMenu()">Home</a>
     <a onclick="showPage('shop');toggleMobileMenu()">Shop</a>
     <a onclick="window.location.href='about.html'">About</a>
-    <button class="btn-primary" onclick="showPage('cart');toggleMobileMenu()">
+    <button class="btn-primary" onclick="toggleMobileMenu();openCartDrawer()">
       Cart (<span id="mobile-cart-count">0</span>)
     </button>
   </nav>
@@ -324,6 +324,11 @@
       <p class="section-label">THE COLLECTION</p>
       <h2 class="section-title">Discover your ritual</h2>
 
+      <div class="shop-search-wrap">
+        <svg class="shop-search-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" id="shop-search" class="shop-search-input" placeholder="Search products..." oninput="filterShop(this.value)">
+      </div>
+
       <div id="shop-products" class="products-grid">
         <p class="loading-text">Loading products...</p>
       </div>
@@ -474,6 +479,19 @@
   </div>
 </footer>
 
+
+<!-- MAIN CART DRAWER -->
+<div id="main-cart-overlay" class="main-cart-overlay" onclick="closeCartDrawer()"></div>
+<div id="main-cart-drawer" class="main-cart-drawer">
+  <div class="main-cart-panel">
+    <div class="main-cart-head">
+      <span>Cart (<span id="main-cart-count">0</span>)</span>
+      <button class="main-cart-close" onclick="closeCartDrawer()" aria-label="Close">&#x2715;</button>
+    </div>
+    <div class="main-cart-body" id="main-cart-body"></div>
+    <div class="main-cart-foot" id="main-cart-foot"></div>
+  </div>
+</div>
 
 <!-- ─────────────────────────────
      JS

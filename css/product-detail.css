@@ -436,7 +436,7 @@ button{ cursor:pointer; border:none; background:none; font-family:inherit; }
 .pd-expand-card-inner{position:relative;z-index:1;padding:2.5rem 2rem;}
 .pd-expand-eyebrow{
   font-size:11px;letter-spacing:3px;text-transform:uppercase;
-  color:var(--sage-light);margin-bottom:.5rem;
+  color:rgba(255,255,255,.6);margin-bottom:.5rem;
   font-family:'Inter',system-ui,sans-serif;
 }
 .pd-expand-title{

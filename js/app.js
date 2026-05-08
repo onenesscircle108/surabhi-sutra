@@ -89,6 +89,7 @@ function showPage(page){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById(page).classList.add('active');
   window.scrollTo(0,0);
+  if(page==='shop') renderShop();
 }
 
 function toggleMobileMenu(){
@@ -210,10 +211,22 @@ function renderHome(){
 }
 
 function renderShop(){
+  const searchInput = document.getElementById('shop-search');
+  filterShop(searchInput ? searchInput.value : '');
+}
+
+function filterShop(query){
   const el = document.getElementById('shop-products');
   if(!el) return;
-
-  el.innerHTML = products.map(productCard).join('');
+  const q = (query||'').trim().toLowerCase();
+  const filtered = q ? products.filter(p=>
+    (p.name||'').toLowerCase().includes(q)||
+    (p.description||'').toLowerCase().includes(q)||
+    (p.category||'').toLowerCase().includes(q)
+  ) : products;
+  el.innerHTML = filtered.length
+    ? filtered.map(productCard).join('')
+    : '<p class="loading-text">No products found for "'+q+'".</p>';
 }
 
 // ─────────────────────────────
@@ -425,6 +438,58 @@ function updateCartUI(){
   const mc = document.getElementById('mobile-cart-count');
   if(mc) mc.textContent = count;
   renderCart();
+  if(document.getElementById('main-cart-drawer')?.classList.contains('open')) renderCartDrawer();
+}
+
+function openCartDrawer(){
+  renderCartDrawer();
+  document.getElementById('main-cart-drawer').classList.add('open');
+  document.getElementById('main-cart-overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function closeCartDrawer(){
+  document.getElementById('main-cart-drawer').classList.remove('open');
+  document.getElementById('main-cart-overlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+function renderCartDrawer(){
+  const body = document.getElementById('main-cart-body');
+  const foot = document.getElementById('main-cart-foot');
+  const countEl = document.getElementById('main-cart-count');
+  if(!body) return;
+  const count = cart.reduce((s,i)=>s+i.qty,0);
+  if(countEl) countEl.textContent = count;
+  if(!cart.length){
+    body.innerHTML='<div class="main-cart-empty">Your cart is empty.<br><small style="color:var(--text-light);">Add something beautiful.</small></div>';
+    if(foot) foot.innerHTML='';
+    return;
+  }
+  body.innerHTML = cart.map(item=>{
+    const product = products.find(p=>p.id==item.id);
+    const imgSrc = product ? (product.images?.[0]||'') : '';
+    const imgTag = imgSrc
+      ? `<img src="${imgSrc}" class="main-cart-thumb" alt="${escapeAttr(item.name)}">`
+      : `<div class="main-cart-thumb"></div>`;
+    return `
+    <div class="main-cart-item">
+      ${imgTag}
+      <div class="main-cart-info">
+        <div class="main-cart-name">${escapeAttr(item.name)}</div>
+        <div class="main-cart-price">&#8377;${item.price} &times; ${item.qty} &nbsp;<strong style="color:var(--text-dark)">&#8377;${item.price*item.qty}</strong></div>
+      </div>
+      <button class="main-cart-remove" onclick="removeFromCart('${escapeAttr(item.id)}')" title="Remove">&#x2715;</button>
+    </div>`;
+  }).join('');
+  const subtotal = cart.reduce((s,i)=>s+i.price*i.qty,0);
+  if(foot) foot.innerHTML=`
+    <div class="main-cart-subtotal">
+      <span class="main-cart-subtotal-label">Subtotal</span>
+      <span class="main-cart-subtotal-amount">&#8377;${subtotal}</span>
+    </div>
+    <button class="btn-primary" style="width:100%;margin-bottom:.75rem;" onclick="closeCartDrawer();showPage('checkout')">Proceed to Checkout</button>
+    <button class="main-cart-continue-btn" onclick="closeCartDrawer()">Continue Shopping</button>`;
 }
 
 function renderCart(){

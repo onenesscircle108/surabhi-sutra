@@ -1123,9 +1123,9 @@ function getFomoSettings() {
     return {
       interval: s.interval || 28,
       duration: s.duration || 5,
-      names_raw: s.names_raw || ''
+      names_raw: s.names_raw || 'Mumbai{Priya, Ananya, Kavitha, Riya};Delhi{Rahul, Vikram, Sneha};Bangalore{Shreya, Divya, Meera, Pooja};Chennai{Lakshmi, Deepa, Geetha};Pune{Sunita, Rekha, Nisha};Hyderabad{Sravya, Mounika, Pallavi};Kolkata{Subhadra, Tanusree};London{Aisha, Preethi};Dubai{Manisha, Farah}'
     };
-  } catch { return { interval: 28, duration: 5, names_raw: '' }; }
+  } catch { return { interval: 28, duration: 5, names_raw: 'Mumbai{Priya, Ananya};Delhi{Rahul, Sneha}' }; }
 }
 
 function parseFomoNames(raw) {
@@ -1172,7 +1172,7 @@ function initFomo() {
   }
 
   setInterval(showFomo, s.interval * 1000);
-  setTimeout(showFomo,  s.interval * 1000);
+  setTimeout(showFomo, 5000);
 }
 
 function closeFomo() {
