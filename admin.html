@@ -107,6 +107,104 @@ body{font-family:Arial,sans-serif;background:var(--beige);min-height:100vh;}
 
 .thumb-strip{display:flex;gap:4px;flex-wrap:wrap;}
 .thumb-strip img{width:36px;height:36px;object-fit:cover;border-radius:4px;border:1px solid var(--border);}
+
+.mobile-action-btn{display:none;}
+
+/* ── MOBILE RESPONSIVE ── */
+@media(max-width:768px){
+  /* Stack layout */
+  #app{grid-template-columns:1fr!important;grid-template-rows:auto 1fr;}
+
+  /* Sidebar becomes horizontal scrollable tab strip */
+  .sidebar{
+    flex-direction:row;
+    align-items:center;
+    flex-wrap:nowrap;
+    padding:0.75rem 0.75rem 0;
+    overflow-x:auto;
+    gap:0;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  .sidebar::-webkit-scrollbar{display:none;}
+  .sidebar-logo{
+    white-space:nowrap;
+    font-size:11px;
+    letter-spacing:1px;
+    margin-bottom:0;
+    padding-bottom:0;
+    padding-right:1rem;
+    border-bottom:none;
+    border-right:1px solid rgba(255,255,255,.2);
+    margin-right:0.75rem;
+    flex-shrink:0;
+  }
+  .menu{
+    display:flex;
+    flex-direction:row;
+    flex-wrap:nowrap;
+    overflow-x:auto;
+    gap:4px;
+    flex:1;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    padding-bottom:0.75rem;
+  }
+  .menu::-webkit-scrollbar{display:none;}
+  .menu li{margin-bottom:0;flex-shrink:0;}
+  .menu button{
+    white-space:nowrap;
+    padding:8px 12px;
+    font-size:12px;
+    border-radius:20px;
+  }
+  #sidebar-admin-email{display:none;}
+  .desktop-only{display:none!important;}
+  .mobile-action-btn{
+    display:inline-block;
+    flex-shrink:0;
+    width:36px;height:36px;
+    padding:0;
+    border-radius:50%;
+    font-size:16px;
+    text-align:center;
+    line-height:36px;
+    margin-left:4px;
+    margin-bottom:0.75rem;
+  }
+
+  /* Main content */
+  .main{padding:1rem;}
+
+  /* Grids → single column */
+  .stats{grid-template-columns:1fr 1fr;}
+  .form-row{grid-template-columns:1fr!important;}
+  .content-grid{grid-template-columns:1fr!important;}
+  .promise-editor{grid-template-columns:1fr!important;}
+  .image-slots{grid-template-columns:1fr 1fr!important;}
+
+  /* Benefit/ingredient editors */
+  .pp-benefit-row-edit{grid-template-columns:1fr auto!important;}
+  .pp-ing-item-edit{grid-template-columns:1fr auto!important;}
+
+  /* Tables scroll horizontally */
+  .data-table-wrap{overflow-x:auto;}
+  .data-table{min-width:600px;}
+
+  /* Form boxes */
+  .form-box{padding:1rem;}
+  .stat-card{padding:1rem;}
+  .stat-num{font-size:24px;}
+
+  /* Login stays centered */
+  .login-box{width:90%;max-width:360px;}
+}
+
+@media(max-width:480px){
+  .stats{grid-template-columns:1fr;}
+  .image-slots{grid-template-columns:1fr!important;}
+  .section-card{padding:0.75rem;}
+}
 </style>
 </head>
 <body>
@@ -139,8 +237,12 @@ body{font-family:Arial,sans-serif;background:var(--beige);min-height:100vh;}
       <li><button class="nav-btn" onclick="showSection('account',this)">👤 Account</button></li>
     </ul>
     <div style="font-size:11px;color:rgba(255,255,255,.4);padding:0 4px;margin-bottom:0.5rem;" id="sidebar-admin-email"></div>
-    <button class="logout-btn" onclick="goToSite()">← Back to Website</button>
-    <button class="logout-btn" onclick="doLogout()">Logout</button>
+    <!-- Desktop: full buttons -->
+    <button class="logout-btn desktop-only" onclick="goToSite()">← Back to Website</button>
+    <button class="logout-btn desktop-only" onclick="doLogout()">Logout</button>
+    <!-- Mobile: compact icons appended to tab strip via CSS -->
+    <button class="logout-btn mobile-action-btn" onclick="goToSite()" title="Back to site">🌐</button>
+    <button class="logout-btn mobile-action-btn" onclick="doLogout()" title="Logout">🚪</button>
   </div>
 
   <div class="main">
@@ -224,16 +326,18 @@ body{font-family:Arial,sans-serif;background:var(--beige);min-height:100vh;}
         </div>
       </div>
 
-      <table class="data-table" style="margin-top:1rem;">
-        <thead>
-          <tr>
-            <th>ID</th><th>Images</th><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Bundle</th><th>Actions</th>
-          </tr>
-        </thead>
-        <tbody id="prod-tbody">
-          <tr><td colspan="8" class="empty-state">No products yet. Add your first product!</td></tr>
-        </tbody>
-      </table>
+      <div class="data-table-wrap" style="margin-top:1rem;">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>ID</th><th>Images</th><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Bundle</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="prod-tbody">
+            <tr><td colspan="8" class="empty-state">No products yet. Add your first product!</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <!-- CONTENT -->
@@ -562,14 +666,16 @@ body{font-family:Arial,sans-serif;background:var(--beige);min-height:100vh;}
     <!-- ORDERS -->
     <div id="orders" class="section">
       <div class="page-title">Customer Orders</div>
-      <table class="data-table">
-        <thead>
-          <tr><th>Order ID</th><th>Customer</th><th>Phone</th><th>Amount</th><th>Date</th><th>Status</th></tr>
-        </thead>
-        <tbody id="orders-tbody">
-          <tr><td colspan="6" class="empty-state">No orders yet.</td></tr>
-        </tbody>
-      </table>
+      <div class="data-table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr><th>Order ID</th><th>Customer</th><th>Phone</th><th>Amount</th><th>Date</th><th>Status</th></tr>
+          </thead>
+          <tbody id="orders-tbody">
+            <tr><td colspan="6" class="empty-state">No orders yet.</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <!-- ABOUT PAGE EDITOR -->
@@ -643,10 +749,12 @@ body{font-family:Arial,sans-serif;background:var(--beige);min-height:100vh;}
         <h3>Admin Users</h3>
         <p style="font-size:13px;color:#777;margin-bottom:1rem;">All emails listed here can log in to this admin panel. Data is stored in the <strong>Admin_id</strong> sheet in your Google Sheet.</p>
         <div id="admins-alert"></div>
-        <table class="data-table" style="margin-bottom:1rem;">
-          <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Action</th></tr></thead>
-          <tbody id="admins-tbody"><tr><td colspan="4" class="empty-state">Loading...</td></tr></tbody>
-        </table>
+        <div class="data-table-wrap" style="margin-bottom:1rem;">
+          <table class="data-table">
+            <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Action</th></tr></thead>
+            <tbody id="admins-tbody"><tr><td colspan="4" class="empty-state">Loading...</td></tr></tbody>
+          </table>
+        </div>
         <div class="section-card">
           <h4 style="margin-bottom:1rem;">Add New Admin</h4>
           <div class="form-row">

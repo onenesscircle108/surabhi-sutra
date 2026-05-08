@@ -47,7 +47,24 @@
   <button class="nav-cart" onclick="showPage('cart')">
     Cart (<span id="cart-count">0</span>)
   </button>
+
+  <button class="nav-hamburger" id="nav-hamburger" onclick="toggleMobileMenu()" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- MOBILE NAV OVERLAY -->
+<div id="mobile-nav-overlay" class="mobile-nav-overlay">
+  <button class="mobile-nav-close" onclick="toggleMobileMenu()" aria-label="Close menu">✕</button>
+  <nav class="mobile-nav-list">
+    <a onclick="showPage('home');toggleMobileMenu()">Home</a>
+    <a onclick="showPage('shop');toggleMobileMenu()">Shop</a>
+    <a onclick="window.location.href='about.html'">About</a>
+    <button class="btn-primary" onclick="showPage('cart');toggleMobileMenu()">
+      Cart (<span id="mobile-cart-count">0</span>)
+    </button>
+  </nav>
+</div>
 
 
 <!-- ═══════════════════════════

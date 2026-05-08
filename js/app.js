@@ -91,6 +91,14 @@ function showPage(page){
   window.scrollTo(0,0);
 }
 
+function toggleMobileMenu(){
+  const overlay = document.getElementById('mobile-nav-overlay');
+  overlay.classList.toggle('open');
+  // keep mobile cart count in sync
+  const mc = document.getElementById('mobile-cart-count');
+  if(mc) mc.textContent = document.getElementById('cart-count').textContent;
+}
+
 // ─────────────────────────────
 // FETCH PRODUCTS
 // ─────────────────────────────
@@ -414,6 +422,8 @@ function addBundle(qty,discountRate,cardEl){
 function updateCartUI(){
   const count = cart.reduce((s,i)=>s+i.qty,0);
   document.getElementById('cart-count').textContent = count;
+  const mc = document.getElementById('mobile-cart-count');
+  if(mc) mc.textContent = count;
   renderCart();
 }
 

@@ -162,7 +162,21 @@
   <button class="pd-nav-cart" onclick="window.location.href='index.html?goto=cart'">
     Cart (<span id="cart-count">0</span>)
   </button>
+  <button class="pd-nav-hamburger" onclick="document.getElementById('ab-mobile-nav').classList.toggle('open')" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- MOBILE NAV OVERLAY (about page) -->
+<div id="ab-mobile-nav" class="pd-mobile-nav">
+  <button class="pd-mobile-nav-close" onclick="document.getElementById('ab-mobile-nav').classList.remove('open')" aria-label="Close menu">✕</button>
+  <nav class="pd-mobile-nav-links">
+    <a onclick="window.location.href='index.html'">Home</a>
+    <a onclick="window.location.href='index.html'">Shop</a>
+    <a onclick="window.location.href='about.html'" style="color:var(--terracotta);">About</a>
+    <a onclick="window.location.href='index.html?goto=cart'">Cart</a>
+  </nav>
+</div>
 
 <!-- ─── HERO ─── -->
 <section class="ab-hero">

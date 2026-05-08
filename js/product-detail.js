@@ -443,8 +443,10 @@ function saveCart(cart) {
 }
 function updateCartBadge() {
   const count = getCart().reduce((s, i) => s + i.qty, 0);
-  const badge = document.getElementById('cart-badge');
-  if (badge) badge.textContent = count;
+  ['cart-badge', 'mobile-cart-badge'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = count;
+  });
 }
 function addToCartCore(id, name, price, qty = 1) {
   const cart = getCart();
