@@ -3,430 +3,523 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Home Page 2 — Old Theme Preview | Surabhi Sutra</title>
+  <title>Surabhi Sutra — Ancient Wisdom. Modern Skin.</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
-
-  <!--
-    ═══════════════════════════════════════════════════════════════
-    OLD SHOPIFY THEME — exact values from settings_data.json
-
-    Main scheme (scheme-44346392-abe9-4f5b-aa1d-057f957efb1a):
-      background:  #fdf8e1   warm parchment
-      foreground:  #28535e   dark teal-green (ALL text incl headings)
-      btn_bg:      #7a2121   deep maroon
-      btn_hover:   #1f5458   darker teal
-      secondary:   #a98b7f   warm mauve (links, outlines)
-
-    Global UI:
-      Font:         Inter 400/700 (not serif)
-      Btn radius:   14px
-      Card radius:  4px
-      H1: 56px · H2: 48px · H3: 32px · H4: 24px · body: 14px
-      Marquee highlight: #ffb70175 (amber, 46% opacity)
-      Footer bg:    #333333 (dark scheme-5)
-    ═══════════════════════════════════════════════════════════════
-  -->
   <style>
-    /* ── RESET INHERITED VARS ── */
-    *, *::before, *::after { font-family: 'Inter', system-ui, sans-serif; }
+/* ── ROOT OVERRIDES ── */
+:root{
+  --h3-bg:#ffffff;
+  --h3-surface:#f7f4ef;
+  --h3-text:#1c1c1c;
+  --h3-mid:#6b6b6b;
+  --h3-light:#aaaaaa;
+  --h3-accent:#7a2121;
+  --h3-accent-dk:#5c1818;
+  --h3-gold:#c8922a;
+  --h3-sage:#28535e;
+  --h3-border:#e8e3dc;
+}
+*,*::before,*::after{font-family:'Inter',system-ui,sans-serif;}
+body{background:var(--h3-bg);color:var(--h3-text);}
 
-    :root {
-      --t-bg:        #fdf8e1;
-      --t-beige:     #f5edcc;
-      --t-fg:        #28535e;
-      --t-fg-mid:    #5a7a82;
-      --t-fg-light:  #a98b7f;
-      --t-maroon:    #7a2121;
-      --t-maroon-dk: #1f5458;
-      --t-amber:     #ffb701;
-      --t-amber-bg:  #ffb70126;
-      --t-sand:      #e0b692;
-      --t-sand-fg:   #1b2e1e;
-      --t-dark:      #333333;
-      --t-border:    rgba(0,0,0,.08);
-      --t-radius:    14px;
-      --t-card-r:    4px;
-    }
+/* ── CORNER BADGES ── */
+.h3-back{
+  position:fixed;top:0;left:0;z-index:10000;
+  background:var(--h3-text);color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:1px;
+  text-transform:uppercase;padding:6px 14px;
+  border-bottom-right-radius:10px;text-decoration:none;
+  transition:background .2s;
+}
+.h3-back:hover{background:var(--h3-accent);}
+.h3-badge{
+  position:fixed;top:0;right:0;z-index:10000;
+  background:var(--h3-accent);color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:1.5px;
+  text-transform:uppercase;padding:6px 14px;
+  border-bottom-left-radius:10px;
+}
 
-    body { background: var(--t-bg); color: var(--t-fg); }
+/* ── WELCOME SCREEN ── */
+#welcome-screen{background:var(--h3-text);}
+.welcome-logo,.welcome-title,.welcome-tagline{color:#fff;}
+.welcome-divider{background:var(--h3-gold);}
+.welcome-loader::after{background:var(--h3-gold);}
 
-    /* ── PREVIEW BADGE ── */
-    .h2-badge {
-      position: fixed; top: 0; right: 0; z-index: 10000;
-      background: var(--t-maroon); color: #fff;
-      font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
-      text-transform: uppercase; padding: 6px 14px;
-      border-bottom-left-radius: 10px;
-    }
-    .h2-back-link {
-      position: fixed; top: 0; left: 0; z-index: 10000;
-      background: var(--t-fg); color: #fff;
-      font-size: 10px; font-weight: 700; letter-spacing: 1px;
-      text-transform: uppercase; padding: 6px 14px;
-      border-bottom-right-radius: 10px;
-      text-decoration: none; transition: background .2s;
-    }
-    .h2-back-link:hover { background: var(--t-maroon); }
+/* ── ANNOUNCE BAR ── */
+.h3-announce{
+  background:var(--h3-text);
+  color:rgba(255,255,255,.85);
+  text-align:center;
+  font-size:11.5px;font-weight:500;
+  letter-spacing:.7px;padding:10px 16px;
+  margin-top:28px;
+}
+.h3-announce strong{color:var(--h3-gold);}
 
-    /* ── ANNOUNCEMENT BAR ── */
-    .h2-announce {
-      background: var(--t-fg);
-      color: #fff;
-      text-align: center;
-      font-size: 12px;
-      font-weight: 500;
-      letter-spacing: .5px;
-      padding: 9px 16px;
-      margin-top: 28px;
-    }
-    .h2-announce strong { color: var(--t-amber); }
+/* ── NAV ── */
+nav{
+  background:var(--h3-bg);
+  border-bottom:1px solid var(--h3-border);
+  padding:0 2rem;height:70px;
+  display:flex;align-items:center;
+  justify-content:space-between;
+  position:sticky;top:0;z-index:200;
+  box-shadow:0 1px 12px rgba(0,0,0,.04);
+}
+.nav-logo{
+  font-size:13px;font-weight:700;letter-spacing:5px;
+  color:var(--h3-text);cursor:pointer;flex-shrink:0;
+}
+.nav-links{
+  display:flex;gap:1.75rem;list-style:none;
+  position:absolute;left:50%;transform:translateX(-50%);
+}
+.nav-links a{
+  font-size:11.5px;letter-spacing:1.2px;text-transform:uppercase;
+  color:var(--h3-mid);cursor:pointer;white-space:nowrap;transition:color .2s;
+}
+.nav-links a:hover{color:var(--h3-accent);}
+.h3-nav-actions{display:flex;align-items:center;gap:12px;flex-shrink:0;}
+.h3-nav-icon{
+  background:none;border:none;cursor:pointer;
+  padding:8px;color:var(--h3-text);transition:color .2s;
+}
+.h3-nav-icon:hover{color:var(--h3-accent);}
+.h3-nav-icon svg{
+  width:20px;height:20px;stroke:currentColor;
+  fill:none;stroke-width:1.6;display:block;
+}
+.nav-cart{
+  background:var(--h3-accent);color:#fff;
+  border:none;border-radius:2px;padding:9px 20px;
+  font-size:11.5px;font-weight:700;letter-spacing:1px;
+  text-transform:uppercase;cursor:pointer;
+  font-family:'Inter',sans-serif;transition:background .2s;
+}
+.nav-cart:hover{background:var(--h3-accent-dk);}
+.nav-hamburger{
+  display:none;flex-direction:column;gap:5px;
+  background:none;border:none;cursor:pointer;padding:6px;
+}
+.nav-hamburger span{
+  display:block;width:22px;height:2px;
+  background:var(--h3-text);border-radius:2px;transition:.3s;
+}
+@media(max-width:768px){
+  .nav-links{display:none;}
+  .nav-hamburger{display:flex;}
+  .nav-cart{display:none;}
+  .h3-nav-icon{display:none;}
+  nav{padding:0 1.25rem;}
+}
 
-    /* ── NAV ── */
-    nav {
-      background: var(--t-bg);
-      border-bottom: 1px solid var(--t-border);
-      box-shadow: 0 1px 8px rgba(40,83,94,.08);
-    }
-    nav .nav-logo {
-      color: var(--t-fg);
-      font-family: 'Inter', sans-serif;
-      font-weight: 700;
-      letter-spacing: 4px;
-      font-size: 14px;
-    }
-    nav .nav-links a {
-      color: var(--t-fg);
-      font-size: 13px;
-      font-weight: 500;
-    }
-    nav .nav-links a:hover { color: var(--t-maroon); }
-    nav .nav-cart {
-      background: var(--t-maroon);
-      color: #fff;
-      border: none;
-      border-radius: var(--t-radius);
-      padding: 9px 20px;
-      font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background .2s;
-      font-family: 'Inter', sans-serif;
-    }
-    nav .nav-cart:hover { background: var(--t-maroon-dk); }
+/* ── HERO ── */
+.h3-hero{
+  display:grid;
+  grid-template-columns:1fr 300px;
+  gap:40px;
+  align-items:center;
+  padding:100px max(5%,60px) 100px max(6%,60px);
+  min-height:88vh;
+  background:var(--h3-bg);
+  position:relative;overflow:hidden;
+}
+.h3-hero::before{
+  content:'';position:absolute;
+  top:-10%;right:-5%;
+  width:55%;height:130%;
+  background:radial-gradient(ellipse,rgba(200,146,42,.07) 0%,transparent 65%);
+  pointer-events:none;
+}
+.h3-hero-eyebrow{
+  font-size:10.5px;font-weight:600;
+  letter-spacing:4px;text-transform:uppercase;
+  color:var(--h3-light);margin-bottom:28px;
+}
+.h3-hero-h1{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:clamp(3rem,6.5vw,6rem);
+  font-weight:600;color:var(--h3-text);
+  line-height:1.02;letter-spacing:-1px;
+  margin-bottom:28px;
+}
+.h3-hero-h1 em{font-style:italic;color:var(--h3-accent);}
+.h3-hero-sub{
+  font-size:15px;color:var(--h3-mid);
+  line-height:1.75;max-width:480px;margin-bottom:40px;
+}
+.h3-hero-actions{display:flex;gap:14px;flex-wrap:wrap;}
+.h3-btn-filled{
+  padding:14px 36px;background:var(--h3-accent);color:#fff;
+  border:none;border-radius:2px;font-size:12px;font-weight:700;
+  letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;
+  font-family:'Inter',sans-serif;transition:background .2s;
+}
+.h3-btn-filled:hover{background:var(--h3-accent-dk);}
+.h3-btn-ghost{
+  padding:14px 36px;background:transparent;color:var(--h3-text);
+  border:1.5px solid var(--h3-border);border-radius:2px;
+  font-size:12px;font-weight:600;letter-spacing:1.5px;
+  text-transform:uppercase;cursor:pointer;
+  font-family:'Inter',sans-serif;transition:.2s;
+}
+.h3-btn-ghost:hover{border-color:var(--h3-text);}
 
-    /* ── WELCOME SCREEN ── */
-    #welcome-screen {
-      background: var(--t-fg);
-    }
-    .welcome-logo, .welcome-title, .welcome-tagline { color: #fff; font-family: 'Inter', sans-serif; }
-    .welcome-divider { background: var(--t-amber); }
-    .welcome-loader { border-color: rgba(255,255,255,.2); border-top-color: var(--t-amber); }
+/* spinning circle decor */
+.h3-hero-decor{
+  display:flex;align-items:center;justify-content:center;
+  position:relative;width:260px;height:260px;
+}
+.h3-circle-svg{
+  position:absolute;width:100%;height:100%;
+  animation:h3spin 28s linear infinite;
+}
+.h3-circle-chars{
+  font-size:10.5px;letter-spacing:3px;
+  fill:var(--h3-light);font-family:'Inter',sans-serif;
+}
+.h3-circle-icon{
+  font-size:3.8rem;position:relative;z-index:1;opacity:.55;
+}
+@keyframes h3spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+@media(max-width:900px){
+  .h3-hero{grid-template-columns:1fr;padding:80px 24px;}
+  .h3-hero-decor{display:none;}
+  .h3-hero-sub{max-width:100%;}
+}
 
-    /* ── HERO ── */
-    .hero {
-      background: var(--t-bg);
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      min-height: 80vh;
-      overflow: hidden;
-    }
-    .h2-hero-text {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 80px 56px 80px 48px;
-      gap: 20px;
-    }
-    .h2-hero-visual {
-      background: var(--t-fg);
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    /* Organic leaf shapes for visual interest since we don't have product photos */
-    .h2-hero-visual::before {
-      content: '';
-      position: absolute;
-      width: 120%; height: 120%;
-      background: radial-gradient(ellipse at 30% 40%, #1f5458 0%, #28535e 40%, #1a3a42 100%);
-    }
-    .h2-hero-visual::after {
-      content: '🌿';
-      font-size: 10rem;
-      opacity: .15;
-      position: absolute;
-      bottom: -20px; right: -20px;
-      transform: rotate(-20deg);
-    }
-    .h2-hero-label {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: var(--t-fg-light);
-    }
-    .h2-hero-h1 {
-      font-size: clamp(2rem, 4vw, 3.5rem);
-      font-weight: 700;
-      color: var(--t-fg);
-      line-height: 1.1;
-      letter-spacing: -.5px;
-    }
-    .h2-hero-h1 em {
-      font-style: normal;
-      color: var(--t-maroon);
-    }
-    .h2-hero-sub {
-      font-size: 14px;
-      color: var(--t-fg-mid);
-      line-height: 1.75;
-      max-width: 440px;
-    }
-    .btn-primary {
-      background: var(--t-maroon);
-      color: #fff;
-      border: none;
-      border-radius: var(--t-radius);
-      padding: 14px 28px;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      width: fit-content;
-      letter-spacing: .3px;
-      transition: background .2s;
-      font-family: 'Inter', sans-serif;
-    }
-    .btn-primary:hover { background: var(--t-maroon-dk); }
-    @media(max-width:768px) {
-      .hero { grid-template-columns: 1fr; }
-      .h2-hero-visual { min-height: 260px; order: -1; }
-      .h2-hero-text { padding: 40px 24px; }
-    }
+/* ── STATS STRIP ── */
+.h3-stats{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  background:var(--h3-surface);
+  border-top:1px solid var(--h3-border);
+  border-bottom:1px solid var(--h3-border);
+}
+.h3-stat{
+  padding:40px 20px;text-align:center;
+  border-right:1px solid var(--h3-border);
+}
+.h3-stat:last-child{border-right:none;}
+.h3-stat-num{
+  display:block;
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(2rem,3vw,2.8rem);
+  font-weight:600;color:var(--h3-text);
+  line-height:1;margin-bottom:8px;
+}
+.h3-stat-label{
+  font-size:10.5px;letter-spacing:2.5px;
+  text-transform:uppercase;color:var(--h3-light);
+}
+@media(max-width:768px){
+  .h3-stats{grid-template-columns:repeat(2,1fr);}
+  .h3-stat:nth-child(2){border-right:none;}
+}
 
-    /* ── MARQUEE ── */
-    .marquee-bar {
-      background: var(--t-fg);
-      padding: 14px 0;
-      overflow: hidden;
-    }
-    .marquee-track { color: rgba(255,255,255,.9); }
-    .marquee-track span:not(.marquee-dot) {
-      background: var(--t-amber-bg);
-      padding: 3px 12px;
-      border-radius: 3px;
-      font-weight: 700;
-      font-size: 13px;
-      letter-spacing: .3px;
-    }
-    .marquee-dot { color: rgba(255,255,255,.35); margin: 0 6px; }
+/* ── MARQUEE OVERRIDE ── */
+.marquee-bar{background:var(--h3-sage);padding:14px 0;}
+.marquee-track span:not(.marquee-dot){
+  color:rgba(255,255,255,.9);font-size:12px;letter-spacing:.5px;
+}
+.marquee-dot{color:rgba(255,255,255,.3);}
 
-    /* ── SECTION COMMON ── */
-    .section { background: var(--t-bg); }
-    .section-label { color: var(--t-fg-light); font-size: 11px; letter-spacing: 3px; }
-    .section-title { color: var(--t-fg); font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 700; letter-spacing: -.3px; }
+/* ── CATEGORY TILES ── */
+.h3-cats-section{padding:88px 24px;background:var(--h3-bg);}
+.h3-cats-inner{max-width:1280px;margin:0 auto;}
+.h3-cats-head{text-align:center;margin-bottom:44px;}
+.h3-cats-eyebrow{
+  font-size:10.5px;letter-spacing:3.5px;text-transform:uppercase;
+  color:var(--h3-light);margin-bottom:12px;
+}
+.h3-cats-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.8rem,3vw,2.8rem);font-weight:600;color:var(--h3-text);
+}
+.h3-cats-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:16px;
+}
+.h3-cat-tile{
+  aspect-ratio:3/4;position:relative;overflow:hidden;
+  cursor:pointer;display:flex;align-items:flex-end;
+  transition:transform .5s ease;
+}
+.h3-cat-tile:hover{transform:scale(1.02);}
+.h3-cat-bg{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:5.5rem;transition:transform .5s ease;
+}
+.h3-cat-tile:hover .h3-cat-bg{transform:scale(1.08);}
+.h3-cat-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(20,20,20,.72) 0%,transparent 55%);
+}
+.h3-cat-label{position:relative;z-index:1;padding:22px 20px;}
+.h3-cat-name{
+  display:block;font-size:15px;font-weight:700;
+  color:#fff;letter-spacing:.3px;margin-bottom:5px;
+}
+.h3-cat-link{font-size:11px;color:rgba(255,255,255,.65);letter-spacing:1.5px;text-transform:uppercase;}
+@media(max-width:900px){.h3-cats-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:480px){.h3-cats-grid{gap:10px;}}
 
-    /* ── PRODUCT LIST HEADER ── */
-    .h2-collection-header {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      gap: 16px;
-      margin-bottom: 28px;
-    }
-    .h2-collection-header h2 {
-      font-size: 24px;
-      font-weight: 700;
-      color: var(--t-fg);
-      letter-spacing: -.3px;
-      margin: 0;
-    }
-    .h2-view-all {
-      font-size: 13px;
-      color: var(--t-fg-light);
-      font-weight: 600;
-      cursor: pointer;
-      text-decoration: underline;
-      text-underline-offset: 3px;
-      white-space: nowrap;
-      background: none;
-      border: none;
-      font-family: 'Inter', sans-serif;
-    }
-    .h2-view-all:hover { color: var(--t-maroon); }
+/* ── BESTSELLERS ── */
+.h3-products-section{
+  padding:88px 24px;background:var(--h3-surface);
+  border-top:1px solid var(--h3-border);
+}
+.h3-products-inner{max-width:1280px;margin:0 auto;}
+.h3-products-head{
+  display:flex;align-items:flex-end;justify-content:space-between;
+  margin-bottom:40px;gap:16px;
+}
+.h3-products-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.8rem,3vw,2.6rem);font-weight:600;color:var(--h3-text);
+}
+.h3-view-all{
+  font-size:11.5px;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--h3-mid);text-decoration:underline;text-underline-offset:4px;
+  background:none;border:none;cursor:pointer;
+  font-family:'Inter',sans-serif;transition:color .2s;white-space:nowrap;
+}
+.h3-view-all:hover{color:var(--h3-accent);}
+/* Product card overrides */
+.h3-products-section .product-card{
+  background:var(--h3-bg);border:none;border-radius:0;
+  box-shadow:none;overflow:hidden;
+}
+.h3-products-section .product-card:hover{
+  box-shadow:none;transform:none;
+}
+.h3-products-section .product-img{
+  height:auto;aspect-ratio:3/4;background:var(--h3-surface);
+  overflow:hidden;
+}
+.h3-products-section .product-img img{
+  transition:transform .55s ease;
+}
+.h3-products-section .product-card:hover .product-img img{
+  transform:scale(1.07);
+}
+.h3-products-section .product-info{padding:16px 0 0;}
+.h3-products-section .product-name{font-size:14px;font-weight:600;color:var(--h3-text);margin-bottom:6px;}
+.h3-products-section .product-price{font-size:14px;color:var(--h3-mid);font-weight:400;}
 
-    /* ── PRODUCT CARDS ── */
-    .product-card {
-      border: none;
-      border-radius: var(--t-card-r);
-      background: #fff;
-      box-shadow: 0 1px 4px rgba(40,83,94,.07);
-      transition: box-shadow .2s;
-    }
-    .product-card:hover { box-shadow: 0 4px 16px rgba(40,83,94,.13); }
-    .product-img { border-radius: var(--t-card-r) var(--t-card-r) 0 0; }
-    .product-name { color: var(--t-fg); font-size: 14px; font-weight: 500; }
-    .product-price { color: var(--t-fg); font-size: 14px; font-weight: 700; }
-    .product-original { color: var(--t-fg-light); }
-    .btn-add {
-      background: var(--t-maroon);
-      color: #fff;
-      border: none;
-      border-radius: var(--t-radius);
-      font-family: 'Inter', sans-serif;
-      font-weight: 700;
-      font-size: 13px;
-      padding: 10px 18px;
-      cursor: pointer;
-      transition: background .2s;
-    }
-    .btn-add:hover { background: var(--t-maroon-dk); }
+/* ── TRUST ── */
+.h3-trust-section{
+  padding:88px 24px;background:var(--h3-bg);
+  border-top:1px solid var(--h3-border);
+  border-bottom:1px solid var(--h3-border);
+}
+.h3-trust-inner{max-width:1280px;margin:0 auto;}
+.h3-trust-head{text-align:center;margin-bottom:60px;}
+.h3-trust-eyebrow{
+  font-size:10.5px;letter-spacing:3.5px;text-transform:uppercase;
+  color:var(--h3-light);margin-bottom:12px;
+}
+.h3-trust-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.8rem,3vw,2.8rem);font-weight:600;color:var(--h3-text);
+}
+.h3-trust-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:40px;
+}
+.h3-trust-item{text-align:center;}
+.h3-trust-icon{
+  width:56px;height:56px;margin:0 auto 20px;
+  border:1.5px solid var(--h3-border);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;
+}
+.h3-trust-name{font-size:14px;font-weight:700;color:var(--h3-text);margin-bottom:10px;}
+.h3-trust-desc{font-size:13px;color:var(--h3-mid);line-height:1.7;}
+@media(max-width:900px){.h3-trust-grid{grid-template-columns:repeat(2,1fr);gap:36px;}}
+@media(max-width:480px){.h3-trust-grid{grid-template-columns:1fr;gap:28px;}}
 
-    /* ── DIVIDER BAND (between product grid and editorial) ── */
-    .h2-band {
-      background: var(--t-sand);
-      color: var(--t-sand-fg);
-      padding: 48px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 32px;
-    }
-    .h2-band-text { max-width: 560px; }
-    .h2-band-label { font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; opacity: .7; margin-bottom: 8px; }
-    .h2-band-heading { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 700; line-height: 1.2; margin-bottom: 12px; }
-    .h2-band-sub { font-size: 14px; line-height: 1.75; opacity: .8; }
-    .h2-band-btn {
-      flex-shrink: 0;
-      background: var(--t-sand-fg);
-      color: #e0b692;
-      border: none;
-      border-radius: var(--t-radius);
-      padding: 13px 28px;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      font-family: 'Inter', sans-serif;
-      white-space: nowrap;
-      transition: opacity .2s;
-    }
-    .h2-band-btn:hover { opacity: .85; }
-    @media(max-width:640px) {
-      .h2-band { flex-direction: column; padding: 32px 20px; }
-      .h2-band-btn { width: 100%; text-align: center; }
-    }
+/* ── EDITORIAL ── */
+.h3-editorial{
+  display:grid;grid-template-columns:1fr 1fr;
+}
+.h3-ed-panel{
+  background:var(--h3-sage);
+  min-height:560px;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+}
+.h3-ed-panel::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 30% 50%,#1f5458 0%,#1a3a42 100%);
+}
+.h3-ed-leaf{
+  font-size:9rem;opacity:.13;
+  position:relative;z-index:1;transform:rotate(-12deg);
+}
+.h3-ed-content{
+  padding:80px 64px;
+  display:flex;flex-direction:column;
+  justify-content:center;gap:24px;
+  background:var(--h3-surface);
+}
+.h3-ed-eyebrow{
+  font-size:10.5px;letter-spacing:3.5px;text-transform:uppercase;
+  color:var(--h3-light);
+}
+.h3-ed-heading{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(2rem,3.5vw,3.2rem);font-weight:600;
+  color:var(--h3-text);line-height:1.12;letter-spacing:-.5px;
+}
+.h3-ed-heading em{font-style:italic;color:var(--h3-accent);}
+.h3-ed-body{
+  font-size:14px;color:var(--h3-mid);
+  line-height:1.85;max-width:460px;
+}
+.h3-ed-btn{
+  width:fit-content;padding:13px 28px;
+  background:var(--h3-text);color:#fff;
+  border:none;border-radius:2px;
+  font-size:11.5px;font-weight:700;
+  letter-spacing:1.5px;text-transform:uppercase;
+  cursor:pointer;font-family:'Inter',sans-serif;
+  transition:background .2s;
+}
+.h3-ed-btn:hover{background:var(--h3-accent);}
+@media(max-width:900px){
+  .h3-editorial{grid-template-columns:1fr;}
+  .h3-ed-panel{min-height:280px;}
+  .h3-ed-content{padding:52px 28px;}
+}
 
-    /* ── EDITORIAL (Crafted with care) ── */
-    .h2-editorial {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-    }
-    .h2-ed-media {
-      background: var(--t-fg);
-      min-height: 60svh;
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .h2-ed-media-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, rgba(40,83,94,.6) 0%, transparent 60%);
-    }
-    .h2-ed-media-icon {
-      font-size: 8rem;
-      opacity: .18;
-      position: relative;
-      z-index: 1;
-    }
-    .h2-ed-content {
-      background: var(--t-bg);
-      padding: 64px 56px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      gap: 24px;
-    }
-    .h2-ed-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--t-fg-light); }
-    .h2-ed-heading { font-size: clamp(1.8rem, 3vw, 2.4rem); font-weight: 700; color: var(--t-fg); letter-spacing: -.3px; line-height: 1.2; }
-    .h2-ed-body { font-size: 14px; color: var(--t-fg-mid); line-height: 1.75; max-width: 440px; }
-    .h2-ed-btn {
-      background: var(--t-maroon);
-      color: #fff;
-      border: none;
-      border-radius: var(--t-radius);
-      padding: 13px 28px;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      width: fit-content;
-      font-family: 'Inter', sans-serif;
-      transition: background .2s;
-    }
-    .h2-ed-btn:hover { background: var(--t-maroon-dk); }
-    @media(max-width:768px) {
-      .h2-editorial { grid-template-columns: 1fr; }
-      .h2-ed-media { min-height: 220px; }
-      .h2-ed-content { padding: 36px 20px; }
-    }
+/* ── CERTIFICATIONS ── */
+.h3-certs{
+  padding:36px 24px;
+  border-top:1px solid var(--h3-border);
+  border-bottom:1px solid var(--h3-border);
+  background:var(--h3-bg);
+}
+.h3-certs-inner{
+  max-width:1200px;margin:0 auto;
+  display:flex;align-items:center;
+  justify-content:center;gap:48px;flex-wrap:wrap;
+}
+.h3-certs-label{
+  font-size:9.5px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--h3-light);font-weight:700;white-space:nowrap;
+}
+.h3-certs-sep{width:1px;height:32px;background:var(--h3-border);flex-shrink:0;}
+.h3-cert{text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px;}
+.h3-cert-icon{font-size:22px;}
+.h3-cert-name{
+  font-size:10px;letter-spacing:1.5px;
+  color:var(--h3-mid);font-weight:700;text-transform:uppercase;
+}
+@media(max-width:600px){.h3-certs-inner{gap:24px;}.h3-certs-sep{display:none;}}
 
-    /* ── VALUES ── */
-    .values-section { background: var(--t-beige); }
-    .value-card {
-      background: var(--t-bg);
-      border: none;
-      border-radius: 8px;
-      box-shadow: 0 1px 6px rgba(40,83,94,.08);
-    }
-    .value-icon svg { fill: none; stroke: var(--t-fg); stroke-width: 1.5; }
-    .value-title { color: var(--t-fg); font-size: 15px; font-weight: 700; font-family: 'Inter', sans-serif; }
-    .value-desc { color: var(--t-fg-mid); font-size: 13px; line-height: 1.6; }
+/* ── TESTIMONIALS ── */
+.h3-test-section{padding:88px 24px;background:var(--h3-surface);}
+.h3-test-inner{max-width:1280px;margin:0 auto;}
+.h3-test-head{text-align:center;margin-bottom:52px;}
+.h3-test-eyebrow{
+  font-size:10.5px;letter-spacing:3.5px;text-transform:uppercase;
+  color:var(--h3-light);margin-bottom:12px;
+}
+.h3-test-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.8rem,3vw,2.8rem);font-weight:600;color:var(--h3-text);
+}
+.h3-test-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:28px;
+}
+.h3-test-card{
+  background:var(--h3-bg);padding:36px;
+  border:1px solid var(--h3-border);
+}
+.h3-test-stars{
+  color:var(--h3-gold);font-size:15px;letter-spacing:3px;margin-bottom:18px;
+}
+.h3-test-text{
+  font-size:14px;color:var(--h3-mid);
+  line-height:1.8;margin-bottom:24px;font-style:italic;
+}
+.h3-test-author{font-size:12px;font-weight:700;color:var(--h3-text);letter-spacing:.5px;}
+.h3-test-location{font-size:11px;color:var(--h3-light);margin-top:3px;}
+@media(max-width:900px){.h3-test-grid{grid-template-columns:1fr;max-width:520px;margin:0 auto;}}
 
-    /* ── FOOTER ── */
-    .site-footer { background: var(--t-dark); color: rgba(255,255,255,.75); }
-    .site-footer-inner { border-bottom: 1px solid rgba(255,255,255,.1); }
-    .site-footer-inner h4 { color: #fff; font-family: 'Inter', sans-serif; }
-    .site-footer-inner a { color: rgba(255,255,255,.6); font-size: 13px; }
-    .site-footer-inner a:hover { color: var(--t-amber); }
-    .site-footer-brand h4 { color: #fff; font-size: 16px; letter-spacing: 2px; }
-    .site-footer-brand p { font-size: 13px; line-height: 1.7; }
-    .site-footer-socials a {
-      border-color: rgba(255,255,255,.25);
-      color: rgba(255,255,255,.6);
-    }
-    .site-footer-socials a:hover { border-color: var(--t-amber); color: var(--t-amber); }
-    .site-footer-bottom { color: rgba(255,255,255,.35); font-size: 12px; border-top: 1px solid rgba(255,255,255,.08); }
+/* ── INSTAGRAM ── */
+.h3-insta-section{
+  padding:72px 24px;background:var(--h3-bg);
+  border-top:1px solid var(--h3-border);
+  text-align:center;
+}
+.h3-insta-label{
+  font-size:10.5px;letter-spacing:3.5px;text-transform:uppercase;
+  color:var(--h3-light);margin-bottom:10px;
+}
+.h3-insta-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.4rem,2.5vw,2rem);font-weight:600;
+  color:var(--h3-text);margin-bottom:32px;
+}
+.h3-insta-grid{
+  display:grid;grid-template-columns:repeat(6,1fr);
+  gap:4px;max-width:960px;margin:0 auto 28px;
+}
+.h3-insta-tile{
+  aspect-ratio:1/1;display:flex;
+  align-items:center;justify-content:center;
+  font-size:2.2rem;opacity:.45;
+  cursor:pointer;transition:opacity .3s;
+  border:1px solid var(--h3-border);
+}
+.h3-insta-tile:hover{opacity:.75;}
+.h3-insta-tile:nth-child(1){background:#e8f0ec;}
+.h3-insta-tile:nth-child(2){background:#f5edcc;}
+.h3-insta-tile:nth-child(3){background:#ece8f0;}
+.h3-insta-tile:nth-child(4){background:#f0e8e0;}
+.h3-insta-tile:nth-child(5){background:#e0ecf0;}
+.h3-insta-tile:nth-child(6){background:#f0ece0;}
+.h3-insta-handle{font-size:14px;color:var(--h3-mid);margin-bottom:18px;}
+.h3-insta-handle a{color:var(--h3-accent);font-weight:700;text-decoration:none;}
+.h3-insta-follow{
+  padding:12px 28px;border:1.5px solid var(--h3-text);
+  background:none;color:var(--h3-text);border-radius:2px;
+  font-size:11.5px;font-weight:700;letter-spacing:1.5px;
+  text-transform:uppercase;cursor:pointer;
+  font-family:'Inter',sans-serif;transition:.2s;
+}
+.h3-insta-follow:hover{background:var(--h3-text);color:#fff;}
+@media(max-width:600px){.h3-insta-grid{grid-template-columns:repeat(3,1fr);}}
 
-    /* ── FOMO OVERRIDE (match old popup exactly) ── */
-    .fomo-badge {
-      background: #fdf8e1;
-      border: 2px solid #7f171d;
-      border-radius: 8px;
-    }
-    .fomo-avatar { background: #7a2121; }
+/* ── FOOTER OVERRIDE ── */
+.site-footer{background:#111;color:rgba(255,255,255,.7);}
+.site-footer-inner a:hover{color:var(--h3-gold);}
+.site-footer-socials a:hover{border-color:var(--h3-gold);color:var(--h3-gold);}
 
-    /* ── FLOATING BUY BAR OVERRIDE ── */
-    .pd-float-bar { border-top: 2px solid var(--t-fg); }
-    .pd-float-bar-btn { background: var(--t-maroon); border-radius: 8px; }
-    .pd-float-bar-btn:hover { background: var(--t-maroon-dk); }
-    .pd-float-bar-tag { color: var(--t-fg-light); }
-    .pd-float-bar-name { color: var(--t-fg); font-family: 'Inter', sans-serif; }
+/* ── GENERAL PAGE OVERRIDES ── */
+.page{display:none;}.page.active{display:block;}
+.section{padding:4rem 0;}
+.section-label{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--h3-light);margin-bottom:10px;}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.6rem,3vw,2.4rem);font-weight:600;color:var(--h3-text);margin-bottom:2rem;}
+.btn-primary{background:var(--h3-accent);border-radius:2px;font-weight:700;letter-spacing:1px;}
+.btn-primary:hover{background:var(--h3-accent-dk);}
+.product-card{border-radius:0;border:none;box-shadow:0 1px 4px rgba(0,0,0,.06);}
+.product-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.1);}
+.back-link{font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--h3-light);cursor:pointer;margin-bottom:2rem;display:inline-block;}
+.back-link:hover{color:var(--h3-accent);}
   </style>
 </head>
-
 <body>
 
-<!-- Fixed corner badges -->
-<a class="h2-back-link" href="index.html">← Current Site</a>
-<div class="h2-badge">Theme Preview v2</div>
+<!-- Corner badges -->
+<a class="h3-back" href="index.html">← Current Site</a>
+<div class="h3-badge">Preview v3</div>
 
-<!-- ─── WELCOME SCREEN ─── -->
+<!-- WELCOME SCREEN -->
 <div id="welcome-screen">
   <div class="welcome-logo">Surabhi Sutra</div>
   <div class="welcome-divider"></div>
@@ -437,177 +530,300 @@
 
 <div id="toast-container"></div>
 
-<!-- ─── ANNOUNCEMENT BAR ─── -->
-<div class="h2-announce">
-  <strong>Sale:</strong> Buy 1 Get 1 Free + 20% Off for a Limited Time · Free shipping above ₹339
+<!-- ANNOUNCEMENT BAR -->
+<div class="h3-announce">
+  <strong>Summer Sale:</strong> Buy 1 Get 1 Free + 20% Off · Free shipping above ₹339 · Cash on Delivery available
 </div>
 
-<!-- ─── NAV ─── -->
+<!-- NAV -->
 <nav>
   <div class="nav-logo" onclick="showPage('home')">SURABHI SUTRA</div>
   <ul class="nav-links">
     <li><a onclick="showPage('home')">Home</a></li>
-    <li><a onclick="showPage('shop')">Shop</a></li>
+    <li><a onclick="showPage('shop')">Shop All</a></li>
+    <li><a onclick="showPage('shop')">Face</a></li>
+    <li><a onclick="showPage('shop')">Hair</a></li>
+    <li><a onclick="showPage('shop')">Body</a></li>
     <li><a onclick="window.location.href='about.html'">About</a></li>
   </ul>
-  <button class="nav-cart" onclick="showPage('cart')">
-    Cart (<span id="cart-count">0</span>)
-  </button>
+  <div class="h3-nav-actions">
+    <button class="h3-nav-icon" title="Search" aria-label="Search">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    </button>
+    <button class="h3-nav-icon" title="Wishlist" aria-label="Wishlist">
+      <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    </button>
+    <button class="nav-cart" onclick="showPage('cart')">Bag&nbsp;(<span id="cart-count">0</span>)</button>
+    <button class="nav-hamburger" id="nav-hamburger" onclick="toggleMobileMenu()" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
 </nav>
 
+<!-- MOBILE NAV OVERLAY -->
+<div id="mobile-nav-overlay" class="mobile-nav-overlay">
+  <button class="mobile-nav-close" onclick="toggleMobileMenu()">✕</button>
+  <nav class="mobile-nav-list">
+    <a onclick="showPage('home');toggleMobileMenu()">Home</a>
+    <a onclick="showPage('shop');toggleMobileMenu()">Shop All</a>
+    <a onclick="showPage('shop');toggleMobileMenu()">Face</a>
+    <a onclick="showPage('shop');toggleMobileMenu()">Hair</a>
+    <a onclick="showPage('shop');toggleMobileMenu()">Body</a>
+    <a onclick="window.location.href='about.html'">About</a>
+    <button class="btn-primary" onclick="showPage('cart');toggleMobileMenu()">Bag (<span id="mobile-cart-count">0</span>)</button>
+  </nav>
+</div>
 
-<!-- ═══════════════════════════
-     HOME PAGE
-═══════════════════════════ -->
+
+<!-- ═══════════════ HOME PAGE ═══════════════ -->
 <div id="home" class="page active">
 
-  <!-- HERO — two-column: text left, teal visual right -->
-  <section class="hero">
-    <div class="h2-hero-text">
-      <p class="h2-hero-label" id="hero-eyebrow">Ayurveda Inspired · Panchagavya Rooted</p>
-      <h1 class="h2-hero-h1" id="hero-title">
-        Loved by Skin,<br><em>Powered by Nature</em>
-      </h1>
-      <p class="h2-hero-sub" id="hero-sub">
-        Pure ingredients. Honest formulations. Skincare rooted in five thousand years of tradition.
-      </p>
-      <button onclick="showPage('shop')" class="btn-primary">Shop the Collection</button>
+  <!-- HERO -->
+  <section class="h3-hero">
+    <div class="h3-hero-inner">
+      <p class="h3-hero-eyebrow" id="hero-eyebrow">Ayurveda Inspired · Small Batch Crafted · Cruelty Free</p>
+      <h1 class="h3-hero-h1" id="hero-title">Ancient Wisdom.<br><em>Modern Skin.</em></h1>
+      <p class="h3-hero-sub" id="hero-sub">Pure, potent formulations rooted in five thousand years of Ayurvedic tradition. Crafted with care. Delivered to your door.</p>
+      <div class="h3-hero-actions">
+        <button class="h3-btn-filled" onclick="showPage('shop')">Shop the Collection</button>
+        <button class="h3-btn-ghost" onclick="window.location.href='about.html'">Our Story</button>
+      </div>
     </div>
-    <div class="h2-hero-visual"></div>
+    <div class="h3-hero-decor" aria-hidden="true">
+      <svg class="h3-circle-svg" viewBox="0 0 260 260">
+        <defs>
+          <path id="h3cp" d="M130,130 m-95,0 a95,95 0 1,1 190,0 a95,95 0 1,1-190,0"/>
+        </defs>
+        <text class="h3-circle-chars">
+          <textPath href="#h3cp" startOffset="0%">
+            100% NATURAL  ·  AYURVEDA CERTIFIED  ·  CRUELTY FREE  ·  MADE IN INDIA  ·
+          </textPath>
+        </text>
+      </svg>
+      <div class="h3-circle-icon">🌿</div>
+    </div>
   </section>
 
-  <!-- MARQUEE — old site text, teal bg, amber highlights -->
+  <!-- STATS STRIP -->
+  <div class="h3-stats">
+    <div class="h3-stat">
+      <span class="h3-stat-num">50,000+</span>
+      <span class="h3-stat-label">Happy Customers</span>
+    </div>
+    <div class="h3-stat">
+      <span class="h3-stat-num">12</span>
+      <span class="h3-stat-label">Countries Served</span>
+    </div>
+    <div class="h3-stat">
+      <span class="h3-stat-num">5,000</span>
+      <span class="h3-stat-label">Years of Heritage</span>
+    </div>
+    <div class="h3-stat">
+      <span class="h3-stat-num">100%</span>
+      <span class="h3-stat-label">Natural Ingredients</span>
+    </div>
+  </div>
+
+  <!-- MARQUEE -->
   <div class="marquee-bar">
     <div class="marquee-track" id="marquee-track">
-      <span>Tan melts</span>
-      <span class="marquee-dot">→</span>
-      <span>Pores detox</span>
-      <span class="marquee-dot">→</span>
-      <span>7 layers heal</span>
-      <span class="marquee-dot">→</span>
-      <span>Sacred glow awakens</span>
-      <span class="marquee-dot">·</span>
-      <span>100% Natural</span>
-      <span class="marquee-dot">·</span>
-      <span>Cruelty Free</span>
-      <span class="marquee-dot">·</span>
-      <span>Small Batch Crafted</span>
-      <span class="marquee-dot">·</span>
-      <!-- duplicate for seamless loop -->
-      <span>Tan melts</span>
-      <span class="marquee-dot">→</span>
-      <span>Pores detox</span>
-      <span class="marquee-dot">→</span>
-      <span>7 layers heal</span>
-      <span class="marquee-dot">→</span>
-      <span>Sacred glow awakens</span>
-      <span class="marquee-dot">·</span>
-      <span>100% Natural</span>
-      <span class="marquee-dot">·</span>
-      <span>Cruelty Free</span>
-      <span class="marquee-dot">·</span>
-      <span>Small Batch Crafted</span>
-      <span class="marquee-dot">·</span>
+      <span>Free from parabens</span><span class="marquee-dot">·</span>
+      <span>Cruelty free</span><span class="marquee-dot">·</span>
+      <span>Sustainably sourced</span><span class="marquee-dot">·</span>
+      <span>Ayurveda inspired</span><span class="marquee-dot">·</span>
+      <span>Small batch crafted</span><span class="marquee-dot">·</span>
+      <span>Dermatologist tested</span><span class="marquee-dot">·</span>
+      <span>Ships worldwide</span><span class="marquee-dot">·</span>
+      <!-- duplicate for loop -->
+      <span>Free from parabens</span><span class="marquee-dot">·</span>
+      <span>Cruelty free</span><span class="marquee-dot">·</span>
+      <span>Sustainably sourced</span><span class="marquee-dot">·</span>
+      <span>Ayurveda inspired</span><span class="marquee-dot">·</span>
+      <span>Small batch crafted</span><span class="marquee-dot">·</span>
+      <span>Dermatologist tested</span><span class="marquee-dot">·</span>
+      <span>Ships worldwide</span><span class="marquee-dot">·</span>
     </div>
   </div>
 
-  <!-- BESTSELLERS — with collection-style header -->
-  <section class="section" style="padding:48px 0;">
-    <div class="container">
-      <div class="h2-collection-header">
-        <h2>Our Collection</h2>
-        <button class="h2-view-all" onclick="showPage('shop')">View all →</button>
+  <!-- CATEGORY TILES -->
+  <section class="h3-cats-section">
+    <div class="h3-cats-inner">
+      <div class="h3-cats-head">
+        <p class="h3-cats-eyebrow">Shop by Category</p>
+        <h2 class="h3-cats-title">Find Your Ritual</h2>
       </div>
-      <div id="home-products" class="products-grid">
-        <p class="loading-text">Loading products...</p>
+      <div class="h3-cats-grid">
+        <div class="h3-cat-tile" onclick="showPage('shop')">
+          <div class="h3-cat-bg" style="background:linear-gradient(135deg,#f5edcc,#e8d8b0);">🌸</div>
+          <div class="h3-cat-overlay"></div>
+          <div class="h3-cat-label">
+            <span class="h3-cat-name">Face Care</span>
+            <span class="h3-cat-link">Explore →</span>
+          </div>
+        </div>
+        <div class="h3-cat-tile" onclick="showPage('shop')">
+          <div class="h3-cat-bg" style="background:linear-gradient(135deg,#dceadf,#c4d8c8);">🌿</div>
+          <div class="h3-cat-overlay"></div>
+          <div class="h3-cat-label">
+            <span class="h3-cat-name">Hair Care</span>
+            <span class="h3-cat-link">Explore →</span>
+          </div>
+        </div>
+        <div class="h3-cat-tile" onclick="showPage('shop')">
+          <div class="h3-cat-bg" style="background:linear-gradient(135deg,#e8dece,#d4c4ac);">✨</div>
+          <div class="h3-cat-overlay"></div>
+          <div class="h3-cat-label">
+            <span class="h3-cat-name">Body Wellness</span>
+            <span class="h3-cat-link">Explore →</span>
+          </div>
+        </div>
+        <div class="h3-cat-tile" onclick="showPage('shop')">
+          <div class="h3-cat-bg" style="background:linear-gradient(135deg,#f0e8f0,#dccce0);">🤍</div>
+          <div class="h3-cat-overlay"></div>
+          <div class="h3-cat-label">
+            <span class="h3-cat-name">Baby &amp; Kids</span>
+            <span class="h3-cat-link">Explore →</span>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- SAND BAND — "Glow Naturally" promo strip (replaces 2nd hero image) -->
-  <div class="h2-band">
-    <div class="h2-band-text">
-      <p class="h2-band-label">Glow Naturally</p>
-      <h2 class="h2-band-heading">Real ingredients.<br>Real results. No noise.</h2>
-      <p class="h2-band-sub">Panchagavya wisdom meets modern skin science. Every bar, every drop — crafted to let your skin breathe, heal, and glow the way nature intended.</p>
-    </div>
-    <button class="h2-band-btn" onclick="showPage('shop')">Buy Now</button>
-  </div>
-
-  <!-- EDITORIAL — "Crafted with Care" (media_with_content section) -->
-  <div class="h2-editorial">
-    <div class="h2-ed-media">
-      <div class="h2-ed-media-overlay"></div>
-      <div class="h2-ed-media-icon">🌿</div>
-    </div>
-    <div class="h2-ed-content">
-      <p class="h2-ed-eyebrow">Shop the collection</p>
-      <h2 class="h2-ed-heading">Crafted with care</h2>
-      <p class="h2-ed-body">Transparent labels, thoughtful sourcing, and steady, small-batch quality — no noise, just honesty.</p>
-      <button class="h2-ed-btn" onclick="showPage('shop')">View Products</button>
-    </div>
-  </div>
-
-  <!-- OUR PROMISE ── values section -->
-  <section class="section values-section" style="padding:64px 0;">
-    <div class="container">
-      <p class="section-label" id="promise-label">Our Promise</p>
-      <h2 class="section-title" id="promise-title" style="margin-bottom:32px;">What we stand for</h2>
-      <div class="values-grid" id="promise-cards">
-
-        <div class="value-card">
-          <div class="value-icon">
-            <svg viewBox="0 0 24 24"><path d="M12 2C6 2 3 8 3 12c0 5 4 9 9 9s9-4 9-9C21 7 17 2 12 2z"/><path d="M12 2c0 0 0 10-6 14"/></svg>
-          </div>
-          <h4 class="value-title">100% Natural</h4>
-          <p class="value-desc">Every ingredient is plant-derived, ethically sourced and free from synthetic chemicals.</p>
-        </div>
-
-        <div class="value-card">
-          <div class="value-icon">
-            <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          </div>
-          <h4 class="value-title">Cruelty Free</h4>
-          <p class="value-desc">We never test on animals. Our products are certified cruelty-free and vegan.</p>
-        </div>
-
-        <div class="value-card">
-          <div class="value-icon">
-            <svg viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="3" rx="1"/><path d="M6 5h12l1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L6 5z"/><line x1="9" y1="10" x2="15" y2="10"/></svg>
-          </div>
-          <h4 class="value-title">Small Batch</h4>
-          <p class="value-desc">Crafted in small batches to ensure maximum freshness and potency in every product.</p>
-        </div>
-
-        <div class="value-card">
-          <div class="value-icon">
-            <svg viewBox="0 0 24 24"><path d="M12 22c0 0-7-5-7-11a7 7 0 0 1 14 0c0 6-7 11-7 11z"/><path d="M12 11c0 0-3-3-3-6a3 3 0 0 1 6 0c0 3-3 6-3 6z"/></svg>
-          </div>
-          <h4 class="value-title">Ayurveda Rooted</h4>
-          <p class="value-desc">Formulas inspired by 5,000 years of Ayurvedic wisdom, adapted for modern skin.</p>
-        </div>
-
+  <!-- BESTSELLERS -->
+  <section class="h3-products-section">
+    <div class="h3-products-inner">
+      <div class="h3-products-head">
+        <h2 class="h3-products-title" id="bestsellers-title">Bestsellers</h2>
+        <button class="h3-view-all" onclick="showPage('shop')">View All →</button>
+      </div>
+      <div id="home-products" class="products-grid">
+        <p class="loading-text">Loading products…</p>
       </div>
     </div>
+    <!-- hidden IDs app.js looks for -->
+    <span id="bestsellers-label" style="display:none;"></span>
+  </section>
+
+  <!-- TRUST SECTION -->
+  <section class="h3-trust-section">
+    <div class="h3-trust-inner">
+      <div class="h3-trust-head">
+        <p class="h3-trust-eyebrow" id="promise-label">Our Promise</p>
+        <h2 class="h3-trust-title" id="promise-title">Why Thousands Choose Us</h2>
+      </div>
+      <div class="h3-trust-grid" id="promise-cards">
+        <div class="h3-trust-item">
+          <div class="h3-trust-icon">🌿</div>
+          <div class="h3-trust-name">100% Natural</div>
+          <p class="h3-trust-desc">Every ingredient is plant-derived, ethically sourced and free from synthetic chemicals or preservatives.</p>
+        </div>
+        <div class="h3-trust-item">
+          <div class="h3-trust-icon">🐰</div>
+          <div class="h3-trust-name">Cruelty Free</div>
+          <p class="h3-trust-desc">Never tested on animals. Our products are certified cruelty-free and proudly vegan in every formulation.</p>
+        </div>
+        <div class="h3-trust-item">
+          <div class="h3-trust-icon">⚗️</div>
+          <div class="h3-trust-name">Small Batch</div>
+          <p class="h3-trust-desc">Crafted in small batches to ensure maximum freshness, potency and quality in every single product.</p>
+        </div>
+        <div class="h3-trust-item">
+          <div class="h3-trust-icon">🔬</div>
+          <div class="h3-trust-name">Derma Tested</div>
+          <p class="h3-trust-desc">Formulated by Ayurvedic experts and verified by modern dermatologists for safety across all skin types.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDITORIAL -->
+  <section class="h3-editorial">
+    <div class="h3-ed-panel">
+      <div class="h3-ed-leaf">☘️</div>
+    </div>
+    <div class="h3-ed-content">
+      <p class="h3-ed-eyebrow">Our Philosophy</p>
+      <h2 class="h3-ed-heading">Five Thousand Years.<br><em>One Purpose.</em></h2>
+      <p class="h3-ed-body">Surabhi Sutra is not just skincare — it is a ritual. Rooted in the ancient Ayurvedic tradition of Panchakarma and Dinacharya, our formulations bring the botanical wisdom of India's sages into your morning routine. No shortcuts. No synthetics. Just nature, distilled.</p>
+      <button class="h3-ed-btn" onclick="window.location.href='about.html'">Read Our Story</button>
+    </div>
+  </section>
+
+  <!-- CERTIFICATIONS STRIP -->
+  <div class="h3-certs">
+    <div class="h3-certs-inner">
+      <p class="h3-certs-label">Certified &amp; Trusted</p>
+      <div class="h3-certs-sep"></div>
+      <div class="h3-cert"><span class="h3-cert-icon">🌿</span><span class="h3-cert-name">Ayurveda Certified</span></div>
+      <div class="h3-cert"><span class="h3-cert-icon">🐰</span><span class="h3-cert-name">Cruelty Free</span></div>
+      <div class="h3-cert"><span class="h3-cert-icon">🔬</span><span class="h3-cert-name">Derma Tested</span></div>
+      <div class="h3-cert"><span class="h3-cert-icon">🌱</span><span class="h3-cert-name">Paraben Free</span></div>
+      <div class="h3-cert"><span class="h3-cert-icon">🇮🇳</span><span class="h3-cert-name">Made in India</span></div>
+      <div class="h3-cert"><span class="h3-cert-icon">🌍</span><span class="h3-cert-name">Ships Worldwide</span></div>
+    </div>
+  </div>
+
+  <!-- TESTIMONIALS -->
+  <section class="h3-test-section">
+    <div class="h3-test-inner">
+      <div class="h3-test-head">
+        <p class="h3-test-eyebrow">Real Reviews</p>
+        <h2 class="h3-test-title">What Our Customers Say</h2>
+      </div>
+      <div class="h3-test-grid">
+        <div class="h3-test-card">
+          <div class="h3-test-stars">★★★★★</div>
+          <p class="h3-test-text">"The kumkumadi face wash has completely transformed my skin. My dark spots have faded significantly in just four weeks. I've tried so many products and nothing comes close to this."</p>
+          <div class="h3-test-author">Ananya S.</div>
+          <div class="h3-test-location">Mumbai, India</div>
+        </div>
+        <div class="h3-test-card">
+          <div class="h3-test-stars">★★★★★</div>
+          <p class="h3-test-text">"Finally a natural skincare brand that actually delivers results. The ingredients are so clean and my sensitive skin has never reacted badly. Will never go back to commercial brands."</p>
+          <div class="h3-test-author">Riya K.</div>
+          <div class="h3-test-location">Bengaluru, India</div>
+        </div>
+        <div class="h3-test-card">
+          <div class="h3-test-stars">★★★★★</div>
+          <p class="h3-test-text">"Ordered from the UK and received my package in perfect condition within a week. The quality is outstanding — you can smell and feel the difference from the very first use."</p>
+          <div class="h3-test-author">Priya M.</div>
+          <div class="h3-test-location">London, United Kingdom</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INSTAGRAM GRID -->
+  <section class="h3-insta-section">
+    <p class="h3-insta-label">Follow the Ritual</p>
+    <h2 class="h3-insta-title">@surabhisutra</h2>
+    <div class="h3-insta-grid">
+      <div class="h3-insta-tile">🌿</div>
+      <div class="h3-insta-tile">🌸</div>
+      <div class="h3-insta-tile">✨</div>
+      <div class="h3-insta-tile">🌱</div>
+      <div class="h3-insta-tile">🪔</div>
+      <div class="h3-insta-tile">☘️</div>
+    </div>
+    <p class="h3-insta-handle">Join our growing community on Instagram — <a href="#">@surabhisutra</a></p>
+    <button class="h3-insta-follow">Follow Us</button>
   </section>
 
 </div><!-- end #home -->
 
 
-<!-- ═══════════════════════════ SHOP ═══════════════════════════ -->
+<!-- ═══════════════ SHOP ═══════════════ -->
 <div id="shop" class="page">
   <section class="section">
     <div class="container">
       <p class="section-label">THE COLLECTION</p>
       <h2 class="section-title">Discover your ritual</h2>
-      <div id="shop-products" class="products-grid">
-        <p class="loading-text">Loading products...</p>
-      </div>
+      <div id="shop-products" class="products-grid"><p class="loading-text">Loading products…</p></div>
     </div>
   </section>
 </div>
 
-<!-- ═══════════════════════════ PRODUCT ═══════════════════════════ -->
+<!-- ═══════════════ PRODUCT ═══════════════ -->
 <div id="product" class="page">
   <section class="section">
     <div class="container">
@@ -622,7 +838,7 @@
   </section>
 </div>
 
-<!-- ═══════════════════════════ CART ═══════════════════════════ -->
+<!-- ═══════════════ CART ═══════════════ -->
 <div id="cart" class="page">
   <section class="section">
     <div class="container">
@@ -633,7 +849,7 @@
   </section>
 </div>
 
-<!-- ═══════════════════════════ CHECKOUT ═══════════════════════════ -->
+<!-- ═══════════════ CHECKOUT ═══════════════ -->
 <div id="checkout" class="page">
   <section class="section">
     <div class="container">
@@ -658,12 +874,12 @@
   </section>
 </div>
 
-<!-- ═══════════════════════════ FOOTER ═══════════════════════════ -->
+<!-- ═══════════════ FOOTER ═══════════════ -->
 <footer class="site-footer">
   <div class="site-footer-inner">
     <div class="site-footer-brand">
       <h4>Surabhi Sutra</h4>
-      <p>Surabhi Sutra brings five thousand years of Ayurvedic wisdom into your daily skincare ritual. Every product is made fresh, in small batches, with ingredients your skin was always meant to meet.</p>
+      <p>Surabhi Sutra brings five thousand years of Ayurvedic wisdom into your daily skincare ritual. Every product is made fresh, in small batches, with ingredients your skin was always meant to meet. No shortcuts. No synthetics. Just nature, distilled.</p>
       <div class="site-footer-socials">
         <a href="#" title="Telegram">T</a>
         <a href="#" title="Facebook">f</a>
@@ -686,7 +902,7 @@
       <ul>
         <li><a href="#">FAQs</a></li>
         <li><a href="#">Track Order</a></li>
-        <li><a href="#">Blogs</a></li>
+        <li><a href="#">Blog</a></li>
         <li><a href="#">Returns Policy</a></li>
         <li><a href="about.html">About Us</a></li>
       </ul>
