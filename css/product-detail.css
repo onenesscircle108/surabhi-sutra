@@ -2,32 +2,34 @@
 *{margin:0;padding:0;box-sizing:border-box;}
 
 :root{
-  --cream:#FAF6F0;
-  --beige:#F0E8DC;
-  --sage:#4A7C59;
-  --sage-light:#6B9E78;
-  --terracotta:#C4714A;
-  --brown:#7D5A3C;
-  --text-dark:#2C1F14;
-  --text-mid:#6B5744;
-  --text-light:#A89070;
-  --border:#DDD0BC;
-  --gold:#C8922A;
-  --gold-light:#E8B048;
-  --gold-bg:#FDF3E3;
+  --cream:#fdf8e1;
+  --beige:#f5edcc;
+  --sage:#28535e;
+  --sage-light:#1f5458;
+  --terracotta:#7a2121;
+  --brown:#5a1818;
+  --text-dark:#28535e;
+  --text-mid:#5a7a82;
+  --text-light:#a98b7f;
+  --border:rgba(0,0,0,.09);
+  --gold:#ffb701;
+  --gold-light:#ffc933;
+  --gold-bg:#fff8e1;
+  --amber:#ffb701;
+  --mauve:#a98b7f;
 }
 
 html{ scroll-behavior:smooth; }
 
 body{
-  font-family:Georgia,'Times New Roman',serif;
+  font-family:'Inter',system-ui,sans-serif;
   background:var(--cream);
   color:var(--text-dark);
   line-height:1.6;
 }
 
 h1,h2,h3{
-  font-family:Georgia,'Times New Roman',serif;
+  font-family:'Inter',system-ui,sans-serif;
   font-weight:700;
 }
 
@@ -90,7 +92,7 @@ button{ cursor:pointer; border:none; background:none; font-family:inherit; }
   z-index:200;
 }
 .pd-nav-logo{
-  font-family:Georgia,'Times New Roman',serif;
+  font-family:'Inter',system-ui,sans-serif;
   font-size:14px;
   letter-spacing:4px;
   text-transform:uppercase;
@@ -101,7 +103,7 @@ button{ cursor:pointer; border:none; background:none; font-family:inherit; }
   display:flex;list-style:none;gap:2rem;
 }
 .pd-nav-links a{
-  font-family:Georgia,'Times New Roman',serif;
+  font-family:'Inter',system-ui,sans-serif;
   font-size:13px;
   letter-spacing:.5px;
   color:var(--text-mid);
@@ -111,7 +113,7 @@ button{ cursor:pointer; border:none; background:none; font-family:inherit; }
 .pd-nav-links a:hover{color:var(--sage);}
 .pd-nav-cart{
   background:none;border:none;
-  font-family:Georgia,'Times New Roman',serif;
+  font-family:'Inter',system-ui,sans-serif;
   font-size:12px;
   letter-spacing:.5px;
   color:var(--text-mid);
@@ -249,7 +251,7 @@ button{ cursor:pointer; border:none; background:none; font-family:inherit; }
   margin-bottom:1.25rem;flex-wrap:wrap;
 }
 .pd-price-current{
-  font-family:'Playfair Display',Georgia,serif;
+  font-family:'Inter',system-ui,sans-serif;
   font-size:2rem;font-weight:700;color:var(--text-dark);
 }
 .pd-price-original{
@@ -285,7 +287,7 @@ button{ cursor:pointer; border:none; background:none; font-family:inherit; }
   padding:15px;
   background:var(--sage);color:#fff;
   font-size:14px;letter-spacing:2px;text-transform:uppercase;
-  font-weight:600;font-family:Georgia,'Times New Roman',serif;
+  font-weight:600;font-family:'Inter',system-ui,sans-serif;
   border-radius:2px;
   transition:background .2s;
   margin-bottom:1rem;
@@ -343,7 +345,7 @@ button{ cursor:pointer; border:none; background:none; font-family:inherit; }
 .pd-eyebrow{
   font-size:11px;letter-spacing:3px;text-transform:uppercase;
   color:var(--text-light);margin-bottom:.5rem;
-  font-family:Georgia,'Times New Roman',serif;
+  font-family:'Inter',system-ui,sans-serif;
 }
 .pd-section-title{
   font-size:clamp(1.4rem,3vw,2rem);
@@ -369,7 +371,7 @@ button{ cursor:pointer; border:none; background:none; font-family:inherit; }
 .pd-expand-eyebrow{
   font-size:11px;letter-spacing:3px;text-transform:uppercase;
   color:var(--sage-light);margin-bottom:.5rem;
-  font-family:Georgia,'Times New Roman',serif;
+  font-family:'Inter',system-ui,sans-serif;
 }
 .pd-expand-title{
   font-size:clamp(1.2rem,2.5vw,1.6rem);
@@ -381,7 +383,7 @@ button{ cursor:pointer; border:none; background:none; font-family:inherit; }
   border:1.5px solid rgba(255,255,255,.4);
   border-radius:2px;color:#fff;
   font-size:12px;letter-spacing:1px;text-transform:uppercase;
-  font-family:Georgia,'Times New Roman',serif;
+  font-family:'Inter',system-ui,sans-serif;
   transition:.2s;cursor:pointer;background:rgba(255,255,255,.1);
 }
 .pd-expand-toggle-btn:hover{background:rgba(255,255,255,.2);}
@@ -407,7 +409,7 @@ button{ cursor:pointer; border:none; background:none; font-family:inherit; }
 }
 .pd-benefit-text h4{
   font-size:14px;font-weight:700;color:#fff;
-  font-family:Georgia,'Times New Roman',serif;margin-bottom:4px;
+  font-family:'Inter',system-ui,sans-serif;margin-bottom:4px;
 }
 .pd-benefit-text p{font-size:13px;color:rgba(255,255,255,.7);line-height:1.6;}
 
@@ -440,11 +442,11 @@ button{ cursor:pointer; border:none; background:none; font-family:inherit; }
   background:#e8f5e9;color:var(--sage);
   font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
   padding:3px 8px;border-radius:10px;margin-bottom:6px;
-  font-family:Georgia,'Times New Roman',serif;
+  font-family:'Inter',system-ui,sans-serif;
 }
 .pd-ingredient-name{
   font-size:15px;font-weight:700;color:var(--text-dark);
-  font-family:'Playfair Display',Georgia,serif;margin-bottom:4px;
+  font-family:'Inter',system-ui,sans-serif;margin-bottom:4px;
 }
 .pd-ingredient-desc{font-size:12px;color:var(--text-mid);line-height:1.5;}
 
@@ -485,7 +487,7 @@ button{ cursor:pointer; border:none; background:none; font-family:inherit; }
 }
 .pd-compare-table th{
   padding:14px 16px;font-size:12px;letter-spacing:1px;text-transform:uppercase;
-  font-family:Georgia,'Times New Roman',serif;
+  font-family:'Inter',system-ui,sans-serif;
   border-bottom:1px solid rgba(255,255,255,.15);
 }
 .pd-compare-table th:nth-child(2){background:var(--sage);color:#fff;}
@@ -515,7 +517,7 @@ button{ cursor:pointer; border:none; background:none; font-family:inherit; }
 .pd-accordion-head:hover{background:var(--cream);}
 .pd-accordion-head h4{
   font-size:14px;font-weight:600;color:var(--text-dark);
-  font-family:Georgia,'Times New Roman',serif;
+  font-family:'Inter',system-ui,sans-serif;
 }
 .pd-accordion-icon{
   font-size:18px;color:var(--text-light);
@@ -552,7 +554,7 @@ button{ cursor:pointer; border:none; background:none; font-family:inherit; }
 .pd-cleanser-body{padding:14px;}
 .pd-cleanser-body h4{
   font-size:13px;font-weight:700;color:var(--text-dark);
-  font-family:Georgia,'Times New Roman',serif;margin-bottom:4px;
+  font-family:'Inter',system-ui,sans-serif;margin-bottom:4px;
 }
 .pd-cleanser-body p{font-size:12px;color:var(--text-mid);margin-bottom:10px;line-height:1.5;}
 .pd-cleanser-link{
@@ -590,14 +592,14 @@ button{ cursor:pointer; border:none; background:none; font-family:inherit; }
 .pd-video-body{padding:12px 14px;}
 .pd-video-body .customer-name{
   font-size:13px;font-weight:600;color:#fff;
-  font-family:Georgia,'Times New Roman',serif;
+  font-family:'Inter',system-ui,sans-serif;
 }
 .pd-video-body .product-tag{font-size:11px;color:rgba(255,255,255,.6);margin-bottom:8px;}
 .pd-video-add-btn{
   width:100%;padding:8px;
   background:var(--sage);color:#fff;
   font-size:12px;letter-spacing:1px;text-transform:uppercase;
-  font-family:Georgia,'Times New Roman',serif;border-radius:2px;
+  font-family:'Inter',system-ui,sans-serif;border-radius:2px;
   transition:.2s;
 }
 .pd-video-add-btn:hover{background:var(--sage-light);}
@@ -620,7 +622,7 @@ button{ cursor:pointer; border:none; background:none; font-family:inherit; }
 .pd-product-card-body{padding:12px;}
 .pd-product-card-body h4{
   font-size:13px;font-weight:600;color:var(--text-dark);
-  font-family:Georgia,'Times New Roman',serif;margin-bottom:4px;line-height:1.3;
+  font-family:'Inter',system-ui,sans-serif;margin-bottom:4px;line-height:1.3;
 }
 .pd-product-card-prices{
   display:flex;align-items:center;gap:6px;margin-bottom:8px;flex-wrap:wrap;
@@ -632,7 +634,7 @@ button{ cursor:pointer; border:none; background:none; font-family:inherit; }
   width:100%;padding:7px;
   border:1.5px solid var(--sage);color:var(--sage);
   font-size:11px;letter-spacing:.8px;text-transform:uppercase;
-  font-family:Georgia,'Times New Roman',serif;border-radius:2px;background:#fff;
+  font-family:'Inter',system-ui,sans-serif;border-radius:2px;background:#fff;
   transition:.2s;
 }
 .pd-add-btn:hover{background:var(--sage);color:#fff;}
@@ -656,7 +658,7 @@ button{ cursor:pointer; border:none; background:none; font-family:inherit; }
 .pd-blog-title{
   font-size:13px;font-weight:600;color:var(--text-dark);
   line-height:1.4;margin-bottom:8px;
-  font-family:Georgia,'Times New Roman',serif;
+  font-family:'Inter',system-ui,sans-serif;
 }
 .pd-blog-link{
   font-size:11px;color:var(--sage);letter-spacing:.5px;
@@ -674,7 +676,7 @@ button{ cursor:pointer; border:none; background:none; font-family:inherit; }
   text-align:center;min-width:80px;
 }
 .pd-reviews-score .big-score{
-  font-family:'Playfair Display',Georgia,serif;
+  font-family:'Inter',system-ui,sans-serif;
   font-size:3rem;font-weight:700;color:var(--text-dark);line-height:1;
 }
 .pd-reviews-score .big-stars{color:var(--gold);font-size:18px;letter-spacing:2px;}
@@ -695,7 +697,7 @@ button{ cursor:pointer; border:none; background:none; font-family:inherit; }
 .pd-filter-select{
   padding:8px 14px;border:1px solid var(--border);
   background:#fff;font-size:13px;color:var(--text-dark);
-  border-radius:2px;font-family:Georgia,'Times New Roman',serif;
+  border-radius:2px;font-family:'Inter',system-ui,sans-serif;
   cursor:pointer;
 }
 .pd-review-card{
@@ -712,11 +714,11 @@ button{ cursor:pointer; border:none; background:none; font-family:inherit; }
   background:#e8f5e9;
   display:flex;align-items:center;justify-content:center;
   font-size:15px;font-weight:700;color:var(--sage);
-  font-family:Georgia,'Times New Roman',serif;flex-shrink:0;
+  font-family:'Inter',system-ui,sans-serif;flex-shrink:0;
 }
 .pd-reviewer-name{
   font-size:14px;font-weight:600;color:var(--text-dark);
-  font-family:Georgia,'Times New Roman',serif;
+  font-family:'Inter',system-ui,sans-serif;
 }
 .pd-reviewer-date{font-size:11px;color:var(--text-light);}
 .pd-review-stars{color:var(--gold);font-size:13px;letter-spacing:1px;}
@@ -737,7 +739,7 @@ button{ cursor:pointer; border:none; background:none; font-family:inherit; }
 .pd-banner-slide button{
   padding:12px 28px;background:var(--sage);color:#fff;
   font-size:13px;letter-spacing:1px;text-transform:uppercase;
-  font-family:Georgia,'Times New Roman',serif;border-radius:2px;transition:.2s;
+  font-family:'Inter',system-ui,sans-serif;border-radius:2px;transition:.2s;
 }
 .pd-banner-slide button:hover{background:var(--text-dark);}
 .pd-banner-dots{
@@ -768,7 +770,7 @@ button{ cursor:pointer; border:none; background:none; font-family:inherit; }
 }
 .pd-footer h4{
   font-size:12px;letter-spacing:2px;text-transform:uppercase;
-  color:#fff;margin-bottom:1rem;font-family:Georgia,'Times New Roman',serif;
+  color:#fff;margin-bottom:1rem;font-family:'Inter',system-ui,sans-serif;
 }
 .pd-footer p,.pd-footer li{
   font-size:13px;line-height:1.8;list-style:none;
@@ -816,12 +818,12 @@ button{ cursor:pointer; border:none; background:none; font-family:inherit; }
 .pd-sticky-price{font-size:13px;color:var(--sage);font-weight:700;}
 .pd-sticky-atc{
   padding:11px 20px;
-  background:var(--sage);color:#fff;
-  font-size:12px;letter-spacing:1.5px;text-transform:uppercase;
-  font-weight:600;font-family:Georgia,'Times New Roman',serif;
-  border-radius:2px;white-space:nowrap;flex-shrink:0;
+  background:var(--terracotta);color:#fff;
+  font-size:12px;letter-spacing:1px;text-transform:uppercase;
+  font-weight:700;font-family:'Inter',system-ui,sans-serif;
+  border-radius:14px;white-space:nowrap;flex-shrink:0;
 }
-.pd-sticky-atc:hover{background:var(--text-dark);}
+.pd-sticky-atc:hover{background:var(--sage-light);}
 
 /* ── UTILITY ── */
 .pd-alt-bg{background:var(--beige);}
@@ -912,7 +914,7 @@ button{ cursor:pointer; border:none; background:none; font-family:inherit; }
   display:block;width:100%;padding:14px;
   background:var(--text-dark);color:#fff;
   font-size:13px;letter-spacing:1.5px;text-transform:uppercase;
-  font-family:Georgia,'Times New Roman',serif;
+  font-family:'Inter',system-ui,sans-serif;
   border:none;cursor:pointer;border-radius:2px;
   transition:background .2s;margin-bottom:.6rem;
 }
@@ -921,7 +923,7 @@ button{ cursor:pointer; border:none; background:none; font-family:inherit; }
   display:block;width:100%;padding:11px;
   background:none;color:var(--text-mid);
   font-size:12px;letter-spacing:1px;text-transform:uppercase;
-  font-family:Georgia,'Times New Roman',serif;
+  font-family:'Inter',system-ui,sans-serif;
   border:1px solid var(--border);cursor:pointer;border-radius:2px;
   transition:.2s;
 }
@@ -956,7 +958,7 @@ button{ cursor:pointer; border:none; background:none; font-family:inherit; }
   width:100%;padding:10px 12px;
   border:1px solid var(--border);
   border-radius:2px;
-  font-size:13px;font-family:Georgia,'Times New Roman',serif;
+  font-size:13px;font-family:'Inter',system-ui,sans-serif;
   color:var(--text-dark);background:#fff;
   transition:border-color .2s;
 }
@@ -978,13 +980,13 @@ button{ cursor:pointer; border:none; background:none; font-family:inherit; }
 .pd-submit-review-btn{
   display:inline-block;
   padding:12px 28px;
-  background:var(--text-dark);color:#fff;
-  font-size:12px;letter-spacing:1.5px;text-transform:uppercase;
-  font-family:Georgia,'Times New Roman',serif;
-  border:none;cursor:pointer;border-radius:2px;
+  background:var(--terracotta);color:#fff;
+  font-size:12px;letter-spacing:1px;text-transform:uppercase;
+  font-family:'Inter',system-ui,sans-serif;
+  border:none;cursor:pointer;border-radius:14px;
   transition:background .2s;
 }
-.pd-submit-review-btn:hover{background:var(--sage);}
+.pd-submit-review-btn:hover{background:var(--sage-light);}
 .pd-submit-review-btn:disabled{
   background:var(--border);color:var(--text-light);cursor:default;
 }
@@ -1025,7 +1027,7 @@ button{ cursor:pointer; border:none; background:none; font-family:inherit; }
 .pd-bundle-heading{
   font-size:13px;font-weight:700;letter-spacing:.5px;
   color:var(--sage);
-  font-family:Georgia,'Times New Roman',serif;
+  font-family:'Inter',system-ui,sans-serif;
   margin:0;line-height:1.2;
 }
 .pd-bundle-subheading{
@@ -1068,7 +1070,7 @@ button{ cursor:pointer; border:none; background:none; font-family:inherit; }
 .pd-bundle-qty{
   font-size:18px;font-weight:700;color:var(--text-dark);
   margin-bottom:2px;line-height:1;
-  font-family:Georgia,'Times New Roman',serif;
+  font-family:'Inter',system-ui,sans-serif;
 }
 .pd-bundle-qty-label{font-size:9px;color:var(--text-light);letter-spacing:.5px;margin-bottom:6px;}
 .pd-bundle-saving{
@@ -1084,7 +1086,7 @@ button{ cursor:pointer; border:none; background:none; font-family:inherit; }
   width:100%;padding:11px;
   background:var(--sage);color:#fff;
   font-size:12px;letter-spacing:1.5px;text-transform:uppercase;
-  font-weight:700;font-family:Georgia,'Times New Roman',serif;
+  font-weight:700;font-family:'Inter',system-ui,sans-serif;
   border-radius:4px;transition:.2s;margin-top:.25rem;
   display:flex;align-items:center;justify-content:center;gap:8px;
 }
@@ -1146,7 +1148,7 @@ button{ cursor:pointer; border:none; background:none; font-family:inherit; }
 .pd-float-bar-name{
   font-size:13px;font-weight:700;color:var(--text-dark);
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-  font-family:'Playfair Display',Georgia,serif;
+  font-family:'Inter',system-ui,sans-serif;
 }
 .pd-float-bar-tag{font-size:11px;color:var(--sage);font-weight:600;margin-top:2px;}
 .pd-float-bar-price{
@@ -1155,14 +1157,14 @@ button{ cursor:pointer; border:none; background:none; font-family:inherit; }
 }
 .pd-float-bar-btn{
   flex-shrink:0;
-  background:var(--sage);color:#fff;
-  border:none;border-radius:6px;
+  background:var(--terracotta);color:#fff;
+  border:none;border-radius:14px;
   padding:10px 20px;font-size:14px;font-weight:700;
   cursor:pointer;white-space:nowrap;
-  font-family:'Playfair Display',Georgia,serif;
+  font-family:'Inter',system-ui,sans-serif;
   transition:background .2s;
 }
-.pd-float-bar-btn:hover{background:var(--terracotta);}
+.pd-float-bar-btn:hover{background:var(--sage-light);}
 @media(max-width:480px){
   .pd-float-bar-info{display:none;}
   .pd-float-bar-btn{flex:1;}
@@ -1186,7 +1188,7 @@ button{ cursor:pointer; border:none; background:none; font-family:inherit; }
   background:var(--sage);color:#fff;
   display:flex;align-items:center;justify-content:center;
   font-size:15px;font-weight:700;flex-shrink:0;
-  font-family:'Playfair Display',Georgia,serif;
+  font-family:'Inter',system-ui,sans-serif;
 }
 .fomo-text{flex:1;min-width:0;}
 .fomo-name-line{font-size:12px;color:var(--text-dark);line-height:1.4;}
