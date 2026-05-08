@@ -218,6 +218,10 @@ function renderShop(){
 function filterShop(query){
   const el = document.getElementById('shop-products');
   if(!el) return;
+  if(!products.length){
+    el.innerHTML='<p class="loading-text">Loading products...</p>';
+    return;
+  }
   const q = (query||'').trim().toLowerCase();
   const filtered = q ? products.filter(p=>
     (p.name||'').toLowerCase().includes(q)||
