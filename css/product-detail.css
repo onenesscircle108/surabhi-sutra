@@ -2,21 +2,22 @@
 *{margin:0;padding:0;box-sizing:border-box;}
 
 :root{
-  --cream:#fdf8e1;
-  --beige:#f5edcc;
+  --cream:#ffffff;
+  --beige:#f7f4ef;
   --sage:#28535e;
   --sage-light:#1f5458;
   --terracotta:#7a2121;
   --brown:#5a1818;
-  --text-dark:#28535e;
-  --text-mid:#5a7a82;
-  --text-light:#a98b7f;
-  --border:rgba(0,0,0,.09);
-  --gold:#ffb701;
-  --gold-light:#ffc933;
-  --gold-bg:#fff8e1;
-  --amber:#ffb701;
+  --text-dark:#1c1c1c;
+  --text-mid:#6b6b6b;
+  --text-light:#aaaaaa;
+  --border:#e8e3dc;
+  --gold:#c8922a;
+  --gold-light:#d4a840;
+  --gold-bg:#fdf6ea;
+  --amber:#c8922a;
   --mauve:#a98b7f;
+  --surface:#f7f4ef;
 }
 
 html{ scroll-behavior:smooth; }
@@ -174,7 +175,7 @@ button{ cursor:pointer; border:none; background:none; font-family:inherit; }
 .pd-mobile-nav-cart-btn{
   padding:12px 32px;
   background:var(--terracotta);
-  color:#fff;border:none;border-radius:14px;
+  color:#fff;border:none;border-radius:2px;
   font-size:14px;font-weight:700;
   font-family:'Inter',system-ui,sans-serif;
   cursor:pointer;
@@ -259,9 +260,11 @@ button{ cursor:pointer; border:none; background:none; font-family:inherit; }
 .pd-breadcrumb span{opacity:.5;}
 
 .pd-product-name{
-  font-size:clamp(1.5rem,3vw,2rem);
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:clamp(1.8rem,3.5vw,2.4rem);
+  font-weight:600;
   color:var(--text-dark);
-  line-height:1.25;
+  line-height:1.15;
   margin-bottom:.5rem;
 }
 .pd-product-subtitle{
@@ -409,7 +412,9 @@ button{ cursor:pointer; border:none; background:none; font-family:inherit; }
   font-family:'Inter',system-ui,sans-serif;
 }
 .pd-section-title{
-  font-size:clamp(1.4rem,3vw,2rem);
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:clamp(1.5rem,3vw,2.2rem);
+  font-weight:600;
   color:var(--text-dark);margin-bottom:.5rem;
 }
 .pd-section-sub{
@@ -882,7 +887,7 @@ button{ cursor:pointer; border:none; background:none; font-family:inherit; }
   background:var(--terracotta);color:#fff;
   font-size:12px;letter-spacing:1px;text-transform:uppercase;
   font-weight:700;font-family:'Inter',system-ui,sans-serif;
-  border-radius:14px;white-space:nowrap;flex-shrink:0;
+  border-radius:2px;white-space:nowrap;flex-shrink:0;
 }
 .pd-sticky-atc:hover{background:var(--sage-light);}
 
@@ -1044,7 +1049,7 @@ button{ cursor:pointer; border:none; background:none; font-family:inherit; }
   background:var(--terracotta);color:#fff;
   font-size:12px;letter-spacing:1px;text-transform:uppercase;
   font-family:'Inter',system-ui,sans-serif;
-  border:none;cursor:pointer;border-radius:14px;
+  border:none;cursor:pointer;border-radius:2px;
   transition:background .2s;
 }
 .pd-submit-review-btn:hover{background:var(--sage-light);}
@@ -1219,7 +1224,7 @@ button{ cursor:pointer; border:none; background:none; font-family:inherit; }
 .pd-float-bar-btn{
   flex-shrink:0;
   background:var(--terracotta);color:#fff;
-  border:none;border-radius:14px;
+  border:none;border-radius:2px;
   padding:10px 20px;font-size:14px;font-weight:700;
   cursor:pointer;white-space:nowrap;
   font-family:'Inter',system-ui,sans-serif;

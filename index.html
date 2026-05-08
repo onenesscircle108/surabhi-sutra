@@ -6,7 +6,7 @@
   <title>Surabhi Sutra</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 
@@ -44,13 +44,20 @@
     <li><a onclick="window.location.href='about.html'">About</a></li>
   </ul>
 
-  <button class="nav-cart" onclick="showPage('cart')">
-    Cart (<span id="cart-count">0</span>)
-  </button>
-
-  <button class="nav-hamburger" id="nav-hamburger" onclick="toggleMobileMenu()" aria-label="Open menu">
-    <span></span><span></span><span></span>
-  </button>
+  <div class="nav-right">
+    <button class="nav-icon-btn" title="Search" aria-label="Search">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    </button>
+    <button class="nav-icon-btn" title="Wishlist" aria-label="Wishlist">
+      <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    </button>
+    <button class="nav-cart" onclick="showPage('cart')">
+      Bag&nbsp;(<span id="cart-count">0</span>)
+    </button>
+    <button class="nav-hamburger" id="nav-hamburger" onclick="toggleMobileMenu()" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
 </nav>
 
 <!-- MOBILE NAV OVERLAY -->
@@ -75,54 +82,103 @@
   <!-- HERO -->
   <section class="hero">
     <div class="hero-text">
-      <p class="hero-eyebrow" id="hero-eyebrow">Ayurveda Inspired</p>
+      <p class="hero-eyebrow" id="hero-eyebrow">Ayurveda Inspired · Small Batch Crafted · Cruelty Free</p>
       <h1 class="hero-title" id="hero-title">
-        Loved by Skin, <span>Powered by Nature</span>
+        Ancient Wisdom.<br><em style="font-style:italic;color:var(--terracotta);">Modern Skin.</em>
       </h1>
       <p class="hero-sub" id="hero-sub">
-        Pure ingredients. Honest formulations. Skincare rooted in tradition.
+        Pure, potent formulations rooted in five thousand years of Ayurvedic tradition. Crafted with care. Delivered to your door.
       </p>
-      <button onclick="showPage('shop')" class="btn-primary">
-        Shop the Collection
-      </button>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:1rem;">
+        <button onclick="showPage('shop')" class="btn-primary" style="margin-top:0;">Shop the Collection</button>
+        <button onclick="window.location.href='about.html'" style="padding:12px 28px;background:transparent;color:var(--text-dark);border:1.5px solid var(--border);border-radius:2px;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;font-family:Inter,sans-serif;transition:.2s;">Our Story</button>
+      </div>
     </div>
     <div class="hero-visual"></div>
   </section>
 
-  <!-- MARQUEE BAR -->
-  <div class="marquee-bar">
-    <div class="marquee-track" id="marquee-track">
-      <!-- JS populates from localStorage site content -->
-      <span>Free from parabens</span>
-      <span class="marquee-dot">·</span>
-      <span>Cruelty free</span>
-      <span class="marquee-dot">·</span>
-      <span>Sustainably sourced</span>
-      <span class="marquee-dot">·</span>
-      <span>Ayurveda inspired</span>
-      <span class="marquee-dot">·</span>
-      <span>Small batch crafted</span>
-      <span class="marquee-dot">·</span>
-      <!-- Duplicate set for seamless loop -->
-      <span>Free from parabens</span>
-      <span class="marquee-dot">·</span>
-      <span>Cruelty free</span>
-      <span class="marquee-dot">·</span>
-      <span>Sustainably sourced</span>
-      <span class="marquee-dot">·</span>
-      <span>Ayurveda inspired</span>
-      <span class="marquee-dot">·</span>
-      <span>Small batch crafted</span>
-      <span class="marquee-dot">·</span>
+  <!-- STATS STRIP -->
+  <div class="stats-strip">
+    <div class="stats-strip-item">
+      <span class="stats-strip-num">50,000+</span>
+      <span class="stats-strip-label">Happy Customers</span>
+    </div>
+    <div class="stats-strip-item">
+      <span class="stats-strip-num">12</span>
+      <span class="stats-strip-label">Countries Served</span>
+    </div>
+    <div class="stats-strip-item">
+      <span class="stats-strip-num">5,000</span>
+      <span class="stats-strip-label">Years of Heritage</span>
+    </div>
+    <div class="stats-strip-item">
+      <span class="stats-strip-num">100%</span>
+      <span class="stats-strip-label">Natural Ingredients</span>
     </div>
   </div>
 
-  <!-- BESTSELLERS -->
-  <section class="section">
-    <div class="container">
-      <p class="section-label" id="bestsellers-label">Bestsellers</p>
-      <h2 class="section-title" id="bestsellers-title">Customer favorites</h2>
+  <!-- MARQUEE BAR -->
+  <div class="marquee-bar">
+    <div class="marquee-track" id="marquee-track">
+      <span>Free from parabens</span><span class="marquee-dot">·</span>
+      <span>Cruelty free</span><span class="marquee-dot">·</span>
+      <span>Sustainably sourced</span><span class="marquee-dot">·</span>
+      <span>Ayurveda inspired</span><span class="marquee-dot">·</span>
+      <span>Small batch crafted</span><span class="marquee-dot">·</span>
+      <span>Dermatologist tested</span><span class="marquee-dot">·</span>
+      <span>Ships worldwide</span><span class="marquee-dot">·</span>
+      <span>Free from parabens</span><span class="marquee-dot">·</span>
+      <span>Cruelty free</span><span class="marquee-dot">·</span>
+      <span>Sustainably sourced</span><span class="marquee-dot">·</span>
+      <span>Ayurveda inspired</span><span class="marquee-dot">·</span>
+      <span>Small batch crafted</span><span class="marquee-dot">·</span>
+      <span>Dermatologist tested</span><span class="marquee-dot">·</span>
+      <span>Ships worldwide</span><span class="marquee-dot">·</span>
+    </div>
+  </div>
 
+  <!-- CATEGORY TILES -->
+  <section class="cats-section">
+    <div class="container">
+      <div class="cats-head">
+        <p class="cats-eyebrow">Shop by Category</p>
+        <h2 class="cats-title">Find Your Ritual</h2>
+      </div>
+      <div class="cats-grid">
+        <div class="cat-tile" onclick="showPage('shop')">
+          <div class="cat-tile-bg" style="background:linear-gradient(135deg,#f5edcc,#e8d8b0);">🌸</div>
+          <div class="cat-tile-overlay"></div>
+          <div class="cat-tile-label"><span class="cat-tile-name">Face Care</span><span class="cat-tile-sub">Explore →</span></div>
+        </div>
+        <div class="cat-tile" onclick="showPage('shop')">
+          <div class="cat-tile-bg" style="background:linear-gradient(135deg,#dceadf,#c4d8c8);">🌿</div>
+          <div class="cat-tile-overlay"></div>
+          <div class="cat-tile-label"><span class="cat-tile-name">Hair Care</span><span class="cat-tile-sub">Explore →</span></div>
+        </div>
+        <div class="cat-tile" onclick="showPage('shop')">
+          <div class="cat-tile-bg" style="background:linear-gradient(135deg,#e8dece,#d4c4ac);">✨</div>
+          <div class="cat-tile-overlay"></div>
+          <div class="cat-tile-label"><span class="cat-tile-name">Body Wellness</span><span class="cat-tile-sub">Explore →</span></div>
+        </div>
+        <div class="cat-tile" onclick="showPage('shop')">
+          <div class="cat-tile-bg" style="background:linear-gradient(135deg,#f0e8f0,#dccce0);">🤍</div>
+          <div class="cat-tile-overlay"></div>
+          <div class="cat-tile-label"><span class="cat-tile-name">Baby &amp; Kids</span><span class="cat-tile-sub">Explore →</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BESTSELLERS -->
+  <section class="section" style="background:var(--surface);border-top:1px solid var(--border);">
+    <div class="container">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:2rem;gap:16px;">
+        <div>
+          <p class="section-label" id="bestsellers-label">Bestsellers</p>
+          <h2 class="section-title" style="margin-bottom:0;" id="bestsellers-title">Customer Favorites</h2>
+        </div>
+        <button onclick="showPage('shop')" style="font-size:11.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-mid);text-decoration:underline;text-underline-offset:4px;background:none;border:none;cursor:pointer;white-space:nowrap;font-family:Inter,sans-serif;">View All →</button>
+      </div>
       <div id="home-products" class="products-grid">
         <p class="loading-text">Loading products...</p>
       </div>
@@ -130,14 +186,13 @@
   </section>
 
   <!-- OUR PROMISE -->
-  <section class="section values-section">
+  <section class="section values-section" style="background:var(--cream);border-top:1px solid var(--border);">
     <div class="container">
-      <p class="section-label" id="promise-label">Our Promise</p>
-      <h2 class="section-title" id="promise-title">What we stand for</h2>
-
-      <!-- JS re-renders this from localStorage; static fallback shown on first load -->
+      <div style="text-align:center;margin-bottom:56px;">
+        <p class="section-label" id="promise-label">Our Promise</p>
+        <h2 class="section-title" style="margin-bottom:0;" id="promise-title">Why Thousands Choose Us</h2>
+      </div>
       <div class="values-grid" id="promise-cards">
-
         <div class="value-card">
           <div class="value-icon">
             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -146,9 +201,8 @@
             </svg>
           </div>
           <h4 class="value-title">100% Natural</h4>
-          <p class="value-desc">Every ingredient is plant-derived, ethically sourced and free from synthetic chemicals.</p>
+          <p class="value-desc">Every ingredient is plant-derived, ethically sourced and free from synthetic chemicals or preservatives.</p>
         </div>
-
         <div class="value-card">
           <div class="value-icon">
             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -156,9 +210,8 @@
             </svg>
           </div>
           <h4 class="value-title">Cruelty Free</h4>
-          <p class="value-desc">We never test on animals. Our products are certified cruelty-free and vegan.</p>
+          <p class="value-desc">Never tested on animals. Certified cruelty-free and proudly vegan in every formulation we make.</p>
         </div>
-
         <div class="value-card">
           <div class="value-icon">
             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -168,9 +221,8 @@
             </svg>
           </div>
           <h4 class="value-title">Small Batch</h4>
-          <p class="value-desc">Crafted in small batches to ensure maximum freshness and potency in every product.</p>
+          <p class="value-desc">Crafted in small batches to ensure maximum freshness, potency and quality in every product.</p>
         </div>
-
         <div class="value-card">
           <div class="value-icon">
             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -179,10 +231,84 @@
             </svg>
           </div>
           <h4 class="value-title">Ayurveda Rooted</h4>
-          <p class="value-desc">Formulas inspired by 5,000 years of Ayurvedic wisdom, adapted for modern skin.</p>
+          <p class="value-desc">Formulas inspired by 5,000 years of Ayurvedic wisdom, verified by modern dermatologists.</p>
         </div>
-
       </div>
+    </div>
+  </section>
+
+  <!-- EDITORIAL -->
+  <section class="editorial-section">
+    <div class="editorial-panel">
+      <div class="editorial-panel-icon">☘️</div>
+    </div>
+    <div class="editorial-content">
+      <p class="editorial-eyebrow">Our Philosophy</p>
+      <h2 class="editorial-heading">Five Thousand Years.<br><em>One Purpose.</em></h2>
+      <p class="editorial-body">Surabhi Sutra is not just skincare — it is a ritual. Rooted in the ancient Ayurvedic tradition of Panchakarma and Dinacharya, our formulations bring the botanical wisdom of India's sages into your morning routine. No shortcuts. No synthetics. Just nature, distilled.</p>
+      <button class="editorial-btn" onclick="window.location.href='about.html'">Read Our Story</button>
+    </div>
+  </section>
+
+  <!-- CERTIFICATIONS -->
+  <div class="certs-strip">
+    <div class="certs-inner">
+      <p class="certs-label">Certified &amp; Trusted</p>
+      <div class="certs-sep"></div>
+      <div class="cert-item"><span class="cert-icon">🌿</span><span class="cert-name">Ayurveda Certified</span></div>
+      <div class="cert-item"><span class="cert-icon">🐰</span><span class="cert-name">Cruelty Free</span></div>
+      <div class="cert-item"><span class="cert-icon">🔬</span><span class="cert-name">Derma Tested</span></div>
+      <div class="cert-item"><span class="cert-icon">🌱</span><span class="cert-name">Paraben Free</span></div>
+      <div class="cert-item"><span class="cert-icon">🇮🇳</span><span class="cert-name">Made in India</span></div>
+      <div class="cert-item"><span class="cert-icon">🌍</span><span class="cert-name">Ships Worldwide</span></div>
+    </div>
+  </div>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials-section">
+    <div class="container">
+      <div class="testimonials-head">
+        <p class="testimonials-eyebrow">Real Reviews</p>
+        <h2 class="testimonials-title">What Our Customers Say</h2>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">"The kumkumadi face wash has completely transformed my skin. My dark spots have faded significantly in just four weeks. I've tried so many products and nothing comes close to this."</p>
+          <div class="testimonial-author">Ananya S.</div>
+          <div class="testimonial-location">Mumbai, India</div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">"Finally a natural skincare brand that actually delivers results. The ingredients are so clean and my sensitive skin has never reacted badly. Will never go back to commercial brands."</p>
+          <div class="testimonial-author">Riya K.</div>
+          <div class="testimonial-location">Bengaluru, India</div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">"Ordered from the UK and received my package in perfect condition within a week. The quality is outstanding — you can smell and feel the difference from the very first use."</p>
+          <div class="testimonial-author">Priya M.</div>
+          <div class="testimonial-location">London, United Kingdom</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INSTAGRAM GRID -->
+  <section class="insta-section">
+    <div class="container">
+      <p class="insta-eyebrow">Follow the Ritual</p>
+      <h2 class="insta-title">@surabhisutra</h2>
+      <div class="insta-grid">
+        <div class="insta-tile">🌿</div>
+        <div class="insta-tile">🌸</div>
+        <div class="insta-tile">✨</div>
+        <div class="insta-tile">🌱</div>
+        <div class="insta-tile">🪔</div>
+        <div class="insta-tile">☘️</div>
+      </div>
+      <p class="insta-handle">Join our community on Instagram — <a href="#">@surabhisutra</a></p>
+      <button class="insta-follow-btn">Follow Us</button>
     </div>
   </section>
 
