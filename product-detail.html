@@ -39,6 +39,22 @@
 
 <!-- ANNOUNCE BAR -->
 <div class="announce-bar"><span id="announce-bar-text"></span></div>
+<script>
+(function(){
+  try {
+    var s=JSON.parse(localStorage.getItem('surabhi_announce_settings')||'{}');
+    var msgs=(s.messages&&s.messages.filter(Boolean).length)?s.messages.filter(Boolean):['Sale: Buy 1 Get 1 Free + 20% Off · Free shipping above ₹339 · Cash on Delivery available'];
+    var iv=Number(s.interval)||4;
+    var el=document.getElementById('announce-bar-text');
+    if(!el||!msgs.length)return;
+    function fmt(t){var c=t.indexOf(':');return(c>0&&c<=25)?'<strong>'+t.slice(0,c)+':</strong>'+t.slice(c+1):t;}
+    el.innerHTML=fmt(msgs[0]);
+    if(msgs.length<2)return;
+    var idx=0;
+    setInterval(function(){el.classList.add('announce-fade');setTimeout(function(){idx=(idx+1)%msgs.length;el.innerHTML=fmt(msgs[idx]);el.classList.remove('announce-fade');},380);},iv*1000);
+  }catch(e){}
+})();
+</script>
 
 <!-- NAV -->
 <nav>
