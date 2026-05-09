@@ -1,7 +1,7 @@
 // ─────────────────────────────
 // CONFIG
 // ─────────────────────────────
-const API_URL = 'https://script.google.com/macros/s/AKfycbwOeOaSAk2R6PMGAf1jBEHpRaR-hwCJu_UsMR2gxOJIiy4EY_QV1kDSp592Lo4N00ag/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbw4WcGOBWlADPu-IKLVS563UROCSxhG1qHyooa_6-LTSVzAZNYVAzf32JIIcC8DMncP/exec';
 
 // ─────────────────────────────
 // STATE
