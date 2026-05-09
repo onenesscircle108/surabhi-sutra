@@ -235,6 +235,7 @@ body{font-family:Arial,sans-serif;background:var(--beige);min-height:100vh;}
       <li><button class="nav-btn" onclick="showSection('orders',this)">🛒 Orders</button></li>
       <li><button class="nav-btn" onclick="showSection('about',this)">📖 About Page</button></li>
       <li><button class="nav-btn" onclick="showSection('returns',this)">↩️ Return Policy</button></li>
+      <li><button class="nav-btn" onclick="showSection('announce',this)">📢 Announce Bar</button></li>
       <li><button class="nav-btn" onclick="showSection('footer',this)">🔗 Footer</button></li>
       <li><button class="nav-btn" onclick="showSection('account',this)">👤 Account</button></li>
     </ul>
@@ -762,6 +763,33 @@ body{font-family:Arial,sans-serif;background:var(--beige);min-height:100vh;}
       </div>
     </div>
 
+    <!-- ANNOUNCE BAR -->
+    <div id="announce" class="section">
+      <div class="page-title">Announce Bar</div>
+      <div id="announce-alert"></div>
+      <div class="form-box">
+        <h3>Messages</h3>
+        <p style="font-size:13px;color:#777;margin-bottom:1rem;">
+          Add one message per row. If there's more than one, they rotate automatically.
+          Text before the first <code>:</code> is automatically <strong style="color:var(--text-dark);">bolded</strong> (e.g. <em>Sale: 20% Off…</em>).
+        </p>
+        <div id="ab-msg-list" class="pp-usage-list" style="margin-bottom:8px;"></div>
+        <button class="btn btn-sm" onclick="addAnnounceMsg()">+ Add Message</button>
+      </div>
+      <div class="form-box">
+        <h3>Rotation Speed</h3>
+        <div class="form-group" style="max-width:220px;">
+          <label>Seconds between messages</label>
+          <input type="number" id="ab-interval" min="2" max="30" step="1" value="4">
+          <small style="color:#999;font-size:11px;">Recommended: 3–6 seconds</small>
+        </div>
+      </div>
+      <div style="margin-top:1rem;">
+        <button class="btn" onclick="saveAnnounceSettings()">Save Announce Bar</button>
+        <button class="btn btn-grey" onclick="resetAnnounceSettings()">Reset Defaults</button>
+      </div>
+    </div>
+
     <!-- FOOTER -->
     <div id="footer" class="section">
       <div class="page-title">Footer Settings</div>
@@ -1063,6 +1091,7 @@ async function showSection(id, btn) {
   if (id === 'fomo')        renderFomoEditor();
   if (id === 'about')       { renderAboutEditor(); renderFaqEditor(); }
   if (id === 'returns')     renderReturnsEditor();
+  if (id === 'announce')    renderAnnounceEditor();
   if (id === 'footer')      renderFooterEditor();
   if (id === 'account')     { renderAboutEditor(); renderFaqEditor(); await loadAdmins(); }
 }
@@ -2135,6 +2164,60 @@ function resetReturnsSettings() {
   localStorage.removeItem('surabhi_returns_settings');
   renderReturnsEditor();
   const al = document.getElementById('returns-alert');
+  if (al) { al.innerHTML = '<div class="alert alert-success">Reset to defaults.</div>'; setTimeout(() => al.innerHTML = '', 2000); }
+}
+
+// ─── ANNOUNCE BAR SETTINGS ─────────────────────────────────
+const DEFAULT_ANNOUNCE_ADMIN = {
+  messages: ['Sale: Buy 1 Get 1 Free + 20% Off · Free shipping above ₹339 · Cash on Delivery available'],
+  interval: 4
+};
+
+function getAnnounceAdminSettings() {
+  try {
+    const s = JSON.parse(localStorage.getItem('surabhi_announce_settings') || '{}');
+    const messages = (s.messages && s.messages.filter(Boolean).length)
+      ? s.messages.filter(Boolean)
+      : DEFAULT_ANNOUNCE_ADMIN.messages;
+    return { messages, interval: Number(s.interval) || DEFAULT_ANNOUNCE_ADMIN.interval };
+  } catch { return { ...DEFAULT_ANNOUNCE_ADMIN }; }
+}
+
+function announceMsgHTML(msg) {
+  return `
+    <div class="pp-usage-item-edit" style="display:flex;gap:8px;align-items:center;">
+      <input type="text" placeholder="e.g. Sale: 20% off sitewide · Free shipping above ₹339" value="${escA(msg)}" style="flex:1;">
+      <button class="pp-row-remove" onclick="removePPRow(this)" title="Remove">×</button>
+    </div>`;
+}
+
+function renderAnnounceEditor() {
+  const s = getAnnounceAdminSettings();
+  document.getElementById('ab-interval').value = s.interval;
+  const wrap = document.getElementById('ab-msg-list');
+  if (wrap) wrap.innerHTML = s.messages.map(announceMsgHTML).join('');
+}
+
+function addAnnounceMsg() {
+  document.getElementById('ab-msg-list')?.insertAdjacentHTML('beforeend', announceMsgHTML(''));
+}
+
+function saveAnnounceSettings() {
+  const messages = Array.from(document.querySelectorAll('#ab-msg-list .pp-usage-item-edit input'))
+    .map(i => i.value.trim()).filter(Boolean);
+  const settings = {
+    messages: messages.length ? messages : DEFAULT_ANNOUNCE_ADMIN.messages,
+    interval: parseInt(document.getElementById('ab-interval')?.value) || DEFAULT_ANNOUNCE_ADMIN.interval
+  };
+  localStorage.setItem('surabhi_announce_settings', JSON.stringify(settings));
+  const al = document.getElementById('announce-alert');
+  if (al) { al.innerHTML = '<div class="alert alert-success">Announce bar saved!</div>'; setTimeout(() => al.innerHTML = '', 2500); }
+}
+
+function resetAnnounceSettings() {
+  localStorage.removeItem('surabhi_announce_settings');
+  renderAnnounceEditor();
+  const al = document.getElementById('announce-alert');
   if (al) { al.innerHTML = '<div class="alert alert-success">Reset to defaults.</div>'; setTimeout(() => al.innerHTML = '', 2000); }
 }
 

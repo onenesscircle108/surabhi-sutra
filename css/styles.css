@@ -175,6 +175,14 @@ body{
   letter-spacing:.3px;
 }
 .announce-bar strong{color:var(--amber);}
+#announce-bar-text{
+  display:inline-block;
+  transition:opacity .35s ease,transform .35s ease;
+}
+#announce-bar-text.announce-fade{
+  opacity:0;
+  transform:translateY(-6px);
+}
 
 /* MARQUEE */
 .marquee-bar{

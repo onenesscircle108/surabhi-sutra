@@ -31,9 +31,7 @@
 <!-- ─────────────────────────────
      NAV
 ───────────────────────────── -->
-<div class="announce-bar">
-  <strong>Sale:</strong> Buy 1 Get 1 Free + 20% Off · Free shipping above ₹339 · Cash on Delivery available
-</div>
+<div class="announce-bar"><span id="announce-bar-text"></span></div>
 
 <nav>
   <div class="nav-logo" onclick="showPage('home')">SURABHI SUTRA</div>
@@ -469,7 +467,7 @@
   <div class="site-footer-bottom" id="footer-copyright"></div>
 </footer>
 <script src="js/footer.js"></script>
-<script>renderFooter();</script>
+<script>renderFooter(); initAnnounceBar();</script>
 
 
 <!-- MAIN CART DRAWER -->

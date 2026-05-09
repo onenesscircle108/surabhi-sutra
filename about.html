@@ -207,9 +207,7 @@
 <body>
 
 <!-- ANNOUNCE BAR -->
-<div class="announce-bar">
-  <strong>Sale:</strong> Buy 1 Get 1 Free + 20% Off · Free shipping above ₹339 · Cash on Delivery available
-</div>
+<div class="announce-bar"><span id="announce-bar-text"></span></div>
 
 <!-- NAV -->
 <nav>
@@ -480,6 +478,7 @@ function render() {
 
 render();
 renderFooter();
+initAnnounceBar();
 </script>
 </body>
 </html>

@@ -1,3 +1,4 @@
+// ─── FOOTER ──────────────────────────────────────────────────
 const DEFAULT_FOOTER = {
   brand_desc: 'Surabhi Sutra brings five thousand years of Ayurvedic wisdom into your daily skincare ritual. Every product is made fresh, in small batches, with ingredients your skin was always meant to meet. No shortcuts. No synthetics. Just nature, distilled.',
   socials: [
@@ -6,8 +7,8 @@ const DEFAULT_FOOTER = {
     { name: 'Instagram',  url: '#', label: 'ig' }
   ],
   contact: [
-    { label: 'WhatsApp Us',            url: '#'                           },
-    { label: 'hello@surabhisutra.in',  url: 'mailto:hello@surabhisutra.in' }
+    { label: 'WhatsApp Us',           url: '#'                            },
+    { label: 'hello@surabhisutra.in', url: 'mailto:hello@surabhisutra.in' }
   ],
   office_name:    'Surabhi Sutra Naturals',
   office_address: 'New Delhi, India — 110001',
@@ -66,4 +67,59 @@ function renderFooter() {
       if (el) el.textContent = count;
     });
   } catch {}
+}
+
+// ─── ANNOUNCE BAR ─────────────────────────────────────────────
+const DEFAULT_ANNOUNCE = {
+  messages: [
+    'Sale: Buy 1 Get 1 Free + 20% Off · Free shipping above ₹339 · Cash on Delivery available'
+  ],
+  interval: 4
+};
+
+function getAnnounceSettings() {
+  try {
+    const s = JSON.parse(localStorage.getItem('surabhi_announce_settings') || '{}');
+    const messages = (s.messages && s.messages.filter(Boolean).length)
+      ? s.messages.filter(Boolean)
+      : DEFAULT_ANNOUNCE.messages;
+    return {
+      messages,
+      interval: Number(s.interval) || DEFAULT_ANNOUNCE.interval
+    };
+  } catch { return { ...DEFAULT_ANNOUNCE }; }
+}
+
+function formatAnnounceMsg(text) {
+  // Bold the text before the first colon if it's a short prefix (≤25 chars)
+  const colonIdx = text.indexOf(':');
+  if (colonIdx > 0 && colonIdx <= 25) {
+    const prefix = text.slice(0, colonIdx);
+    const rest   = text.slice(colonIdx + 1);
+    return `<strong>${prefix}:</strong>${rest}`;
+  }
+  return text;
+}
+
+let _announceIdx = 0;
+
+function initAnnounceBar() {
+  const el = document.getElementById('announce-bar-text');
+  if (!el) return;
+
+  const { messages, interval } = getAnnounceSettings();
+  if (!messages.length) return;
+
+  el.innerHTML = formatAnnounceMsg(messages[0]);
+
+  if (messages.length < 2) return;
+
+  setInterval(() => {
+    el.classList.add('announce-fade');
+    setTimeout(() => {
+      _announceIdx = (_announceIdx + 1) % messages.length;
+      el.innerHTML = formatAnnounceMsg(messages[_announceIdx]);
+      el.classList.remove('announce-fade');
+    }, 380);
+  }, interval * 1000);
 }

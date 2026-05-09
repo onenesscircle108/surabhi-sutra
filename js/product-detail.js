@@ -1331,6 +1331,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderIngredientsTab();
   renderHowToTab();
   if (typeof renderFooter === 'function') renderFooter();
+  if (typeof initAnnounceBar === 'function') initAnnounceBar();
   updateCartBadge();
   fetchProduct();
   fetchReviews();
