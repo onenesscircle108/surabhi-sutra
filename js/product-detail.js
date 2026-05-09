@@ -68,6 +68,65 @@ const DELIVERY_SVGS = [
   `<svg viewBox="0 0 24 24" width="20" height="20" stroke="var(--sage)" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>`
 ];
 
+const DEFAULT_ING_HERO = {
+  name:      'Wild Turmeric',
+  latin:     'Curcuma Aromatica',
+  stat_num:  '5×',
+  stat_label:'More curcuminoid potency than regular kitchen turmeric — the brightening difference you can see.',
+  chips:     'Red Lentil · Clarity\nBesan · Deep Cleanse\nSandalwood · Cooling'
+};
+
+const DEFAULT_BENEFITS_TAB_CONTENT = {
+  stats: [
+    { num: '4.8★', label: 'Average rating from verified customers' },
+    { num: '5,000', label: 'Years of Ayurvedic wisdom in every sachet' },
+    { num: '0%', label: 'Parabens · SLS · Synthetic fragrance · Artificial color' }
+  ],
+  eyebrow: 'Why It Works',
+  title:   'Six Reasons Your Skin Will Love This',
+  items: [
+    { title: 'Brightens Over Time', desc: "Wild turmeric's curcuminoids inhibit tyrosinase — the enzyme behind dark spots and tan. Visible skin-tone evening in 3–4 weeks of daily use." },
+    { title: 'Tikta Rasa Cleansing', desc: "Ayurveda's bitter-cleanse principle draws out toxins and excess sebum without disrupting your skin's natural moisture barrier. No tight feeling after washing." },
+    { title: 'Barrier-Safe Formula', desc: 'No sulfates. The lentil and chickpea base gently exfoliates while honey restores hydration at the ceramide level after every wash.' },
+    { title: 'Pore-Refining Action', desc: 'Red lentil saponins deep-cleanse pores, removing oxidised sebum that causes blackheads and enlarged-looking pores.' },
+    { title: 'Anti-Pollution Shield', desc: 'Neem and sandalwood polyphenols neutralise free radicals from UV and urban pollution — protecting cellular DNA between washes.' },
+    { title: 'Fresh Daily Promise', desc: 'Made in small batches at our workshop. Your jar is made fresh and packed with full-potency actives — not sitting in a warehouse for years.' }
+  ]
+};
+
+const DEFAULT_ING_TAB_CONTENT = {
+  eyebrow:  'Full Transparency',
+  title:    "What's Inside Every Jar",
+  subtitle: 'Six hero botanicals with centuries of Ayurvedic documentation. Zero synthetic fillers. Every ingredient on our label is pronounceable.',
+  items: [
+    { emoji: '🌿', badge: 'Hero Active',    name: 'Wild Turmeric',       desc: 'Curcuma Aromatica — 5× richer in curcuminoids than kitchen turmeric. Brightens, detans, and calms inflammation at the cellular level.' },
+    { emoji: '🫘', badge: 'Cleansing Base', name: 'Red Lentil + Besan',  desc: "Protein-rich flour blend that gently exfoliates dead cells and emulsifies sebum — India's original face wash, used for thousands of years." },
+    { emoji: '🪵', badge: 'Cooling Agent',  name: 'Sandalwood',          desc: 'Santalum Album — cooling, anti-inflammatory, rich in santalol which reduces skin redness and post-acne marks.' },
+    { emoji: '🌱', badge: 'Antibacterial',  name: 'Neem Leaf Extract',   desc: 'Azadirachta Indica — prevents acne-causing bacteria from colonising freshly cleansed pores.' },
+    { emoji: '🌹', badge: 'Hydration Base', name: 'Rose Water',          desc: 'Rosa Damascena — natural pH-balancer and humectant, gentle enough for sensitive skin with light floral hydration.' },
+    { emoji: '🍯', badge: 'Barrier Repair', name: 'Raw Honey',           desc: 'Apis Mellifera — draws moisture in and creates a protective film that prevents trans-epidermal water loss after cleansing.' }
+  ],
+  full_inci: 'Wild Turmeric (Curcuma aromatica), Chickpea Flour (Cicer arietinum), Red Lentil Powder (Lens culinaris), Green Gram Flour (Vigna radiata), Sandalwood Powder (Santalum album), Rose Water (Rosa damascena), Neem Leaf Extract (Azadirachta indica), Honey (Apis mellifera), Vegetable Glycerin, Xanthan Gum. No parabens · No SLS/SLES · No synthetic fragrance · No artificial color.'
+};
+
+const DEFAULT_HOWTO_TAB_CONTENT = {
+  steps_eyebrow: 'Application Ritual',
+  steps_title:   'Three Steps. Twice a Day.',
+  steps: [
+    { title: 'Wet & Activate',   desc: 'Dampen your face with lukewarm water. Take a small amount and add a few drops of water to activate the botanical powders.' },
+    { title: 'Massage Gently',   desc: 'Using circular motions, massage the paste across your face for 60 seconds. The gentle grit exfoliates while the turmeric penetrates.' },
+    { title: 'Rinse & Reveal',   desc: 'Rinse with cool water to close pores. Pat dry gently. Follow with toner or moisturiser while skin is still slightly damp.' }
+  ],
+  am_routine: 'Tikta Face Wash (activate, massage 60s, rinse)\nRose Water Toner (balance pH)\nMalai Glow Cream (lightweight moisture)\nSPF 30+ sunscreen (always)',
+  pm_routine: 'Double-cleanse if wearing SPF or makeup\nTikta Face Wash (90s evening massage)\nKumkumadi Drops (1–2 drops while damp)\nChandan Lepa overnight mask (2×/week)',
+  safety: [
+    { title: 'Who Should Use This?',      content: 'Safe for all skin types including sensitive skin. Ideal for ages 14 and above. Suitable for Indian skin tones and climates.' },
+    { title: 'Patch Test Advice',         content: 'Apply a small amount to the inner wrist or behind the ear. Wait 24 hours. If no redness or irritation appears, proceed with full use.' },
+    { title: 'Pregnancy & Breastfeeding', content: 'All ingredients are natural and generally safe. Please consult your doctor before use during pregnancy or breastfeeding.' },
+    { title: 'Storage & Shelf Life',      content: 'Store in a cool, dry place away from direct sunlight. Shelf life is 12 months from manufacture. Use within 6 months of opening.' }
+  ]
+};
+
 const DEFAULT_PD_CONTENT = {
   subtitle: 'Brightening & Detan with Real Dals & Besan',
   trust_badges: ['100% Natural', 'Ayurveda Certified', 'Fresh Made Daily', 'Derma Tested'],
@@ -77,6 +136,10 @@ const DEFAULT_PD_CONTENT = {
     { icon: '', text: 'Free shipping above ₹339' },
     { icon: '', text: 'Cash on Delivery available' }
   ],
+  ing_hero:     DEFAULT_ING_HERO,
+  benefits_tab: DEFAULT_BENEFITS_TAB_CONTENT,
+  ing_tab:      DEFAULT_ING_TAB_CONTENT,
+  howto_tab:    DEFAULT_HOWTO_TAB_CONTENT,
   feature_cards: [
     {
       enabled: true,
@@ -159,23 +222,24 @@ function getPDContent() {
   try {
     const s = JSON.parse(localStorage.getItem('surabhi_product_page_settings') || '{}');
     const rawDelivery = s.delivery_items || DEFAULT_PD_CONTENT.delivery_items;
-    const rawCmp      = s.compare        || {};
-    const defCmp      = DEFAULT_PD_CONTENT.compare;
     return {
       subtitle:       s.subtitle      || DEFAULT_PD_CONTENT.subtitle,
       trust_badges:   s.trust_badges  || DEFAULT_PD_CONTENT.trust_badges,
       delivery_items: rawDelivery.map(normalizeDeliveryItem),
-      feature_cards:  s.feature_cards || DEFAULT_PD_CONTENT.feature_cards,
-      ingredients:    s.ingredients   || DEFAULT_PD_CONTENT.ingredients,
-      compare: {
-        eyebrow: rawCmp.eyebrow || defCmp.eyebrow,
-        title:   rawCmp.title   || defCmp.title,
-        col1:    rawCmp.col1    || defCmp.col1,
-        col2:    rawCmp.col2    || defCmp.col2,
-        col3:    rawCmp.col3    || defCmp.col3,
-        rows:    (rawCmp.rows && rawCmp.rows.length) ? rawCmp.rows : defCmp.rows
-      },
-      usage: s.usage || DEFAULT_PD_CONTENT.usage
+      ing_hero:       s.ing_hero      || DEFAULT_ING_HERO,
+      benefits_tab:   s.benefits_tab  || DEFAULT_BENEFITS_TAB_CONTENT,
+      ing_tab:        (() => {
+        const t = s.ing_tab || s.ingredients || {};
+        return {
+          eyebrow:   t.eyebrow   || DEFAULT_ING_TAB_CONTENT.eyebrow,
+          title:     t.title     || DEFAULT_ING_TAB_CONTENT.title,
+          subtitle:  t.subtitle  || DEFAULT_ING_TAB_CONTENT.subtitle,
+          items:     (t.items && t.items.length) ? t.items : DEFAULT_ING_TAB_CONTENT.items,
+          full_inci: t.full_inci || DEFAULT_ING_TAB_CONTENT.full_inci
+        };
+      })(),
+      howto_tab:      s.howto_tab     || DEFAULT_HOWTO_TAB_CONTENT,
+      feature_cards:  s.feature_cards || DEFAULT_PD_CONTENT.feature_cards
     };
   } catch { return DEFAULT_PD_CONTENT; }
 }
@@ -298,7 +362,159 @@ function esc(s) {
 }
 
 // ─────────────────────────────
-// RENDER DYNAMIC SECTIONS
+// RENDER INGREDIENT HERO
+// ─────────────────────────────
+function renderIngHero() {
+  const wrap = document.getElementById('pd-ing-hero-wrap');
+  if (!wrap) return;
+  const h = getPDContent().ing_hero || DEFAULT_ING_HERO;
+  const chips = (h.chips || '').split('\n').filter(Boolean).map(c =>
+    `<span class="p2-ing-chip">${esc(c.trim())}</span>`).join('');
+  wrap.innerHTML = `
+    <div class="p2-ing-hero">
+      <p class="p2-ing-eyebrow">The Hero Ingredient</p>
+      <div class="p2-ing-hero-grid">
+        <div class="p2-ing-hero-name">${esc(h.name)}<span>${esc(h.latin)}</span></div>
+        <div class="p2-ing-hero-divider"></div>
+        <div class="p2-ing-hero-stat">
+          <div class="p2-ing-stat-num">${esc(h.stat_num)}</div>
+          <div class="p2-ing-stat-label">${esc(h.stat_label)}</div>
+        </div>
+      </div>
+      ${chips ? `<div class="p2-ing-support">${chips}</div>` : ''}
+    </div>`;
+}
+
+// ─────────────────────────────
+// RENDER BENEFITS TAB
+// ─────────────────────────────
+const BENEFIT_SVGS = [
+  `<svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`,
+  `<svg viewBox="0 0 24 24"><path d="M12 2C6 2 3 8 3 12c0 5 4 9 9 9s9-4 9-9c0-5-3-10-9-10z"/><path d="M12 2c0 0 0 10-6 14"/></svg>`,
+  `<svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
+  `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
+  `<svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>`,
+  `<svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`
+];
+
+function renderBenefitsTab() {
+  const wrap = document.getElementById('pd-benefits-wrap');
+  if (!wrap) return;
+  const b = getPDContent().benefits_tab || DEFAULT_BENEFITS_TAB_CONTENT;
+  const stats = (b.stats || []).map(s => `
+    <div class="p2-stat-item">
+      <div class="p2-stat-num">${esc(s.num)}</div>
+      <div class="p2-stat-label">${esc(s.label)}</div>
+    </div>`).join('');
+  const items = (b.items || []).map((item, i) => `
+    <div class="p2-benefit-card">
+      <div class="p2-benefit-icon-wrap">${BENEFIT_SVGS[i % BENEFIT_SVGS.length]}</div>
+      <div class="p2-benefit-title">${esc(item.title)}</div>
+      <p class="p2-benefit-desc">${esc(item.desc)}</p>
+    </div>`).join('');
+  wrap.innerHTML = `
+    <div class="p2-section" style="padding-bottom:0;">
+      <div class="p2-stats-strip">${stats}</div>
+    </div>
+    <div class="p2-section">
+      <p class="p2-eyebrow">${esc(b.eyebrow)}</p>
+      <h2 class="p2-section-title">${esc(b.title)}</h2>
+      <div class="p2-benefits-grid">${items}</div>
+    </div>`;
+}
+
+// ─────────────────────────────
+// RENDER INGREDIENTS TAB
+// ─────────────────────────────
+function renderIngredientsTab() {
+  const wrap = document.getElementById('pd-ing-tab-wrap');
+  if (!wrap) return;
+  const t = getPDContent().ing_tab || DEFAULT_ING_TAB_CONTENT;
+  const ingImgSrc = item => {
+    if (!item.image) return '';
+    const m = item.image.match(/\/d\/([a-zA-Z0-9_-]+)/);
+    return m ? `https://drive.google.com/thumbnail?id=${m[1]}&sz=w200` : item.image;
+  };
+  const cards = (t.items || []).map(item => {
+    const src = ingImgSrc(item);
+    const img = src
+      ? `<img src="${esc(src)}" alt="${esc(item.name)}" class="p2-ing-card-img-real" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+      : '';
+    const emoji = `<div class="p2-ing-card-img" style="${src ? 'display:none' : ''}">${esc(item.emoji || '🌿')}</div>`;
+    return `
+      <div class="p2-ing-card">
+        ${img}${emoji}
+        <div class="p2-ing-card-body">
+          <div class="p2-ing-card-badge">${esc(item.badge)}</div>
+          <div class="p2-ing-card-name">${esc(item.name)}</div>
+          <div class="p2-ing-card-desc">${esc(item.desc)}</div>
+        </div>
+      </div>`;
+  }).join('');
+  wrap.innerHTML = `
+    <div class="p2-section-alt">
+      <div class="p2-section">
+        <p class="p2-eyebrow">${esc(t.eyebrow)}</p>
+        <h2 class="p2-section-title">${esc(t.title)}</h2>
+        ${t.subtitle ? `<p class="p2-section-sub">${esc(t.subtitle)}</p>` : ''}
+        <div class="p2-ing-grid">${cards}</div>
+        ${t.full_inci ? `<div class="p2-full-ing"><div class="p2-full-ing-label">Full INCI List</div><p>${esc(t.full_inci)}</p></div>` : ''}
+      </div>
+    </div>`;
+}
+
+// ─────────────────────────────
+// RENDER HOW TO USE TAB
+// ─────────────────────────────
+function renderHowToTab() {
+  const wrap = document.getElementById('pd-howto-tab-wrap');
+  if (!wrap) return;
+  const h = getPDContent().howto_tab || DEFAULT_HOWTO_TAB_CONTENT;
+  const steps = (h.steps || []).map((s, i) => `
+    <div class="p2-step">
+      <div class="p2-step-num">${String(i + 1).padStart(2, '0')}</div>
+      <div class="p2-step-title">${esc(s.title)}</div>
+      <p class="p2-step-desc">${esc(s.desc)}</p>
+    </div>`).join('');
+  const amItems = (h.am_routine || '').split('\n').filter(Boolean).map(l => `<li>${esc(l.trim())}</li>`).join('');
+  const pmItems = (h.pm_routine || '').split('\n').filter(Boolean).map(l => `<li>${esc(l.trim())}</li>`).join('');
+  const safetyAcc = (h.safety || []).map(item => `
+    <div class="p2-acc-item">
+      <div class="p2-acc-head" onclick="toggleAcc(this)"><span>${esc(item.title)}</span><span class="p2-acc-icon">+</span></div>
+      <div class="p2-acc-body"><div class="p2-acc-content">${esc(item.content)}</div></div>
+    </div>`).join('');
+  wrap.innerHTML = `
+    <div class="p2-section">
+      <p class="p2-eyebrow">${esc(h.steps_eyebrow)}</p>
+      <h2 class="p2-section-title">${esc(h.steps_title)}</h2>
+      <div class="p2-steps">${steps}</div>
+      <div class="p2-divider" style="margin:2rem 0;"></div>
+      <p class="p2-eyebrow">Your Daily Ritual</p>
+      <h3 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:1.5rem;font-weight:600;color:var(--text-dark);margin-bottom:1.5rem;">AM &amp; PM Routine</h3>
+      <div class="p2-routine-grid">
+        <div class="p2-routine-card">
+          <div class="p2-routine-card-head">
+            <span class="p2-routine-icon">☀️</span><span class="p2-routine-title">Morning Routine</span>
+          </div>
+          <ul class="p2-routine-list">${amItems}</ul>
+        </div>
+        <div class="p2-routine-card">
+          <div class="p2-routine-card-head">
+            <span class="p2-routine-icon">🌙</span><span class="p2-routine-title">Evening Routine</span>
+          </div>
+          <ul class="p2-routine-list">${pmItems}</ul>
+        </div>
+      </div>
+      ${safetyAcc ? `
+      <div class="p2-divider" style="margin:2.5rem 0;"></div>
+      <p class="p2-eyebrow">Important Notes</p>
+      <h3 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:1.5rem;font-weight:600;color:var(--text-dark);margin-bottom:1rem;">Safety &amp; Storage</h3>
+      <div class="p2-accordion">${safetyAcc}</div>` : ''}
+    </div>`;
+}
+
+// ─────────────────────────────
+// RENDER DYNAMIC SECTIONS (legacy feature cards)
 // ─────────────────────────────
 const CHECK_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
 const ALTS = ['','pd-alt-bg',''];
@@ -1110,6 +1326,10 @@ function makeDraggable(el) {
 // ─────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   renderHeroTexts();
+  renderIngHero();
+  renderBenefitsTab();
+  renderIngredientsTab();
+  renderHowToTab();
   updateCartBadge();
   fetchProduct();
   fetchReviews();

@@ -485,6 +485,7 @@ body{font-family:Arial,sans-serif;background:var(--beige);min-height:100vh;}
       <div class="page-title">Product Page Settings</div>
       <div id="pp-alert"></div>
 
+      <!-- PROMO BAR -->
       <div class="form-box">
         <h3>Promo Bar Messages</h3>
         <p style="font-size:13px;color:#777;margin-bottom:1rem;">One message per line. Use | to separate the label from the promo code (e.g. "FLAT 40% OFF on orders above ₹799 | Use Code | SUMMER40").</p>
@@ -494,133 +495,123 @@ body{font-family:Arial,sans-serif;background:var(--beige);min-height:100vh;}
         </div>
       </div>
 
+      <!-- HERO TEXTS -->
       <div class="form-box">
-        <h3>Recommendation Sections</h3>
-        <p style="font-size:13px;color:#777;margin-bottom:1.5rem;">Select which products appear in each carousel on the product page. Leave all unchecked to show all products as fallback.</p>
-
-        <div class="section-card">
-          <h4>You May Also Like (Explore the Range)</h4>
-          <p>Shown after the expandable feature cards.</p>
-          <div id="pp-cleanser-checks" class="pp-check-grid"></div>
-        </div>
-
-        <div class="section-card">
-          <h4>Natural Lovers Also Buy!</h4>
-          <p>Horizontal carousel shown before the blog section.</p>
-          <div id="pp-alsobuy-checks" class="pp-check-grid"></div>
-        </div>
-
-        <div class="section-card">
-          <h4>Other Products in this Range</h4>
-          <p>Shown after the reviews section.</p>
-          <div id="pp-range-checks" class="pp-check-grid"></div>
-        </div>
-
-        <div class="section-card">
-          <h4>Frequently Bought Together</h4>
-          <p>Shown after "Other Products in Range".</p>
-          <div id="pp-fbt-checks" class="pp-check-grid"></div>
-        </div>
-
-        <div style="margin-top:1.5rem;">
-          <button class="btn" onclick="saveProductPageSettings()">Save Product Page Settings</button>
-          <button class="btn btn-grey" onclick="resetProductPageSettings()">Reset</button>
-        </div>
-      </div>
-
-      <!-- GENERAL TEXTS EDITOR -->
-      <div class="form-box">
-        <h3>General Texts (Hero Section)</h3>
-        <p style="font-size:13px;color:#777;margin-bottom:1.5rem;">These texts appear in the product hero for every product. Edit them here once to apply site-wide.</p>
-
+        <h3>Hero Section — Subtitle, Badges &amp; Delivery</h3>
+        <p style="font-size:13px;color:#777;margin-bottom:1.5rem;">These appear on every product page. Edit once to apply site-wide.</p>
         <div class="form-group">
           <label>Product Subtitle (line below product name)</label>
           <input type="text" id="pp-subtitle" placeholder="e.g. Brightening & Detan with Real Dals & Besan">
         </div>
-
         <div class="form-group">
-          <label>Trust Badges (exactly 4 labels)</label>
+          <label>Trust Badges (4 labels)</label>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-            <input type="text" id="trust-0" placeholder="Badge 1 (e.g. 100% Natural)">
-            <input type="text" id="trust-1" placeholder="Badge 2 (e.g. Ayurveda Certified)">
-            <input type="text" id="trust-2" placeholder="Badge 3 (e.g. Fresh Made Daily)">
-            <input type="text" id="trust-3" placeholder="Badge 4 (e.g. Derma Tested)">
+            <input type="text" id="trust-0" placeholder="e.g. 100% Natural">
+            <input type="text" id="trust-1" placeholder="e.g. Ayurveda Certified">
+            <input type="text" id="trust-2" placeholder="e.g. Fresh Made Daily">
+            <input type="text" id="trust-3" placeholder="e.g. Derma Tested">
           </div>
         </div>
-
         <div class="form-group" style="margin-bottom:4px;">
           <label>Delivery Info Items</label>
           <div id="pp-delivery-items" class="pp-usage-list" style="margin-bottom:8px;"></div>
           <button class="btn btn-sm" onclick="addPPDeliveryItem()">+ Add Item</button>
-          <p style="font-size:11px;color:#999;margin-top:4px;">Icon URL: paste any image link (Google Drive share URL, imgur, etc.) — leave blank to use the default SVG icon. Text: use &lt;b&gt;...&lt;/b&gt; for bold.</p>
+          <p style="font-size:11px;color:#999;margin-top:4px;">Leave Icon URL blank to use default SVG. Text supports &lt;b&gt;bold&lt;/b&gt;.</p>
         </div>
       </div>
 
-      <!-- FEATURE CARDS EDITOR -->
+      <!-- INGREDIENT HERO -->
       <div class="form-box">
-        <h3>Feature Cards (Click to Know More)</h3>
-        <p style="font-size:13px;color:#777;margin-bottom:1.5rem;">Edit the expandable cards shown below the product hero. Toggle cards on/off, edit heading text, and manage benefit rows for each card.</p>
-        <div id="pp-feature-cards-editor"></div>
+        <h3>Ingredient Hero Section</h3>
+        <p style="font-size:13px;color:#777;margin-bottom:1.5rem;">The large dark banner that appears below the product gallery. Highlights the star ingredient with a potency stat.</p>
+        <div class="section-card">
+          <h4>Star Ingredient</h4>
+          <div class="content-grid">
+            <div class="form-group"><label>Ingredient Name</label><input type="text" id="ih-name" placeholder="e.g. Wild Turmeric"></div>
+            <div class="form-group"><label>Latin / Scientific Name</label><input type="text" id="ih-latin" placeholder="e.g. Curcuma Aromatica"></div>
+            <div class="form-group"><label>Stat Number</label><input type="text" id="ih-stat-num" placeholder="e.g. 5×"></div>
+            <div class="form-group"><label>Stat Label (the line under the number)</label><input type="text" id="ih-stat-label" placeholder="e.g. More curcuminoid potency than regular kitchen turmeric"></div>
+          </div>
+        </div>
+        <div class="section-card">
+          <h4>Supporting Ingredient Chips</h4>
+          <p>One chip per line. Format: "Ingredient · Benefit"</p>
+          <div class="form-group"><label>Chips (one per line)</label><textarea id="ih-chips" style="height:120px;" placeholder="Red Lentil · Clarity&#10;Besan · Deep Cleanse&#10;Sandalwood · Cooling"></textarea></div>
+        </div>
       </div>
 
-      <!-- INGREDIENTS EDITOR -->
+      <!-- KEY BENEFITS TAB -->
       <div class="form-box">
-        <h3>What's Inside — Ingredients</h3>
-        <div class="form-group">
-          <label>Eyebrow Label</label>
-          <input type="text" id="ing-eyebrow">
+        <h3>Key Benefits Tab</h3>
+        <div class="section-card">
+          <h4>Stats Strip (3 headline numbers)</h4>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+            <div>
+              <div class="form-group" style="margin-bottom:4px;"><label>Stat 1 Number</label><input type="text" id="bt-stat-num-0" placeholder="e.g. 4.8★"></div>
+              <div class="form-group"><label>Stat 1 Label</label><input type="text" id="bt-stat-label-0" placeholder="e.g. Average rating"></div>
+            </div>
+            <div>
+              <div class="form-group" style="margin-bottom:4px;"><label>Stat 2 Number</label><input type="text" id="bt-stat-num-1" placeholder="e.g. 5,000"></div>
+              <div class="form-group"><label>Stat 2 Label</label><input type="text" id="bt-stat-label-1" placeholder="e.g. Years of Ayurvedic wisdom"></div>
+            </div>
+            <div>
+              <div class="form-group" style="margin-bottom:4px;"><label>Stat 3 Number</label><input type="text" id="bt-stat-num-2" placeholder="e.g. 0%"></div>
+              <div class="form-group"><label>Stat 3 Label</label><input type="text" id="bt-stat-label-2" placeholder="e.g. Parabens · SLS"></div>
+            </div>
+          </div>
         </div>
-        <div class="form-group">
-          <label>Section Title</label>
-          <input type="text" id="ing-title">
+        <div class="section-card">
+          <h4>Benefits Grid</h4>
+          <div class="content-grid" style="margin-bottom:12px;">
+            <div class="form-group"><label>Eyebrow</label><input type="text" id="bt-eyebrow" placeholder="e.g. Why It Works"></div>
+            <div class="form-group"><label>Section Title</label><input type="text" id="bt-title" placeholder="e.g. Six Reasons Your Skin Will Love This"></div>
+          </div>
+          <div id="pp-benefits-items" class="pp-benefit-list" style="margin-bottom:8px;"></div>
+          <button class="btn btn-sm" onclick="addPPBenefitItem()">+ Add Benefit Card</button>
         </div>
+      </div>
+
+      <!-- INGREDIENTS TAB -->
+      <div class="form-box">
+        <h3>Ingredients Tab</h3>
+        <div class="content-grid">
+          <div class="form-group"><label>Eyebrow Label</label><input type="text" id="it-eyebrow" placeholder="e.g. Full Transparency"></div>
+          <div class="form-group"><label>Section Title</label><input type="text" id="it-title" placeholder="e.g. What's Inside Every Jar"></div>
+        </div>
+        <div class="form-group"><label>Subtitle / Intro text</label><textarea id="it-subtitle" style="height:60px;" placeholder="Short description under the title..."></textarea></div>
         <div id="pp-ing-items" class="pp-usage-list" style="margin-bottom:8px;"></div>
-        <button class="btn btn-sm" onclick="addPPIngItem()">+ Add Ingredient</button>
+        <button class="btn btn-sm" onclick="addPPIngItem()">+ Add Ingredient Card</button>
+        <div class="form-group" style="margin-top:1rem;">
+          <label>Full INCI Ingredient List</label>
+          <textarea id="it-full-inci" style="height:80px;" placeholder="Wild Turmeric (Curcuma aromatica), Chickpea Flour..."></textarea>
+        </div>
       </div>
 
-      <!-- COMPARISON EDITOR -->
+      <!-- HOW TO USE TAB -->
       <div class="form-box">
-        <h3>Comparison Table</h3>
-        <div class="form-group">
-          <label>Eyebrow Label</label>
-          <input type="text" id="cmp-eyebrow">
-        </div>
-        <div class="form-group">
-          <label>Section Title</label>
-          <input type="text" id="cmp-title">
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;">
-          <div class="form-group" style="margin:0;">
-            <label>Column 1 Header</label>
-            <input type="text" id="cmp-col1" placeholder="Feature">
+        <h3>How to Use Tab</h3>
+        <div class="section-card">
+          <h4>Steps Section</h4>
+          <div class="content-grid" style="margin-bottom:12px;">
+            <div class="form-group"><label>Eyebrow</label><input type="text" id="ht-steps-eyebrow" placeholder="e.g. Application Ritual"></div>
+            <div class="form-group"><label>Section Title</label><input type="text" id="ht-steps-title" placeholder="e.g. Three Steps. Twice a Day."></div>
           </div>
-          <div class="form-group" style="margin:0;">
-            <label>Column 2 Header</label>
-            <input type="text" id="cmp-col2" placeholder="Your Product">
-          </div>
-          <div class="form-group" style="margin:0;">
-            <label>Column 3 Header</label>
-            <input type="text" id="cmp-col3" placeholder="Regular Face Wash">
-          </div>
+          <div id="pp-howto-steps" style="margin-bottom:8px;"></div>
+          <button class="btn btn-sm" onclick="addPPHowtoStep()">+ Add Step</button>
         </div>
-        <label style="font-weight:600;font-size:.85rem;display:block;margin-bottom:6px;">Table Rows</label>
-        <div id="cmp-rows-list"></div>
-        <button class="btn btn-sm" onclick="addCmpRow()" style="margin-top:6px;">+ Add Row</button>
-      </div>
-
-      <!-- USAGE & SAFETY EDITOR -->
-      <div class="form-box">
-        <h3>Usage &amp; Safety Accordion</h3>
-        <div class="form-group">
-          <label>Eyebrow Label</label>
-          <input type="text" id="usg-eyebrow">
+        <div class="section-card">
+          <h4>Morning Routine (one item per line)</h4>
+          <textarea id="ht-am-routine" style="height:90px;" placeholder="Tikta Face Wash (activate, massage 60s, rinse)&#10;Rose Water Toner (balance pH)&#10;Malai Glow Cream&#10;SPF 30+ sunscreen"></textarea>
         </div>
-        <div class="form-group">
-          <label>Section Title</label>
-          <input type="text" id="usg-title">
+        <div class="section-card">
+          <h4>Evening Routine (one item per line)</h4>
+          <textarea id="ht-pm-routine" style="height:90px;" placeholder="Double-cleanse if wearing SPF or makeup&#10;Tikta Face Wash (90s evening massage)&#10;Kumkumadi Drops&#10;Chandan Lepa overnight mask (2×/week)"></textarea>
         </div>
-        <div id="pp-usg-items" class="pp-usage-list" style="margin-bottom:8px;"></div>
-        <button class="btn btn-sm" onclick="addPPUsageItem()">+ Add Accordion Item</button>
+        <div class="section-card">
+          <h4>Safety &amp; Storage Accordion</h4>
+          <div id="pp-safety-items" class="pp-usage-list" style="margin-bottom:8px;"></div>
+          <button class="btn btn-sm" onclick="addPPSafetyItem()">+ Add Accordion Item</button>
+        </div>
       </div>
 
       <div style="margin-top:1.5rem;">
@@ -1361,147 +1352,165 @@ const DEFAULT_DELIVERY_ITEMS = [
   { icon: '', text: 'Cash on Delivery available' }
 ];
 
-const DEFAULT_FC = [
-  { enabled:true, eyebrow:'Patented Formula', title:'With Patented LentiClear™ Technology', gradient:'linear-gradient(135deg,#7D5A3C,#C8922A)',
-    benefits:[{title:'Balances Sebum Naturally',desc:'Controls excess oil production for a matte, comfortable finish.'},{title:'Deep Pore Clarity',desc:'Clears congested pores and reveals visibly brighter, cleaner skin.'},{title:'Boosts Skin Radiance',desc:'Enhances microcirculation and fortifies the skin\'s natural protective barrier.'}] },
-  { enabled:true, eyebrow:'Ancient Wisdom', title:'Introducing Regenerative Bitter (Tikta) Cleansing', gradient:'linear-gradient(135deg,#4A7C59,#2C1F14)',
-    benefits:[{title:'Anti-Ageing Cellular Action',desc:'Bitter botanicals stimulate skin cell turnover at the cellular level.'},{title:'Cellular Regeneration',desc:'Promotes renewal of damaged skin cells — skin becomes firmer and smoother.'},{title:'Toxin Elimination',desc:'Ancient Tikta rasa draws out impurities trapped in pores.'},{title:'Dosha Balancing',desc:'Pacifies Pitta and Kapha doshas — root causes of oily skin and dullness.'}] },
-  { enabled:true, eyebrow:'Natural Cleansing', title:'Bitter is Better Cleansing — Gentle & Brightening', gradient:'linear-gradient(135deg,#C4714A,#7D5A3C)',
-    benefits:[{title:'Pure Whole Ingredients',desc:'Real, whole botanicals — not extracts or synthetic derivatives.'},{title:'Melanin Control',desc:'Wild turmeric and sandalwood inhibit excess melanin without bleaching agents.'},{title:'Even-Toning Action',desc:'Regular use fades sun tan, dark spots, and uneven patches.'},{title:'Zero Harsh Surfactants',desc:'No SLS, SLES, or parabens — gentler on the skin barrier than any synthetic.'}] }
-];
-const DEFAULT_ING = { eyebrow:"What's Inside", title:'Bitter, active, fresh & whole picks', items:[
-  {emoji:'🌿', badge:'Bitter Active', name:'Wild Turmeric', desc:'Inhibits melanin production and reduces inflammation, delivering a natural, lasting glow.'},
-  {emoji:'🥜', badge:'Exfoliant', name:'Real Dals & Besan', desc:'Gently exfoliates dead skin cells, absorbs excess sebum, and delivers plant-based proteins.'},
-  {emoji:'🪵', badge:'Soothing', name:'Sandalwood', desc:'Cools, soothes, and imparts a subtle natural fragrance while toning the skin.'}
-]};
-const DEFAULT_CMP = {
-  eyebrow: 'Why Choose Tikta',
-  title:   'Bitter is Better Than Every Face Wash!',
-  col1:    'Feature',
-  col2:    'Your Product',
-  col3:    'Regular Face Wash',
-  rows: [
-    { feature: 'Cleansing Power',   yours: '✅ Deep pore, gentle',      theirs: '⚠️ Surface only' },
-    { feature: 'Non-Drying',        yours: '✅ Moisture balanced',      theirs: '❌ Often strips barrier' },
-    { feature: 'Long Term Effect',  yours: '✅ Visible brightening',    theirs: '❌ No cumulative benefit' },
-    { feature: 'Ingredients',       yours: '✅ 100% real botanicals',   theirs: '❌ Synthetic surfactants' },
-    { feature: 'Paraben & Sulfate', yours: '✅ Zero',                   theirs: '❌ Usually present' }
+const DEFAULT_ING_HERO = {
+  name:      'Wild Turmeric',
+  latin:     'Curcuma Aromatica',
+  stat_num:  '5×',
+  stat_label:'More curcuminoid potency than regular kitchen turmeric — the brightening difference you can see.',
+  chips:     'Red Lentil · Clarity\nBesan · Deep Cleanse\nSandalwood · Cooling'
+};
+const DEFAULT_BENEFITS_TAB = {
+  stats: [
+    { num: '4.8★', label: 'Average rating' },
+    { num: '5,000', label: 'Years of Ayurvedic wisdom' },
+    { num: '0%', label: 'Parabens · SLS · SLES' }
+  ],
+  eyebrow: 'Why It Works',
+  title:   'Six Reasons Your Skin Will Love This',
+  items: [
+    { title: 'Melanin Inhibition', desc: 'Wild turmeric\'s curcuminoids block tyrosinase activity — the enzyme behind dark spots and uneven tone.' },
+    { title: 'Gentle Exfoliation', desc: 'Besan and lentil flour slough dead cells without synthetic microbeads or harsh acids.' },
+    { title: 'Deep Pore Clarity', desc: 'Neem and tulsi draw out impurities trapped in pores, reducing blackheads over time.' },
+    { title: 'Barrier Strengthening', desc: 'Plant proteins from dals reinforce the skin\'s moisture barrier for a plump, resilient feel.' },
+    { title: 'Anti-Inflammatory', desc: 'Sandalwood and turmeric calm redness and Pitta-related breakouts at the root cause.' },
+    { title: 'Zero Harsh Chemicals', desc: 'No SLS, SLES, parabens, or artificial fragrance — safe for daily use on sensitive skin.' }
   ]
 };
-const DEFAULT_USG = { eyebrow:'How to Use', title:'Usage & Safety', items:[
-  {title:'How to Use', content:'Use twice a day — morning and evening. Apply to damp skin, massage for 60 seconds, rinse with lukewarm water.'},
-  {title:'Patch Test', content:'Apply a small amount to the inner forearm and wait 24 hours before facial use. Discontinue if irritation occurs.'},
-  {title:'Skin Types', content:'Suitable for all skin types — oily, combination, dry, normal, and sensitive.'},
-  {title:'Pregnancy & Kids', content:'Pregnancy safe. Suitable for children 5 years and above. Free from contraindicated essential oils.'}
-]};
-const DEFAULT_PP_SETTINGS = { promo_messages:'', cleanser_ids:[], alsobuy_ids:[], range_ids:[], fbt_ids:[],
-  subtitle: DEFAULT_SUBTITLE, trust_badges: DEFAULT_TRUST_BADGES, delivery_items: DEFAULT_DELIVERY_ITEMS,
-  feature_cards:DEFAULT_FC, ingredients:DEFAULT_ING, compare:DEFAULT_CMP, usage:DEFAULT_USG };
+const DEFAULT_ING_TAB = {
+  eyebrow:   'Full Transparency',
+  title:     "What's Inside Every Jar",
+  subtitle:  'Every ingredient is whole, Ayurvedic-sourced, and chosen for a reason. No synthetic fillers.',
+  items: [
+    { badge: 'Bitter Active', name: 'Wild Turmeric',    emoji: '🌿', image: '', desc: 'Inhibits melanin production and reduces inflammation, delivering a natural, lasting glow.' },
+    { badge: 'Exfoliant',    name: 'Real Dals & Besan', emoji: '🥜', image: '', desc: 'Gently exfoliates dead skin cells, absorbs excess sebum, and delivers plant-based proteins.' },
+    { badge: 'Soothing',     name: 'Sandalwood',        emoji: '🪵', image: '', desc: 'Cools, soothes, and imparts a subtle natural fragrance while toning the skin.' }
+  ],
+  full_inci: 'Wild Turmeric (Curcuma aromatica), Chickpea Flour (Cicer arietinum), Sandalwood Powder (Santalum album), Red Lentil (Lens culinaris), Neem (Azadirachta indica), Tulsi (Ocimum tenuiflorum)'
+};
+const DEFAULT_HOWTO_TAB = {
+  steps_eyebrow: 'Application Ritual',
+  steps_title:   'Three Steps. Twice a Day.',
+  steps: [
+    { title: 'Activate',  desc: 'Take a coin-sized amount. Add a few drops of water and work into a paste in your palm.' },
+    { title: 'Massage',   desc: 'Apply to damp face. Massage in small circles for 60 seconds — do not rush this step.' },
+    { title: 'Rinse',     desc: 'Rinse with lukewarm water. Pat dry. Follow with toner or moisturiser.' }
+  ],
+  am_routine: 'Tikta Face Wash (activate, massage 60s, rinse)\nRose Water Toner (balance pH)\nMalai Glow Cream\nSPF 30+ sunscreen',
+  pm_routine: 'Double-cleanse if wearing SPF or makeup\nTikta Face Wash (90s evening massage)\nKumkumadi Drops\nChandan Lepa overnight mask (2×/week)',
+  safety: [
+    { title: 'Patch Test',       content: 'Apply a small amount to the inner forearm. Wait 24 hours before facial use. Discontinue if irritation occurs.' },
+    { title: 'Skin Types',       content: 'Suitable for all skin types — oily, combination, dry, normal, and sensitive.' },
+    { title: 'Pregnancy & Kids', content: 'Pregnancy safe. Suitable for children 5 years and above. Free from contraindicated essential oils.' },
+    { title: 'Storage',          content: 'Store in a cool, dry place. Avoid direct sunlight. Use within 6 months of opening.' }
+  ]
+};
+const DEFAULT_ING = DEFAULT_ING_TAB;
+const DEFAULT_PP_SETTINGS = {
+  promo_messages: '',
+  subtitle:       DEFAULT_SUBTITLE,
+  trust_badges:   DEFAULT_TRUST_BADGES,
+  delivery_items: DEFAULT_DELIVERY_ITEMS,
+  ing_hero:       DEFAULT_ING_HERO,
+  benefits_tab:   DEFAULT_BENEFITS_TAB,
+  ing_tab:        DEFAULT_ING_TAB,
+  howto_tab:      DEFAULT_HOWTO_TAB
+};
 
 function getPPSettings() {
   try {
-    const stored = JSON.parse(localStorage.getItem('surabhi_product_page_settings') || '{}');
+    const s = JSON.parse(localStorage.getItem('surabhi_product_page_settings') || '{}');
     return {
-      promo_messages:  stored.promo_messages  ?? '',
-      cleanser_ids:    stored.cleanser_ids    ?? [],
-      alsobuy_ids:     stored.alsobuy_ids     ?? [],
-      range_ids:       stored.range_ids       ?? [],
-      fbt_ids:         stored.fbt_ids         ?? [],
-      subtitle:        stored.subtitle        ?? DEFAULT_SUBTITLE,
-      trust_badges:    stored.trust_badges    ?? DEFAULT_TRUST_BADGES,
-      delivery_items:  stored.delivery_items  ?? DEFAULT_DELIVERY_ITEMS,
-      feature_cards:   stored.feature_cards   ?? DEFAULT_FC,
-      ingredients:     stored.ingredients     ?? DEFAULT_ING,
-      compare:         (() => { const c = stored.compare || {}; return {
-        eyebrow: c.eyebrow ?? DEFAULT_CMP.eyebrow,
-        title:   c.title   ?? DEFAULT_CMP.title,
-        col1:    c.col1    ?? DEFAULT_CMP.col1,
-        col2:    c.col2    ?? DEFAULT_CMP.col2,
-        col3:    c.col3    ?? DEFAULT_CMP.col3,
-        rows:    (c.rows && c.rows.length) ? c.rows : DEFAULT_CMP.rows
-      }; })(),
-      usage:           stored.usage           ?? DEFAULT_USG
+      promo_messages: s.promo_messages ?? '',
+      subtitle:       s.subtitle       ?? DEFAULT_SUBTITLE,
+      trust_badges:   s.trust_badges   ?? DEFAULT_TRUST_BADGES,
+      delivery_items: s.delivery_items ?? DEFAULT_DELIVERY_ITEMS,
+      ing_hero:       s.ing_hero       ?? DEFAULT_ING_HERO,
+      benefits_tab:   s.benefits_tab   ?? DEFAULT_BENEFITS_TAB,
+      ing_tab:        (() => {
+        const t = s.ing_tab || s.ingredients || {};
+        return {
+          eyebrow:   t.eyebrow   ?? DEFAULT_ING_TAB.eyebrow,
+          title:     t.title     ?? DEFAULT_ING_TAB.title,
+          subtitle:  t.subtitle  ?? DEFAULT_ING_TAB.subtitle,
+          items:     (t.items && t.items.length) ? t.items : DEFAULT_ING_TAB.items,
+          full_inci: t.full_inci ?? DEFAULT_ING_TAB.full_inci
+        };
+      })(),
+      howto_tab: s.howto_tab ?? DEFAULT_HOWTO_TAB
     };
   } catch { return { ...DEFAULT_PP_SETTINGS }; }
 }
 
-function buildCheckGrid(containerId, selectedIds) {
-  const el = document.getElementById(containerId);
-  if (!el) return;
-  el.innerHTML = products.map(p => {
-    const img = (() => { try { const a = JSON.parse(p.images); return Array.isArray(a) && a[0] ? a[0] : ''; } catch { return ''; } })();
-    const checked = selectedIds.includes(String(p.id)) ? 'checked' : '';
-    return `
-      <label class="pp-check-item">
-        <input type="checkbox" value="${p.id}" ${checked}/>
-        ${img ? `<img src="${img}" alt="">` : '<div style="width:32px;height:32px;background:var(--beige);border-radius:3px;flex-shrink:0;"></div>'}
-        <span title="${p.name}">${p.name}</span>
-      </label>`;
-  }).join('');
+// ── Ingredient Hero Editor ──
+function renderIngHeroEditor() {
+  const s = getPPSettings();
+  const h = s.ing_hero || DEFAULT_ING_HERO;
+  const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
+  set('ih-name',       h.name);
+  set('ih-latin',      h.latin);
+  set('ih-stat-num',   h.stat_num);
+  set('ih-stat-label', h.stat_label);
+  set('ih-chips',      h.chips);
 }
 
-// ── Feature Cards Editor ──
-function benefitRowHTML(b) {
+function readIngHero() {
+  return {
+    name:      document.getElementById('ih-name')?.value.trim()      || '',
+    latin:     document.getElementById('ih-latin')?.value.trim()     || '',
+    stat_num:  document.getElementById('ih-stat-num')?.value.trim()  || '',
+    stat_label:document.getElementById('ih-stat-label')?.value.trim()|| '',
+    chips:     document.getElementById('ih-chips')?.value.trim()     || ''
+  };
+}
+
+// ── Key Benefits Tab Editor ──
+function benefitItemHTML(item) {
   return `
     <div class="pp-benefit-row-edit">
-      <input type="text" placeholder="Benefit title" value="${escA(b.title)}">
-      <textarea placeholder="Description" style="resize:vertical;min-height:56px;">${escA(b.desc)}</textarea>
+      <input type="text" placeholder="Benefit title" value="${escA(item.title || '')}">
+      <textarea placeholder="Description (1–2 sentences)" style="resize:vertical;min-height:52px;grid-column:1/-1;">${escA(item.desc || '')}</textarea>
       <button class="pp-row-remove" onclick="removePPRow(this)" title="Remove">×</button>
     </div>`;
 }
 
-function renderFeatureCardsEditor() {
-  const s    = getPPSettings();
-  const wrap = document.getElementById('pp-feature-cards-editor');
-  if (!wrap) return;
-  wrap.innerHTML = s.feature_cards.map((card, i) => `
-    <div class="section-card pp-card-editor" data-idx="${i}">
-      <div class="pp-card-header">
-        <h4>Card ${i+1}</h4>
-        <label class="pp-toggle">
-          <input type="checkbox" id="fc-${i}-enabled" ${card.enabled!==false?'checked':''}> Enabled
-        </label>
-      </div>
-      <div class="form-group" style="margin-bottom:8px;">
-        <label>Eyebrow Label</label>
-        <input type="text" id="fc-${i}-eyebrow" value="${escA(card.eyebrow)}">
-      </div>
-      <div class="form-group" style="margin-bottom:8px;">
-        <label>Heading</label>
-        <input type="text" id="fc-${i}-title" value="${escA(card.title)}">
-      </div>
-      <div class="form-group" style="margin-bottom:4px;">
-        <label>Benefit Rows</label>
-        <div id="fc-${i}-benefits" class="pp-benefit-list">${(card.benefits||[]).map(benefitRowHTML).join('')}</div>
-        <button class="btn btn-sm btn-grey" onclick="addPPBenefitRow('fc-${i}-benefits')" style="margin-top:4px;">+ Add Row</button>
-      </div>
-    </div>`).join('');
-}
-
-function addPPBenefitRow(containerId) {
-  const el = document.getElementById(containerId);
-  if (!el) return;
-  el.insertAdjacentHTML('beforeend', benefitRowHTML({title:'',desc:''}));
-}
-
-function readFeatureCards() {
-  return Array.from(document.querySelectorAll('.pp-card-editor')).map(card => {
-    const i = card.dataset.idx;
-    const rows = Array.from(card.querySelectorAll('.pp-benefit-row-edit'));
-    return {
-      enabled:  card.querySelector(`#fc-${i}-enabled`)?.checked ?? true,
-      eyebrow:  card.querySelector(`#fc-${i}-eyebrow`)?.value.trim() || '',
-      title:    card.querySelector(`#fc-${i}-title`)?.value.trim()   || '',
-      gradient: DEFAULT_FC[i]?.gradient || DEFAULT_FC[0].gradient,
-      benefits: rows.map(r => ({
-        title: r.querySelector('input')?.value.trim()    || '',
-        desc:  r.querySelector('textarea')?.value.trim() || ''
-      }))
-    };
+function renderBenefitsTabEditor() {
+  const s = getPPSettings();
+  const b = s.benefits_tab || DEFAULT_BENEFITS_TAB;
+  const stats = b.stats || DEFAULT_BENEFITS_TAB.stats;
+  [0,1,2].forEach(i => {
+    const el = document.getElementById(`bt-stat-num-${i}`);
+    const lb = document.getElementById(`bt-stat-label-${i}`);
+    if (el) el.value = (stats[i] && stats[i].num)   || '';
+    if (lb) lb.value = (stats[i] && stats[i].label) || '';
   });
+  const ey = document.getElementById('bt-eyebrow');
+  const ti = document.getElementById('bt-title');
+  if (ey) ey.value = b.eyebrow || '';
+  if (ti) ti.value = b.title   || '';
+  const wrap = document.getElementById('pp-benefits-items');
+  if (wrap) wrap.innerHTML = (b.items || []).map(benefitItemHTML).join('');
 }
 
-// ── Ingredients Editor ──
+function addPPBenefitItem() {
+  document.getElementById('pp-benefits-items')?.insertAdjacentHTML('beforeend', benefitItemHTML({title:'',desc:''}));
+}
+
+function readBenefitsTab() {
+  return {
+    stats: [0,1,2].map(i => ({
+      num:   document.getElementById(`bt-stat-num-${i}`)?.value.trim()   || '',
+      label: document.getElementById(`bt-stat-label-${i}`)?.value.trim() || ''
+    })),
+    eyebrow: document.getElementById('bt-eyebrow')?.value.trim() || '',
+    title:   document.getElementById('bt-title')?.value.trim()   || '',
+    items:   Array.from(document.querySelectorAll('#pp-benefits-items .pp-benefit-row-edit')).map(row => ({
+      title: row.querySelector('input')?.value.trim()    || '',
+      desc:  row.querySelector('textarea')?.value.trim() || ''
+    }))
+  };
+}
+
+// ── Ingredients Tab Editor ──
 function ingItemHTML(item) {
   const hasImg = item.image && item.image.trim();
   return `
@@ -1518,14 +1527,19 @@ function ingItemHTML(item) {
     </div>`;
 }
 
-function renderIngredientsEditor() {
-  const s    = getPPSettings();
+function renderIngTabEditor() {
+  const s = getPPSettings();
+  const t = s.ing_tab || DEFAULT_ING_TAB;
+  const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
+  set('it-eyebrow',  t.eyebrow);
+  set('it-title',    t.title);
+  set('it-subtitle', t.subtitle);
+  set('it-full-inci',t.full_inci);
   const wrap = document.getElementById('pp-ing-items');
-  if (!wrap) return;
-  document.getElementById('ing-eyebrow').value = s.ingredients.eyebrow || '';
-  document.getElementById('ing-title').value   = s.ingredients.title   || '';
-  wrap.innerHTML = (s.ingredients.items || []).map(ingItemHTML).join('');
+  if (wrap) wrap.innerHTML = (t.items || []).map(ingItemHTML).join('');
 }
+
+function renderIngredientsEditor() { renderIngTabEditor(); }
 
 function ingThumb(url) {
   if (!url) return '';
@@ -1545,11 +1559,13 @@ function addPPIngItem() {
   document.getElementById('pp-ing-items')?.insertAdjacentHTML('beforeend', ingItemHTML({emoji:'🌿',badge:'',name:'',desc:'',image:''}));
 }
 
-function readIngredients() {
+function readIngTab() {
   return {
-    eyebrow: document.getElementById('ing-eyebrow')?.value.trim() || '',
-    title:   document.getElementById('ing-title')?.value.trim()   || '',
-    items:   Array.from(document.querySelectorAll('#pp-ing-items .pp-ing-item-edit')).map(row => {
+    eyebrow:   document.getElementById('it-eyebrow')?.value.trim()   || '',
+    title:     document.getElementById('it-title')?.value.trim()     || '',
+    subtitle:  document.getElementById('it-subtitle')?.value.trim()  || '',
+    full_inci: document.getElementById('it-full-inci')?.value.trim() || '',
+    items:     Array.from(document.querySelectorAll('#pp-ing-items .pp-ing-item-edit')).map(row => {
       const inputs = row.querySelectorAll('input');
       return {
         badge:  inputs[0]?.value.trim() || '',
@@ -1562,16 +1578,70 @@ function readIngredients() {
   };
 }
 
-// ── Usage Editor ──
-function usageItemHTML(item) {
+function readIngredients() { return readIngTab(); }
+
+// ── How To Use Tab Editor ──
+function howtoStepHTML(step) {
   return `
     <div class="pp-usage-item-edit">
       <div style="display:flex;gap:8px;align-items:start;">
-        <input type="text" placeholder="Item title (e.g. How to Use)" value="${escA(item.title)}" style="flex:1;">
+        <input type="text" placeholder="Step title (e.g. Activate)" value="${escA(step.title || '')}" style="flex:1;">
         <button class="pp-row-remove" onclick="removePPRow(this)" title="Remove">×</button>
       </div>
-      <textarea placeholder="Content text..." style="resize:vertical;min-height:64px;">${escA(item.content)}</textarea>
+      <textarea placeholder="Step description..." style="resize:vertical;min-height:52px;">${escA(step.desc || '')}</textarea>
     </div>`;
+}
+
+function safetyItemHTML(item) {
+  return `
+    <div class="pp-usage-item-edit">
+      <div style="display:flex;gap:8px;align-items:start;">
+        <input type="text" placeholder="Accordion title (e.g. Patch Test)" value="${escA(item.title || '')}" style="flex:1;">
+        <button class="pp-row-remove" onclick="removePPRow(this)" title="Remove">×</button>
+      </div>
+      <textarea placeholder="Content text..." style="resize:vertical;min-height:64px;">${escA(item.content || '')}</textarea>
+    </div>`;
+}
+
+function usageItemHTML(item) { return safetyItemHTML(item); }
+
+function renderHowToEditor() {
+  const s = getPPSettings();
+  const h = s.howto_tab || DEFAULT_HOWTO_TAB;
+  const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
+  set('ht-steps-eyebrow', h.steps_eyebrow);
+  set('ht-steps-title',   h.steps_title);
+  set('ht-am-routine',    h.am_routine);
+  set('ht-pm-routine',    h.pm_routine);
+  const stepsWrap  = document.getElementById('pp-howto-steps');
+  const safetyWrap = document.getElementById('pp-safety-items');
+  if (stepsWrap)  stepsWrap.innerHTML  = (h.steps  || []).map(howtoStepHTML).join('');
+  if (safetyWrap) safetyWrap.innerHTML = (h.safety || []).map(safetyItemHTML).join('');
+}
+
+function addPPSafetyItem() {
+  document.getElementById('pp-safety-items')?.insertAdjacentHTML('beforeend', safetyItemHTML({title:'',content:''}));
+}
+
+function addPPHowtoStep() {
+  document.getElementById('pp-howto-steps')?.insertAdjacentHTML('beforeend', howtoStepHTML({title:'',desc:''}));
+}
+
+function readHowTo() {
+  return {
+    steps_eyebrow: document.getElementById('ht-steps-eyebrow')?.value.trim() || '',
+    steps_title:   document.getElementById('ht-steps-title')?.value.trim()   || '',
+    am_routine:    document.getElementById('ht-am-routine')?.value.trim()    || '',
+    pm_routine:    document.getElementById('ht-pm-routine')?.value.trim()    || '',
+    steps:  Array.from(document.querySelectorAll('#pp-howto-steps .pp-usage-item-edit')).map(row => ({
+      title: row.querySelector('input')?.value.trim()    || '',
+      desc:  row.querySelector('textarea')?.value.trim() || ''
+    })),
+    safety: Array.from(document.querySelectorAll('#pp-safety-items .pp-usage-item-edit')).map(row => ({
+      title:   row.querySelector('input')?.value.trim()    || '',
+      content: row.querySelector('textarea')?.value.trim() || ''
+    }))
+  };
 }
 
 // ── Delivery Items Editor ──
@@ -1633,67 +1703,6 @@ function readDeliveryItems() {
   })).filter(d => d.text);
 }
 
-function cmpRowHTML(row, i) {
-  return `<div class="pp-fc-card" id="cmp-row-${i}" style="margin-bottom:8px;">
-    <div style="display:flex;gap:6px;align-items:center;margin-bottom:4px;">
-      <span style="font-size:.78rem;font-weight:600;color:var(--text-mid);min-width:22px;">#${i+1}</span>
-      <input type="text" placeholder="Feature" value="${(row.feature||'').replace(/"/g,'&quot;')}" style="flex:1;" id="cmp-row-${i}-feat">
-      <button class="btn btn-sm btn-danger" onclick="document.getElementById('cmp-row-${i}').remove()">✕</button>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
-      <input type="text" placeholder="Your product value" value="${(row.yours||'').replace(/"/g,'&quot;')}" id="cmp-row-${i}-yours">
-      <input type="text" placeholder="Their product value" value="${(row.theirs||'').replace(/"/g,'&quot;')}" id="cmp-row-${i}-theirs">
-    </div>
-  </div>`;
-}
-
-function renderCmpRows(rows) {
-  const wrap = document.getElementById('cmp-rows-list');
-  if (!wrap) return;
-  wrap.innerHTML = rows.map((r, i) => cmpRowHTML(r, i)).join('');
-}
-
-function addCmpRow() {
-  const rows = readCmpRows();
-  rows.push({ feature: '', yours: '', theirs: '' });
-  renderCmpRows(rows);
-}
-
-function readCmpRows() {
-  const rows = [];
-  document.querySelectorAll('#cmp-rows-list .pp-fc-card').forEach((el, i) => {
-    const feat   = el.querySelector(`#cmp-row-${i}-feat`);
-    const yours  = el.querySelector(`#cmp-row-${i}-yours`);
-    const theirs = el.querySelector(`#cmp-row-${i}-theirs`);
-    if (feat) rows.push({ feature: feat.value.trim(), yours: (yours?.value||'').trim(), theirs: (theirs?.value||'').trim() });
-  });
-  return rows;
-}
-
-function renderUsageEditor() {
-  const s    = getPPSettings();
-  const wrap = document.getElementById('pp-usg-items');
-  if (!wrap) return;
-  document.getElementById('usg-eyebrow').value = s.usage.eyebrow || '';
-  document.getElementById('usg-title').value   = s.usage.title   || '';
-  wrap.innerHTML = (s.usage.items || []).map(usageItemHTML).join('');
-}
-
-function addPPUsageItem() {
-  document.getElementById('pp-usg-items')?.insertAdjacentHTML('beforeend', usageItemHTML({title:'',content:''}));
-}
-
-function readUsage() {
-  return {
-    eyebrow: document.getElementById('usg-eyebrow')?.value.trim() || '',
-    title:   document.getElementById('usg-title')?.value.trim()   || '',
-    items:   Array.from(document.querySelectorAll('#pp-usg-items .pp-usage-item-edit')).map(row => ({
-      title:   row.querySelector('input')?.value.trim()    || '',
-      content: row.querySelector('textarea')?.value.trim() || ''
-    }))
-  };
-}
-
 // ── Shared remove helper ──
 function removePPRow(btn) { btn.closest('[class*="-edit"]').remove(); }
 
@@ -1706,12 +1715,7 @@ function renderProductPageEditor() {
   const s = getPPSettings();
   const promoEl = document.getElementById('pp-promo-messages');
   if (promoEl) promoEl.value = s.promo_messages || '';
-  buildCheckGrid('pp-cleanser-checks', s.cleanser_ids.map(String));
-  buildCheckGrid('pp-alsobuy-checks',  s.alsobuy_ids.map(String));
-  buildCheckGrid('pp-range-checks',    s.range_ids.map(String));
-  buildCheckGrid('pp-fbt-checks',      s.fbt_ids.map(String));
 
-  // General texts
   const subEl = document.getElementById('pp-subtitle');
   if (subEl) subEl.value = s.subtitle || DEFAULT_SUBTITLE;
   const badges = s.trust_badges || DEFAULT_TRUST_BADGES;
@@ -1721,48 +1725,22 @@ function renderProductPageEditor() {
   });
   renderDeliveryEditor();
 
-  renderFeatureCardsEditor();
-  renderIngredientsEditor();
-  // Comparison
-  const cmpE = document.getElementById('cmp-eyebrow');
-  const cmpT = document.getElementById('cmp-title');
-  const cmpC1 = document.getElementById('cmp-col1');
-  const cmpC2 = document.getElementById('cmp-col2');
-  const cmpC3 = document.getElementById('cmp-col3');
-  if (cmpE)  cmpE.value  = s.compare.eyebrow || '';
-  if (cmpT)  cmpT.value  = s.compare.title   || '';
-  if (cmpC1) cmpC1.value = s.compare.col1    || '';
-  if (cmpC2) cmpC2.value = s.compare.col2    || '';
-  if (cmpC3) cmpC3.value = s.compare.col3    || '';
-  renderCmpRows(s.compare.rows || DEFAULT_CMP.rows);
-  renderUsageEditor();
-}
-
-function getChecked(containerId) {
-  return Array.from(document.querySelectorAll(`#${containerId} input[type=checkbox]:checked`)).map(cb => cb.value);
+  renderIngHeroEditor();
+  renderBenefitsTabEditor();
+  renderIngTabEditor();
+  renderHowToEditor();
 }
 
 function saveProductPageSettings() {
   const settings = {
     promo_messages: (document.getElementById('pp-promo-messages')?.value || '').trim(),
-    cleanser_ids:   getChecked('pp-cleanser-checks'),
-    alsobuy_ids:    getChecked('pp-alsobuy-checks'),
-    range_ids:      getChecked('pp-range-checks'),
-    fbt_ids:        getChecked('pp-fbt-checks'),
     subtitle:       (document.getElementById('pp-subtitle')?.value || '').trim() || DEFAULT_SUBTITLE,
     trust_badges:   [0,1,2,3].map(i => (document.getElementById(`trust-${i}`)?.value || '').trim() || DEFAULT_TRUST_BADGES[i]),
     delivery_items: readDeliveryItems(),
-    feature_cards:  readFeatureCards(),
-    ingredients:    readIngredients(),
-    compare: {
-      eyebrow: document.getElementById('cmp-eyebrow')?.value.trim() || '',
-      title:   document.getElementById('cmp-title')?.value.trim()   || '',
-      col1:    document.getElementById('cmp-col1')?.value.trim()    || '',
-      col2:    document.getElementById('cmp-col2')?.value.trim()    || '',
-      col3:    document.getElementById('cmp-col3')?.value.trim()    || '',
-      rows:    readCmpRows()
-    },
-    usage: readUsage()
+    ing_hero:       readIngHero(),
+    benefits_tab:   readBenefitsTab(),
+    ing_tab:        readIngTab(),
+    howto_tab:      readHowTo()
   };
   localStorage.setItem('surabhi_product_page_settings', JSON.stringify(settings));
   const al = document.getElementById('pp-alert');
