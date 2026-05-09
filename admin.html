@@ -235,6 +235,7 @@ body{font-family:Arial,sans-serif;background:var(--beige);min-height:100vh;}
       <li><button class="nav-btn" onclick="showSection('orders',this)">🛒 Orders</button></li>
       <li><button class="nav-btn" onclick="showSection('about',this)">📖 About Page</button></li>
       <li><button class="nav-btn" onclick="showSection('returns',this)">↩️ Return Policy</button></li>
+      <li><button class="nav-btn" onclick="showSection('footer',this)">🔗 Footer</button></li>
       <li><button class="nav-btn" onclick="showSection('account',this)">👤 Account</button></li>
     </ul>
     <div style="font-size:11px;color:rgba(255,255,255,.4);padding:0 4px;margin-bottom:0.5rem;" id="sidebar-admin-email"></div>
@@ -761,6 +762,55 @@ body{font-family:Arial,sans-serif;background:var(--beige);min-height:100vh;}
       </div>
     </div>
 
+    <!-- FOOTER -->
+    <div id="footer" class="section">
+      <div class="page-title">Footer Settings</div>
+      <div id="footer-alert"></div>
+
+      <div class="form-box">
+        <h3>Brand Description</h3>
+        <div class="form-group">
+          <label>Tagline paragraph (shown under logo)</label>
+          <textarea id="ft-brand-desc" style="height:90px;" placeholder="Surabhi Sutra brings five thousand years..."></textarea>
+        </div>
+      </div>
+
+      <div class="form-box">
+        <h3>Social Media Links</h3>
+        <p style="font-size:13px;color:#777;margin-bottom:1rem;">Add links to your social profiles. The <strong>Label</strong> is the short text shown in the circle button (e.g. "ig", "fb", "yt", or an emoji like 📸).</p>
+        <div id="ft-socials-list" class="pp-usage-list" style="margin-bottom:8px;"></div>
+        <button class="btn btn-sm" onclick="addFooterSocial()">+ Add Social Link</button>
+      </div>
+
+      <div class="form-box">
+        <h3>Contact Us</h3>
+        <p style="font-size:13px;color:#777;margin-bottom:1rem;">Each item has a label (visible text) and a URL. Use <code>https://wa.me/91XXXXXXXXXX</code> for WhatsApp, <code>mailto:</code> for email, or a regular URL.</p>
+        <div id="ft-contact-list" class="pp-usage-list" style="margin-bottom:8px;"></div>
+        <button class="btn btn-sm" onclick="addFooterContact()">+ Add Contact Item</button>
+      </div>
+
+      <div class="form-box">
+        <h3>Office Address</h3>
+        <div class="form-row">
+          <div class="form-group"><label>Business Name</label><input type="text" id="ft-office-name" placeholder="e.g. Surabhi Sutra Naturals"/></div>
+          <div class="form-group"><label>Address (line breaks supported)</label><textarea id="ft-office-address" style="height:72px;" placeholder="New Delhi, India — 110001"></textarea></div>
+        </div>
+      </div>
+
+      <div class="form-box">
+        <h3>Copyright Line</h3>
+        <div class="form-group">
+          <label>Footer bottom text</label>
+          <input type="text" id="ft-copyright" placeholder="© 2025 Surabhi Sutra · All rights reserved · Made with love in India"/>
+        </div>
+      </div>
+
+      <div style="margin-top:1rem;">
+        <button class="btn" onclick="saveFooterSettings()">Save Footer</button>
+        <button class="btn btn-grey" onclick="resetFooterSettings()">Reset Defaults</button>
+      </div>
+    </div>
+
     <!-- ACCOUNT -->
     <div id="account" class="section">
       <div class="page-title">Admin Account</div>
@@ -1013,6 +1063,7 @@ async function showSection(id, btn) {
   if (id === 'fomo')        renderFomoEditor();
   if (id === 'about')       { renderAboutEditor(); renderFaqEditor(); }
   if (id === 'returns')     renderReturnsEditor();
+  if (id === 'footer')      renderFooterEditor();
   if (id === 'account')     { renderAboutEditor(); renderFaqEditor(); await loadAdmins(); }
 }
 
@@ -2084,6 +2135,106 @@ function resetReturnsSettings() {
   localStorage.removeItem('surabhi_returns_settings');
   renderReturnsEditor();
   const al = document.getElementById('returns-alert');
+  if (al) { al.innerHTML = '<div class="alert alert-success">Reset to defaults.</div>'; setTimeout(() => al.innerHTML = '', 2000); }
+}
+
+// ─── FOOTER SETTINGS ───────────────────────────────────────
+const DEFAULT_FOOTER_ADMIN = {
+  brand_desc:     'Surabhi Sutra brings five thousand years of Ayurvedic wisdom into your daily skincare ritual. Every product is made fresh, in small batches, with ingredients your skin was always meant to meet. No shortcuts. No synthetics. Just nature, distilled.',
+  socials:        [
+    { name: 'Telegram',  url: '#', label: 'T'  },
+    { name: 'Facebook',  url: '#', label: 'f'  },
+    { name: 'Instagram', url: '#', label: 'ig' }
+  ],
+  contact: [
+    { label: 'WhatsApp Us',           url: '#'                            },
+    { label: 'hello@surabhisutra.in', url: 'mailto:hello@surabhisutra.in' }
+  ],
+  office_name:    'Surabhi Sutra Naturals',
+  office_address: 'New Delhi, India — 110001',
+  copyright:      '© 2025 Surabhi Sutra · All rights reserved · Made with love in India'
+};
+
+function getFooterAdminSettings() {
+  try {
+    const s = JSON.parse(localStorage.getItem('surabhi_footer_settings') || '{}');
+    return {
+      brand_desc:     s.brand_desc     ?? DEFAULT_FOOTER_ADMIN.brand_desc,
+      socials:        (s.socials  && s.socials.length)  ? s.socials  : DEFAULT_FOOTER_ADMIN.socials,
+      contact:        (s.contact  && s.contact.length)  ? s.contact  : DEFAULT_FOOTER_ADMIN.contact,
+      office_name:    s.office_name    ?? DEFAULT_FOOTER_ADMIN.office_name,
+      office_address: s.office_address ?? DEFAULT_FOOTER_ADMIN.office_address,
+      copyright:      s.copyright      ?? DEFAULT_FOOTER_ADMIN.copyright
+    };
+  } catch { return { ...DEFAULT_FOOTER_ADMIN }; }
+}
+
+function footerSocialHTML(soc) {
+  return `
+    <div class="pp-usage-item-edit" style="display:grid;grid-template-columns:1fr 2fr 80px auto;gap:8px;align-items:center;">
+      <input type="text" placeholder="Platform (e.g. Instagram)" value="${escA(soc.name || '')}" data-field="name">
+      <input type="url"  placeholder="URL (e.g. https://instagram.com/surabhisutra)" value="${escA(soc.url || '')}" data-field="url">
+      <input type="text" placeholder="Label (e.g. ig)" value="${escA(soc.label || '')}" data-field="label" style="text-align:center;">
+      <button class="pp-row-remove" onclick="removePPRow(this)" title="Remove">×</button>
+    </div>`;
+}
+
+function footerContactHTML(c) {
+  return `
+    <div class="pp-usage-item-edit" style="display:grid;grid-template-columns:1fr 2fr auto;gap:8px;align-items:center;">
+      <input type="text" placeholder="Label (e.g. WhatsApp Us)" value="${escA(c.label || '')}" data-field="label">
+      <input type="text" placeholder="URL (e.g. https://wa.me/91XXXXXXXXXX)" value="${escA(c.url || '')}" data-field="url">
+      <button class="pp-row-remove" onclick="removePPRow(this)" title="Remove">×</button>
+    </div>`;
+}
+
+function renderFooterEditor() {
+  const s = getFooterAdminSettings();
+  const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
+  set('ft-brand-desc',    s.brand_desc);
+  set('ft-office-name',   s.office_name);
+  set('ft-office-address',s.office_address);
+  set('ft-copyright',     s.copyright);
+  const sl = document.getElementById('ft-socials-list');
+  if (sl) sl.innerHTML = s.socials.map(footerSocialHTML).join('');
+  const cl = document.getElementById('ft-contact-list');
+  if (cl) cl.innerHTML = s.contact.map(footerContactHTML).join('');
+}
+
+function addFooterSocial() {
+  document.getElementById('ft-socials-list')?.insertAdjacentHTML('beforeend', footerSocialHTML({ name: '', url: '', label: '' }));
+}
+
+function addFooterContact() {
+  document.getElementById('ft-contact-list')?.insertAdjacentHTML('beforeend', footerContactHTML({ label: '', url: '' }));
+}
+
+function readFooterRows(containerId, fields) {
+  return Array.from(document.querySelectorAll(`#${containerId} .pp-usage-item-edit`)).map(row => {
+    const obj = {};
+    fields.forEach(f => { obj[f] = row.querySelector(`[data-field="${f}"]`)?.value.trim() || ''; });
+    return obj;
+  });
+}
+
+function saveFooterSettings() {
+  const settings = {
+    brand_desc:     document.getElementById('ft-brand-desc')?.value.trim()     || '',
+    socials:        readFooterRows('ft-socials-list', ['name','url','label']).filter(s => s.name || s.url),
+    contact:        readFooterRows('ft-contact-list', ['label','url']).filter(c => c.label),
+    office_name:    document.getElementById('ft-office-name')?.value.trim()    || '',
+    office_address: document.getElementById('ft-office-address')?.value.trim() || '',
+    copyright:      document.getElementById('ft-copyright')?.value.trim()      || ''
+  };
+  localStorage.setItem('surabhi_footer_settings', JSON.stringify(settings));
+  const al = document.getElementById('footer-alert');
+  if (al) { al.innerHTML = '<div class="alert alert-success">Footer saved!</div>'; setTimeout(() => al.innerHTML = '', 2500); }
+}
+
+function resetFooterSettings() {
+  localStorage.removeItem('surabhi_footer_settings');
+  renderFooterEditor();
+  const al = document.getElementById('footer-alert');
   if (al) { al.innerHTML = '<div class="alert alert-success">Reset to defaults.</div>'; setTimeout(() => al.innerHTML = '', 2000); }
 }
 

@@ -1330,6 +1330,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderBenefitsTab();
   renderIngredientsTab();
   renderHowToTab();
+  if (typeof renderFooter === 'function') renderFooter();
   updateCartBadge();
   fetchProduct();
   fetchReviews();
