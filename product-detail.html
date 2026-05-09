@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/product-detail.css">
 </head>
 <body>
@@ -36,38 +37,40 @@
   </div>
 </div>
 
-<!-- ─── PROMO BAR ─── -->
-<div class="pd-promo-bar">
-  <div class="pd-promo-msg" id="promo-msg">
-    <span>FLAT 40% OFF on orders above ₹799 | Use Code</span>
-    <span class="pd-promo-code" onclick="copyPromo('SUMMER40', this)">SUMMER40</span>
-  </div>
+<!-- ANNOUNCE BAR -->
+<div class="announce-bar">
+  <strong>Sale:</strong> Buy 1 Get 1 Free + 20% Off · Free shipping above ₹339 · Cash on Delivery available
 </div>
 
-<!-- ─── NAV ─── -->
-<nav class="pd-nav">
-  <div class="pd-nav-logo" onclick="window.location.href='index.html'">SURABHI SUTRA</div>
-  <ul class="pd-nav-links">
+<!-- NAV -->
+<nav>
+  <div class="nav-logo" onclick="window.location.href='index.html'">SURABHI SUTRA</div>
+  <ul class="nav-links">
     <li><a onclick="window.location.href='index.html'">Home</a></li>
-    <li><a onclick="window.location.href='index.html'">Shop</a></li>
+    <li><a onclick="window.location.href='index.html?goto=shop'">Shop</a></li>
     <li><a onclick="window.location.href='about.html'">About</a></li>
   </ul>
-  <button class="pd-nav-cart" onclick="openCartDrawer()">
-    Cart (<span id="cart-badge">0</span>)
-  </button>
-  <button class="pd-nav-hamburger" onclick="document.getElementById('pd-mobile-nav').classList.toggle('open')" aria-label="Open menu">
-    <span></span><span></span><span></span>
-  </button>
+  <div class="nav-right">
+    <button class="nav-icon-btn" title="Search" aria-label="Search" onclick="window.location.href='index.html?goto=shop'">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    </button>
+    <button class="nav-cart" onclick="openCartDrawer()">
+      Cart&nbsp;(<span id="cart-badge">0</span>)
+    </button>
+    <button class="nav-hamburger" onclick="document.getElementById('pd-mobile-nav').classList.toggle('open')" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
 </nav>
 
-<!-- MOBILE NAV OVERLAY (product-detail) -->
-<div id="pd-mobile-nav" class="pd-mobile-nav">
-  <button class="pd-mobile-nav-close" onclick="document.getElementById('pd-mobile-nav').classList.remove('open')" aria-label="Close menu">✕</button>
-  <nav class="pd-mobile-nav-links">
+<!-- MOBILE NAV OVERLAY -->
+<div id="pd-mobile-nav" class="mobile-nav-overlay">
+  <button class="mobile-nav-close" onclick="document.getElementById('pd-mobile-nav').classList.remove('open')" aria-label="Close menu">✕</button>
+  <nav class="mobile-nav-list">
     <a onclick="window.location.href='index.html'">Home</a>
-    <a onclick="window.location.href='index.html'">Shop</a>
+    <a onclick="window.location.href='index.html?goto=shop'">Shop</a>
     <a onclick="window.location.href='about.html'">About</a>
-    <button class="pd-mobile-nav-cart-btn" onclick="document.getElementById('pd-mobile-nav').classList.remove('open');openCartDrawer()">
+    <button class="btn-primary" onclick="document.getElementById('pd-mobile-nav').classList.remove('open');openCartDrawer()">
       Cart (<span id="mobile-cart-badge">0</span>)
     </button>
   </nav>
@@ -421,13 +424,13 @@
   </div>
 </div>
 
-<!-- ─── FOOTER ─── -->
-<footer class="pd-footer">
-  <div class="pd-footer-inner">
-    <div class="pd-footer-brand">
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <div class="site-footer-brand">
       <h4>Surabhi Sutra</h4>
       <p>Surabhi Sutra brings five thousand years of Ayurvedic wisdom into your daily skincare ritual. Every product is made fresh, in small batches, with ingredients your skin was always meant to meet. No shortcuts. No synthetics. Just nature, distilled.</p>
-      <div class="pd-footer-socials">
+      <div class="site-footer-socials">
         <a href="#" title="Telegram">T</a>
         <a href="#" title="Facebook">f</a>
         <a href="#" title="Instagram">ig</a>
@@ -436,12 +439,12 @@
     <div>
       <h4>Shop For</h4>
       <ul>
-        <li><a href="index.html">Face Care</a></li>
-        <li><a href="index.html">Hair Care</a></li>
-        <li><a href="index.html">Body Care</a></li>
-        <li><a href="index.html">Baby Care</a></li>
-        <li><a href="index.html">Men's Range</a></li>
-        <li><a href="index.html">Gifting</a></li>
+        <li><a href="index.html?goto=shop">Face Care</a></li>
+        <li><a href="index.html?goto=shop">Hair Care</a></li>
+        <li><a href="index.html?goto=shop">Body Care</a></li>
+        <li><a href="index.html?goto=shop">Baby Care</a></li>
+        <li><a href="index.html?goto=shop">Men's Range</a></li>
+        <li><a href="index.html?goto=shop">Gifting</a></li>
       </ul>
     </div>
     <div>
@@ -450,8 +453,8 @@
         <li><a href="#">FAQs</a></li>
         <li><a href="#">Track Order</a></li>
         <li><a href="#">Blogs</a></li>
-        <li><a href="#">Careers</a></li>
         <li><a href="#">Returns Policy</a></li>
+        <li><a href="about.html">About Us</a></li>
         <li><a href="admin.html" style="opacity:.3;">Admin</a></li>
       </ul>
     </div>
@@ -465,7 +468,7 @@
       <p style="font-size:12px;opacity:.6;line-height:1.8;">Surabhi Sutra Naturals<br>New Delhi, India — 110001</p>
     </div>
   </div>
-  <div class="pd-footer-bottom">
+  <div class="site-footer-bottom">
     © 2025 Surabhi Sutra · All rights reserved · Made with love in India
   </div>
 </footer>
