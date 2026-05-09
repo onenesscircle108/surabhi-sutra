@@ -213,11 +213,34 @@ body{font-family:Arial,sans-serif;background:var(--beige);min-height:100vh;}
   <div class="login-box">
     <h2>SURABHI SUTRA</h2>
     <p class="login-sub">Admin Dashboard — Sign in to continue</p>
-    <input type="email" id="login-email" placeholder="Email address" onkeydown="if(event.key==='Enter')doLogin()"/>
-    <input type="password" id="login-pwd" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()"/>
-    <button id="login-btn" onclick="doLogin()">Sign In</button>
-    <p id="login-error" style="color:red;font-size:12px;margin-top:0.5rem;"></p>
-    <p class="login-hint">Access is restricted to authorised admin emails only.</p>
+
+    <!-- Step 1: Email + Password -->
+    <div id="login-step1">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:1.25rem;">
+        <div style="width:24px;height:24px;border-radius:50%;background:var(--sage);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
+        <span style="font-size:13px;color:#555;">Enter your credentials</span>
+      </div>
+      <input type="email" id="login-email" placeholder="Email address" onkeydown="if(event.key==='Enter')doLogin()"/>
+      <input type="password" id="login-pwd" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()"/>
+      <button id="login-btn" onclick="doLogin()">Send OTP →</button>
+      <p id="login-error" style="color:red;font-size:12px;margin-top:0.5rem;"></p>
+      <p class="login-hint">Access is restricted to authorised admin emails only.</p>
+    </div>
+
+    <!-- Step 2: OTP -->
+    <div id="login-step2" style="display:none;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:1.25rem;">
+        <div style="width:24px;height:24px;border-radius:50%;background:#ccc;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">✓</div>
+        <span style="font-size:12px;color:#888;text-decoration:line-through;">Credentials verified</span>
+        <div style="width:24px;height:24px;border-radius:50%;background:var(--sage);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:4px;">2</div>
+        <span style="font-size:13px;color:#555;">Enter OTP</span>
+      </div>
+      <p style="font-size:13px;color:#555;margin-bottom:1rem;text-align:left;">A 6-digit OTP has been sent to your registered email address.</p>
+      <input type="text" id="login-otp" placeholder="6-digit OTP" maxlength="6" pattern="[0-9]*" inputmode="numeric" style="letter-spacing:6px;font-size:20px;text-align:center;" onkeydown="if(event.key==='Enter')doVerifyOTP()"/>
+      <button id="otp-btn" onclick="doVerifyOTP()">Verify & Sign In</button>
+      <p id="otp-error" style="color:red;font-size:12px;margin-top:0.5rem;"></p>
+      <button onclick="backToLogin()" style="background:none;border:none;color:var(--sage);font-size:12px;cursor:pointer;margin-top:0.75rem;width:100%;">← Use different credentials</button>
+    </div>
   </div>
 </div>
 
@@ -1024,7 +1047,7 @@ async function doLogin() {
   }
 
   btn.disabled = true;
-  btn.textContent = 'Signing in…';
+  btn.textContent = 'Sending OTP…';
 
   try {
     const res  = await fetch(WEBHOOK, {
@@ -1034,10 +1057,13 @@ async function doLogin() {
     const data = await res.json();
 
     if (data.success) {
-      _adminEmail = data.admin.email || '';
-      _adminName  = data.admin.name  || '';
-      _adminId    = data.admin.id    || '';
-      showAdminApp();
+      _adminEmail = email;
+      _adminName  = data.admin ? (data.admin.name  || '') : '';
+      _adminId    = data.admin ? (data.admin.id    || '') : '';
+      // Show OTP step
+      document.getElementById('login-step1').style.display = 'none';
+      document.getElementById('login-step2').style.display = 'block';
+      setTimeout(() => document.getElementById('login-otp').focus(), 50);
     } else {
       errEl.textContent = data.message || 'Login failed. Please check your credentials.';
       pwdEl.value = '';
@@ -1046,8 +1072,58 @@ async function doLogin() {
     errEl.textContent = 'Network error. Please try again.';
   } finally {
     btn.disabled = false;
-    btn.textContent = 'Sign In';
+    btn.textContent = 'Send OTP →';
   }
+}
+
+async function doVerifyOTP() {
+  const otpEl = document.getElementById('login-otp');
+  const errEl = document.getElementById('otp-error');
+  const btn   = document.getElementById('otp-btn');
+  const otp   = otpEl.value.trim();
+
+  errEl.textContent = '';
+
+  if (!otp || otp.length !== 6 || !/^\d{6}$/.test(otp)) {
+    errEl.textContent = 'Please enter the 6-digit OTP.';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Verifying…';
+
+  try {
+    const res  = await fetch(WEBHOOK, {
+      method: 'POST',
+      body: JSON.stringify({ action: 'verifyAdminOTP', email: _adminEmail, otp })
+    });
+    const data = await res.json();
+
+    if (data.success) {
+      if (data.admin) {
+        _adminEmail = data.admin.email || _adminEmail;
+        _adminName  = data.admin.name  || _adminName;
+        _adminId    = data.admin.id    || _adminId;
+      }
+      showAdminApp();
+    } else {
+      errEl.textContent = data.message || 'Invalid or expired OTP. Please try again.';
+      otpEl.value = '';
+      otpEl.focus();
+    }
+  } catch (err) {
+    errEl.textContent = 'Network error. Please try again.';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Verify & Sign In';
+  }
+}
+
+function backToLogin() {
+  document.getElementById('login-step2').style.display = 'none';
+  document.getElementById('login-step1').style.display = 'block';
+  document.getElementById('otp-error').textContent = '';
+  document.getElementById('login-otp').value = '';
 }
 
 let _adminEmail = '';
