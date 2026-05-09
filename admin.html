@@ -234,6 +234,7 @@ body{font-family:Arial,sans-serif;background:var(--beige);min-height:100vh;}
       <li><button class="nav-btn" onclick="showSection('fomo',this)">📣 FOMO</button></li>
       <li><button class="nav-btn" onclick="showSection('orders',this)">🛒 Orders</button></li>
       <li><button class="nav-btn" onclick="showSection('about',this)">📖 About Page</button></li>
+      <li><button class="nav-btn" onclick="showSection('returns',this)">↩️ Return Policy</button></li>
       <li><button class="nav-btn" onclick="showSection('account',this)">👤 Account</button></li>
     </ul>
     <div style="font-size:11px;color:rgba(255,255,255,.4);padding:0 4px;margin-bottom:0.5rem;" id="sidebar-admin-email"></div>
@@ -713,9 +714,50 @@ body{font-family:Arial,sans-serif;background:var(--beige);min-height:100vh;}
         <div class="form-group"><label>Founder Photo URL (Google Drive share link)</label><input type="text" id="ab-founder-img" placeholder="https://drive.google.com/..."/></div>
       </div>
 
+      <div class="form-box">
+        <h3>FAQ Section</h3>
+        <p style="font-size:13px;color:#777;margin-bottom:1rem;">These appear on the About page under "Frequently Asked Questions".</p>
+        <div class="form-row" style="margin-bottom:12px;">
+          <div class="form-group"><label>Section Title</label><input type="text" id="ab-faq-title" placeholder="Frequently Asked Questions"/></div>
+          <div class="form-group"><label>Subtitle / Intro</label><input type="text" id="ab-faq-sub" placeholder="Everything you need to know..."/></div>
+        </div>
+        <div id="ab-faq-items" class="pp-usage-list" style="margin-bottom:8px;"></div>
+        <button class="btn btn-sm" onclick="addFaqItem()">+ Add Question</button>
+      </div>
+
       <div style="margin-top:1rem;">
         <button class="btn" onclick="saveAboutSettings()">Save About Page</button>
         <button class="btn btn-grey" onclick="resetAboutSettings()">Reset Defaults</button>
+      </div>
+    </div>
+
+    <!-- RETURN POLICY -->
+    <div id="returns" class="section">
+      <div class="page-title">Return &amp; Refund Policy</div>
+      <div id="returns-alert"></div>
+      <div class="form-box">
+        <h3>Hero Banner</h3>
+        <div class="form-row">
+          <div class="form-group"><label>Eyebrow Label</label><input type="text" id="rp-eyebrow" placeholder="e.g. Our Promise"/></div>
+          <div class="form-group"><label>Heading</label><input type="text" id="rp-heading" placeholder="e.g. Return &amp; Refund Policy"/></div>
+        </div>
+        <div class="form-group"><label>Subtext (tagline below heading)</label><input type="text" id="rp-subtext" placeholder="e.g. We stand behind every product we make."/></div>
+        <div class="form-group"><label>Last Updated</label><input type="text" id="rp-last-updated" placeholder="e.g. May 2025"/></div>
+      </div>
+      <div class="form-box">
+        <h3>Contact Box</h3>
+        <div class="form-group"><label>Contact Box Title</label><input type="text" id="rp-contact-title" placeholder="e.g. Still Have Questions?"/></div>
+        <div class="form-group"><label>Contact Box Text</label><textarea id="rp-contact-text" style="height:72px;" placeholder="Our team is happy to help..."></textarea></div>
+      </div>
+      <div class="form-box">
+        <h3>Policy Sections</h3>
+        <p style="font-size:13px;color:#777;margin-bottom:1rem;">Each section has a type that controls its layout. Supported types: <code>text</code>, <code>highlight</code>, <code>list</code>, <code>exceptions</code>, <code>steps</code>.</p>
+        <div id="rp-sections-list" class="pp-usage-list" style="margin-bottom:8px;"></div>
+        <button class="btn btn-sm" onclick="addRpSection()">+ Add Section</button>
+      </div>
+      <div style="margin-top:1rem;">
+        <button class="btn" onclick="saveReturnsSettings()">Save Return Policy</button>
+        <button class="btn btn-grey" onclick="resetReturnsSettings()">Reset Defaults</button>
       </div>
     </div>
 
@@ -969,8 +1011,9 @@ async function showSection(id, btn) {
   if (id === 'productpage') { await loadProducts(); renderProductPageEditor(); }
   if (id === 'orders')      { await loadOrders(); renderOrders(); }
   if (id === 'fomo')        renderFomoEditor();
-  if (id === 'about')       renderAboutEditor();
-  if (id === 'account')     { renderAboutEditor(); await loadAdmins(); }
+  if (id === 'about')       { renderAboutEditor(); renderFaqEditor(); }
+  if (id === 'returns')     renderReturnsEditor();
+  if (id === 'account')     { renderAboutEditor(); renderFaqEditor(); await loadAdmins(); }
 }
 
 // ─── DASHBOARD ─────────────────────────────────────────────
@@ -1790,6 +1833,17 @@ function resetFomoSettings() {
 }
 
 // ─── ABOUT PAGE ────────────────────────────────────────────
+const DEFAULT_FAQS_ADMIN = [
+  { q: 'Are your products 100% natural?', a: 'Yes. Every ingredient in our formulas is plant-derived, Ayurvedic-sourced, and free from synthetic chemicals, artificial fragrances, SLS, SLES, and parabens.' },
+  { q: 'How long does shipping take?', a: 'Delhi/NCR orders are delivered in 2–3 business days. Pan-India orders typically arrive in 4–5 business days.' },
+  { q: 'Are your products safe for sensitive skin?', a: 'Yes. Our formulas are dermatologically tested and free from harsh surfactants and synthetic irritants. We recommend a 24-hour patch test before facial use.' },
+  { q: 'Can pregnant or breastfeeding women use your products?', a: 'Our ingredient lists are clean and generally considered safe. However, we always recommend consulting your doctor before introducing any new skincare product during pregnancy.' },
+  { q: 'What is your return policy?', a: 'We accept returns on unopened, unused products within 7 days of delivery. For damaged or incorrect items, contact us within 48 hours with a photo.' },
+  { q: 'Do you offer Cash on Delivery?', a: 'Yes, COD is available across India.' },
+  { q: 'How are your products made?', a: 'All products are handcrafted in small batches at our workshop using whole, fresh botanicals.' },
+  { q: 'Do you ship internationally?', a: 'Currently we ship across India. Please WhatsApp us for international order enquiries.' }
+];
+
 const DEFAULT_ABOUT = {
   eyebrow:      'Our Story',
   heading:      'Born from Ancient Wisdom,\nMade for Modern Skin',
@@ -1814,7 +1868,10 @@ function getAboutSettings() {
     return {
       ...DEFAULT_ABOUT,
       ...stored,
-      values: (stored.values && stored.values.length === 4) ? stored.values : DEFAULT_ABOUT.values
+      values: (stored.values && stored.values.length === 4) ? stored.values : DEFAULT_ABOUT.values,
+      faq_title: stored.faq_title ?? 'Frequently Asked Questions',
+      faq_sub:   stored.faq_sub   ?? 'Everything you need to know about our products, ingredients, and orders.',
+      faqs:      (stored.faqs && stored.faqs.length) ? stored.faqs : DEFAULT_FAQS_ADMIN
     };
   } catch { return { ...DEFAULT_ABOUT }; }
 }
@@ -1856,8 +1913,47 @@ function collectAboutSettings() {
   };
 }
 
+// ── FAQ Editor ──
+function faqItemHTML(faq) {
+  return `
+    <div class="pp-usage-item-edit">
+      <div style="display:flex;gap:8px;align-items:start;">
+        <input type="text" placeholder="Question" value="${escA(faq.q || '')}" style="flex:1;font-weight:500;">
+        <button class="pp-row-remove" onclick="removePPRow(this)" title="Remove">×</button>
+      </div>
+      <textarea placeholder="Answer..." style="resize:vertical;min-height:64px;">${escA(faq.a || '')}</textarea>
+    </div>`;
+}
+
+function renderFaqEditor() {
+  const s = getAboutSettings();
+  const ftEl = document.getElementById('ab-faq-title');
+  const fsEl = document.getElementById('ab-faq-sub');
+  if (ftEl) ftEl.value = s.faq_title || 'Frequently Asked Questions';
+  if (fsEl) fsEl.value = s.faq_sub   || 'Everything you need to know about our products, ingredients, and orders.';
+  const wrap = document.getElementById('ab-faq-items');
+  if (wrap) wrap.innerHTML = (s.faqs || DEFAULT_FAQS_ADMIN).map(faqItemHTML).join('');
+}
+
+function addFaqItem() {
+  document.getElementById('ab-faq-items')?.insertAdjacentHTML('beforeend', faqItemHTML({ q: '', a: '' }));
+}
+
+function readFaqs() {
+  return Array.from(document.querySelectorAll('#ab-faq-items .pp-usage-item-edit')).map(row => ({
+    q: row.querySelector('input')?.value.trim()    || '',
+    a: row.querySelector('textarea')?.value.trim() || ''
+  })).filter(f => f.q);
+}
+
 function saveAboutSettings() {
-  localStorage.setItem('surabhi_about_settings', JSON.stringify(collectAboutSettings()));
+  const settings = {
+    ...collectAboutSettings(),
+    faq_title: document.getElementById('ab-faq-title')?.value.trim() || 'Frequently Asked Questions',
+    faq_sub:   document.getElementById('ab-faq-sub')?.value.trim()   || '',
+    faqs:      readFaqs()
+  };
+  localStorage.setItem('surabhi_about_settings', JSON.stringify(settings));
   const al = document.getElementById('about-alert');
   if (al) { al.innerHTML = '<div class="alert alert-success">About page saved!</div>'; setTimeout(() => al.innerHTML = '', 2500); }
 }
@@ -1865,7 +1961,129 @@ function saveAboutSettings() {
 function resetAboutSettings() {
   localStorage.removeItem('surabhi_about_settings');
   renderAboutEditor();
+  renderFaqEditor();
   const al = document.getElementById('about-alert');
+  if (al) { al.innerHTML = '<div class="alert alert-success">Reset to defaults.</div>'; setTimeout(() => al.innerHTML = '', 2000); }
+}
+
+// ─── RETURN POLICY SETTINGS ─────────────────────────────────
+const DEFAULT_RETURNS_ADMIN = {
+  eyebrow:       'Our Promise',
+  heading:       'Return & Refund Policy',
+  subtext:       "We stand behind every product we make. If something isn't right, we'll make it right.",
+  last_updated:  'May 2025',
+  contact_title: 'Still Have Questions?',
+  contact_text:  'Our team is happy to help. Reach us at hello@surabhisutra.in or WhatsApp us — we typically respond within a few hours on business days.',
+  sections: [
+    { icon: '📅', title: 'Return Window',            type: 'text',       content: 'We accept return requests within 7 days of delivery. The product must be unopened, unused, and in its original packaging.' },
+    { icon: '⚠️', title: 'Non-Returnable Items',     type: 'exceptions', intro:   'The following items cannot be returned or exchanged:', items: ['Opened or used products (for hygiene reasons)', 'Products purchased during clearance or final-sale events', 'Gift cards and digital vouchers', 'Products returned without original packaging'] },
+    { icon: '🔄', title: 'How to Initiate a Return', type: 'steps',      steps: [{ title: 'Contact Us', desc: 'Email us at hello@surabhisutra.in or WhatsApp within 7 days of delivery.' }, { title: 'Share Photos', desc: 'For damaged or incorrect items, attach clear photos of the product.' }, { title: 'Get Approval', desc: 'Our team will respond within 1–2 business days with a return authorisation.' }, { title: 'Ship It Back', desc: 'Pack securely and ship. Return shipping is borne by the customer except where the error is ours.' }, { title: 'Refund Processed', desc: 'Refund initiated within 3–5 business days once we receive and inspect the item.' }] },
+    { icon: '💚', title: 'Damaged or Defective Products', type: 'highlight', content: 'If you receive a damaged, defective, or incorrect product, contact us within 48 hours with photos. We will arrange a full replacement or refund — including return shipping — at no charge to you.' },
+    { icon: '💳', title: 'Refund Timeline',           type: 'list',       items: ['Prepaid orders: 5–7 business days to original payment method', 'COD orders: refund via bank transfer or UPI', 'Shipping charges are non-refundable except where the error is ours'] },
+    { icon: '↔️', title: 'Exchange Policy',           type: 'text',       content: 'We are happy to exchange an unopened product for a different variant or product of equal value within 7 days of delivery.' },
+    { icon: '📦', title: 'Cancellations',             type: 'text',       content: 'Orders can be cancelled within 12 hours of placement. Once dispatched, cancellation is not possible — you may return after delivery.' }
+  ]
+};
+
+function getReturnsAdminSettings() {
+  try {
+    const s = JSON.parse(localStorage.getItem('surabhi_returns_settings') || '{}');
+    return {
+      ...DEFAULT_RETURNS_ADMIN, ...s,
+      sections: (s.sections && s.sections.length) ? s.sections : DEFAULT_RETURNS_ADMIN.sections
+    };
+  } catch { return { ...DEFAULT_RETURNS_ADMIN }; }
+}
+
+function rpSectionHTML(sec, i) {
+  return `
+    <div class="pp-usage-item-edit" data-rp-idx="${i}" style="background:#fafafa;">
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:6px;">
+        <input type="text" placeholder="Emoji icon (e.g. 📅)" value="${escA(sec.icon || '')}" style="width:60px;text-align:center;font-size:16px;" data-field="icon">
+        <input type="text" placeholder="Section title" value="${escA(sec.title || '')}" style="flex:1;font-weight:500;" data-field="title">
+        <select style="padding:6px 8px;border:1px solid var(--border);border-radius:3px;font-size:12px;" data-field="type">
+          ${['text','highlight','list','exceptions','steps'].map(t => `<option value="${t}"${sec.type===t?' selected':''}>${t}</option>`).join('')}
+        </select>
+        <button class="pp-row-remove" onclick="removePPRow(this)" title="Remove">×</button>
+      </div>
+      <textarea placeholder="Content (for text/highlight types) — or JSON array for list/items/steps" style="resize:vertical;min-height:80px;" data-field="content">${escA(rpSectionContent(sec))}</textarea>
+    </div>`;
+}
+
+function rpSectionContent(sec) {
+  if (sec.type === 'text' || sec.type === 'highlight') return sec.content || '';
+  if (sec.type === 'list') return (sec.items || []).join('\n');
+  if (sec.type === 'exceptions') return (sec.intro ? sec.intro + '\n' : '') + (sec.items || []).join('\n');
+  if (sec.type === 'steps') return (sec.steps || []).map(s => `${s.title}: ${s.desc}`).join('\n');
+  return '';
+}
+
+function renderReturnsEditor() {
+  const s = getReturnsAdminSettings();
+  const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
+  set('rp-eyebrow',       s.eyebrow);
+  set('rp-heading',       s.heading);
+  set('rp-subtext',       s.subtext);
+  set('rp-last-updated',  s.last_updated);
+  set('rp-contact-title', s.contact_title);
+  set('rp-contact-text',  s.contact_text);
+  const wrap = document.getElementById('rp-sections-list');
+  if (wrap) wrap.innerHTML = (s.sections || []).map((sec, i) => rpSectionHTML(sec, i)).join('');
+}
+
+function addRpSection() {
+  const wrap = document.getElementById('rp-sections-list');
+  if (!wrap) return;
+  const i = wrap.children.length;
+  wrap.insertAdjacentHTML('beforeend', rpSectionHTML({ icon: '📌', title: '', type: 'text', content: '' }, i));
+}
+
+function readRpSection(row) {
+  const type = row.querySelector('[data-field="type"]')?.value || 'text';
+  const raw  = row.querySelector('[data-field="content"]')?.value.trim() || '';
+  const lines = raw.split('\n').map(l => l.trim()).filter(Boolean);
+  const sec = {
+    icon:  row.querySelector('[data-field="icon"]')?.value.trim()  || '',
+    title: row.querySelector('[data-field="title"]')?.value.trim() || '',
+    type
+  };
+  if (type === 'text' || type === 'highlight') {
+    sec.content = raw;
+  } else if (type === 'list') {
+    sec.items = lines;
+  } else if (type === 'exceptions') {
+    sec.intro = lines[0] || '';
+    sec.items = lines.slice(1);
+  } else if (type === 'steps') {
+    sec.steps = lines.map(l => {
+      const idx = l.indexOf(':');
+      return idx > -1
+        ? { title: l.slice(0, idx).trim(), desc: l.slice(idx + 1).trim() }
+        : { title: l, desc: '' };
+    });
+  }
+  return sec;
+}
+
+function saveReturnsSettings() {
+  const settings = {
+    eyebrow:       document.getElementById('rp-eyebrow')?.value.trim()       || '',
+    heading:       document.getElementById('rp-heading')?.value.trim()       || '',
+    subtext:       document.getElementById('rp-subtext')?.value.trim()       || '',
+    last_updated:  document.getElementById('rp-last-updated')?.value.trim()  || '',
+    contact_title: document.getElementById('rp-contact-title')?.value.trim() || '',
+    contact_text:  document.getElementById('rp-contact-text')?.value.trim()  || '',
+    sections: Array.from(document.querySelectorAll('#rp-sections-list .pp-usage-item-edit')).map(readRpSection)
+  };
+  localStorage.setItem('surabhi_returns_settings', JSON.stringify(settings));
+  const al = document.getElementById('returns-alert');
+  if (al) { al.innerHTML = '<div class="alert alert-success">Return policy saved!</div>'; setTimeout(() => al.innerHTML = '', 2500); }
+}
+
+function resetReturnsSettings() {
+  localStorage.removeItem('surabhi_returns_settings');
+  renderReturnsEditor();
+  const al = document.getElementById('returns-alert');
   if (al) { al.innerHTML = '<div class="alert alert-success">Reset to defaults.</div>'; setTimeout(() => al.innerHTML = '', 2000); }
 }
 
