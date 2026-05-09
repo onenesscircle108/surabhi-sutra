@@ -750,6 +750,7 @@ async function fetchProduct() {
     const hit = cached.find(p => String(p.id) === String(productId)) || cached[0];
     if (hit) renderProduct(hit);
     renderCarousels();
+    renderRelatedRow();
   }
 
   // ── STEP 2: fetch fresh data, update cache and re-render ──
@@ -765,6 +766,7 @@ async function fetchProduct() {
     const target = found || allProducts[0];
     if (target) renderProduct(target);
     renderCarousels();
+    renderRelatedRow();
 
   } catch (err) {
     console.error(err);
@@ -938,6 +940,52 @@ function initStarPicker() {
 }
 
 // ─────────────────────────────
+// TAB SWITCHING
+// ─────────────────────────────
+function switchTab(tab) {
+  document.querySelectorAll('.p2-tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  document.querySelectorAll('.p2-tab-content').forEach(s => s.style.display = 'none');
+  const el = document.getElementById('tab-' + tab);
+  if (el) el.style.display = '';
+  const bar = document.getElementById('pd-tabs-bar');
+  if (bar) bar.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// ─────────────────────────────
+// P2 ACCORDION (How to Use tab)
+// ─────────────────────────────
+function toggleAcc(head) {
+  const item = head.closest('.p2-acc-item');
+  const wasOpen = item.classList.contains('open');
+  document.querySelectorAll('.p2-acc-item').forEach(i => i.classList.remove('open'));
+  if (!wasOpen) item.classList.add('open');
+}
+
+// ─────────────────────────────
+// RELATED ROW (Pair It With)
+// ─────────────────────────────
+function renderRelatedRow() {
+  const row = document.getElementById('pd-related-row');
+  if (!row) return;
+  const others = allProducts.filter(p => String(p.id) !== String(productId)).slice(0, 8);
+  if (!others.length) { row.innerHTML = '<p style="color:var(--text-light);font-size:13px;">More products coming soon.</p>'; return; }
+  row.innerHTML = others.map(p => {
+    const img = p.images && p.images[0] ? p.images[0] : '';
+    const imgHTML = img ? `<img src="${img}" alt="${escAttr(p.name)}">` : '🌿';
+    return `
+      <div class="p2-related-card" onclick="window.location.href='product-detail.html?id=${escAttr(p.id)}'">
+        <div class="p2-related-img">${imgHTML}</div>
+        <div class="p2-related-body">
+          <div class="p2-related-name">${escAttr(p.name)}</div>
+          <div class="p2-related-price">₹${p.price}</div>
+          <button class="p2-related-btn" onclick="event.stopPropagation();addProductToCart('${escAttr(p.id)}')">+ Add</button>
+        </div>
+      </div>`;
+  }).join('');
+  makeDraggable(row);
+}
+
+// ─────────────────────────────
 // ACCORDION TOGGLES
 // ─────────────────────────────
 function toggleExpand(cardId, btn) {
@@ -1062,10 +1110,6 @@ function makeDraggable(el) {
 // ─────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   renderHeroTexts();
-  renderFeatureCards();
-  renderIngredients();
-  renderCompare();
-  renderUsage();
   updateCartBadge();
   fetchProduct();
   fetchReviews();

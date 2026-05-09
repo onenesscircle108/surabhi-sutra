@@ -107,7 +107,7 @@
     <div class="pd-rating-row" id="pd-rating-row" style="visibility:hidden;">
       <span class="pd-stars" id="pd-stars">★★★★★</span>
       <span class="pd-rating-val" id="pd-rating-val">0.0</span>
-      <a class="pd-rating-count" id="pd-rating-count" href="#reviews">0 Reviews</a>
+      <a class="pd-rating-count" id="pd-rating-count" href="#tab-reviews" onclick="switchTab('reviews')">0 Reviews</a>
     </div>
 
     <p class="pd-short-desc" id="detail-desc">
@@ -148,197 +148,250 @@
   </div>
 </div><!-- end .pd-hero -->
 
-<!-- ─── S2–S4: Feature Cards (rendered by JS) ─── -->
-<div id="pd-feature-cards-wrap"></div>
-
-<!-- ─── S5: Ingredients (rendered by JS) ─── -->
-<div id="pd-ingredients-wrap"></div>
-
-<!-- ─── S7: Comparison (rendered by JS) ─── -->
-<div id="pd-compare-wrap"></div>
-
-<!-- ─── S8: Usage & Safety (rendered by JS) ─── -->
-<div id="pd-usage-wrap"></div>
-
-<!-- ─── S9: Explore the Range ─── -->
-<div class="pd-section" id="section-cleanser" style="display:none;">
-  <div class="pd-container">
-    <p class="pd-eyebrow">Explore the Range</p>
-    <h2 class="pd-section-title" style="margin-bottom:1.5rem;">You May Also Like</h2>
-    <div class="pd-product-carousel" id="cleanser-row"><!-- populated by JS --></div>
+<!-- ─── INGREDIENT HERO ─── -->
+<div class="p2-ing-hero">
+  <p class="p2-ing-eyebrow">The Hero Ingredient</p>
+  <div class="p2-ing-hero-grid">
+    <div class="p2-ing-hero-name">
+      Wild Turmeric
+      <span>Curcuma Aromatica</span>
+    </div>
+    <div class="p2-ing-hero-divider"></div>
+    <div class="p2-ing-hero-stat">
+      <div class="p2-ing-stat-num">5×</div>
+      <div class="p2-ing-stat-label">More curcuminoid potency than<br>regular kitchen turmeric —<br>the brightening difference you can see.</div>
+    </div>
+  </div>
+  <div class="p2-ing-support">
+    <span class="p2-ing-chip">Red Lentil · Clarity</span>
+    <span class="p2-ing-chip">Besan · Deep Cleanse</span>
+    <span class="p2-ing-chip">Sandalwood · Cooling</span>
+    <span class="p2-ing-chip">Neem · Anti-Bacterial</span>
+    <span class="p2-ing-chip">Rose Water · Hydration</span>
+    <span class="p2-ing-chip">Honey · Barrier Repair</span>
   </div>
 </div>
 
-<!-- ─── S10: Why It Matters ─── -->
-<div class="pd-section pd-beige-bg">
-  <div class="pd-container">
-    <div class="pd-expand-card" id="card-why">
-      <div class="pd-expand-card-bg" style="background-image:linear-gradient(135deg,#2C1F14,#4A7C59);"></div>
-      <div class="pd-expand-card-inner">
-        <p class="pd-expand-eyebrow">The Bigger Picture</p>
-        <h2 class="pd-expand-title">Why It Really Matters Which Face Wash You Use</h2>
-        <button class="pd-expand-toggle-btn" onclick="toggleExpand('card-why', this)">
-          Click to Know More ▾
-        </button>
-        <div class="pd-expand-body">
-          <div class="pd-benefit-rows">
-            <div class="pd-benefit-row">
-              <div class="pd-benefit-icon">
-                <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-              </div>
-              <div class="pd-benefit-text">
-                <h4>Your Barrier is Everything</h4>
-                <p>The skin barrier is your first line of defence. Harsh surfactants in conventional cleansers strip away ceramides, leaving skin vulnerable to dehydration and inflammation.</p>
-              </div>
-            </div>
-            <div class="pd-benefit-row">
-              <div class="pd-benefit-icon">
-                <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-              </div>
-              <div class="pd-benefit-text">
-                <h4>Cleansing is Cumulative</h4>
-                <p>Twice a day, 365 days a year — the ingredient profile of your face wash adds up. Choosing real over synthetic is the highest-leverage switch in any skincare routine.</p>
-              </div>
-            </div>
-            <div class="pd-benefit-row">
-              <div class="pd-benefit-icon">
-                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-              </div>
-              <div class="pd-benefit-text">
-                <h4>Ayurveda Has 5,000 Years of Data</h4>
-                <p>Tikta rasa (bitter taste) has been documented as a skin purifier in classical Ayurvedic texts. This is not trend — it is tested, generational wisdom in every sachet.</p>
-              </div>
-            </div>
-            <div class="pd-benefit-row">
-              <div class="pd-benefit-icon">
-                <svg viewBox="0 0 24 24"><path d="M12 2C6 2 3 8 3 12c0 5 4 9 9 9s9-4 9-9C21 7 17 2 12 2z"/></svg>
-              </div>
-              <div class="pd-benefit-text">
-                <h4>Nature Knows Your Skin</h4>
-                <p>Your skin evolved alongside plants, not petrochemicals. Botanicals communicate with your skin's own biology in ways that synthetic molecules simply cannot replicate.</p>
-              </div>
-            </div>
-          </div>
-        </div>
+
+<!-- ─── STICKY TAB BAR ─── -->
+<div class="p2-tabs-bar" id="pd-tabs-bar">
+  <div class="p2-tabs-inner">
+    <button class="p2-tab-btn active" data-tab="benefits" onclick="switchTab('benefits')">Key Benefits</button>
+    <button class="p2-tab-btn" data-tab="ingredients" onclick="switchTab('ingredients')">Ingredients</button>
+    <button class="p2-tab-btn" data-tab="howto" onclick="switchTab('howto')">How to Use</button>
+    <button class="p2-tab-btn" data-tab="reviews" onclick="switchTab('reviews')">Reviews</button>
+  </div>
+</div>
+
+
+<!-- TAB: BENEFITS -->
+<div id="tab-benefits" class="p2-tab-content">
+  <div class="p2-section" style="padding-bottom:0;">
+    <div class="p2-stats-strip">
+      <div class="p2-stat-item">
+        <div class="p2-stat-num">4.8★</div>
+        <div class="p2-stat-label">Average rating from<br>verified customers</div>
+      </div>
+      <div class="p2-stat-item">
+        <div class="p2-stat-num">5,000</div>
+        <div class="p2-stat-label">Years of Ayurvedic wisdom<br>in every sachet</div>
+      </div>
+      <div class="p2-stat-item">
+        <div class="p2-stat-num">0%</div>
+        <div class="p2-stat-label">Parabens · SLS · Synthetic<br>fragrance · Artificial color</div>
+      </div>
+    </div>
+  </div>
+  <div class="p2-section">
+    <p class="p2-eyebrow">Why It Works</p>
+    <h2 class="p2-section-title">Six Reasons Your Skin Will Love This</h2>
+    <div class="p2-benefits-grid">
+      <div class="p2-benefit-card">
+        <div class="p2-benefit-icon-wrap"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div class="p2-benefit-title">Brightens Over Time</div>
+        <p class="p2-benefit-desc">Wild turmeric's curcuminoids inhibit tyrosinase — the enzyme behind dark spots and tan. Visible skin-tone evening in 3–4 weeks of daily use.</p>
+      </div>
+      <div class="p2-benefit-card">
+        <div class="p2-benefit-icon-wrap"><svg viewBox="0 0 24 24"><path d="M12 2C6 2 3 8 3 12c0 5 4 9 9 9s9-4 9-9C21 7 17 2 12 2z"/><path d="M12 2c0 0 0 10-6 14"/></svg></div>
+        <div class="p2-benefit-title">Tikta Rasa Cleansing</div>
+        <p class="p2-benefit-desc">Ayurveda's bitter-cleanse principle draws out toxins and excess sebum without disrupting your skin's natural moisture barrier. No tight feeling after washing.</p>
+      </div>
+      <div class="p2-benefit-card">
+        <div class="p2-benefit-icon-wrap"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div class="p2-benefit-title">Barrier-Safe Formula</div>
+        <p class="p2-benefit-desc">No sulfates. The lentil and chickpea base gently exfoliates while honey restores hydration at the ceramide level after every wash.</p>
+      </div>
+      <div class="p2-benefit-card">
+        <div class="p2-benefit-icon-wrap"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>
+        <div class="p2-benefit-title">Pore-Refining Action</div>
+        <p class="p2-benefit-desc">Red lentil saponins deep-cleanse pores, removing oxidised sebum that causes blackheads and enlarged-looking pores.</p>
+      </div>
+      <div class="p2-benefit-card">
+        <div class="p2-benefit-icon-wrap"><svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
+        <div class="p2-benefit-title">Anti-Pollution Shield</div>
+        <p class="p2-benefit-desc">Neem and sandalwood polyphenols neutralise free radicals from UV and urban pollution — protecting cellular DNA between washes.</p>
+      </div>
+      <div class="p2-benefit-card">
+        <div class="p2-benefit-icon-wrap"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+        <div class="p2-benefit-title">Fresh Daily Promise</div>
+        <p class="p2-benefit-desc">Made in small batches at our workshop. Your jar is made fresh and packed with full-potency actives — not sitting in a warehouse for years.</p>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ─── S11: More Information ─── -->
-<div class="pd-section">
-  <div class="pd-container">
-    <p class="pd-eyebrow">Details</p>
-    <h2 class="pd-section-title" style="margin-bottom:1.5rem;">More Information</h2>
-    <div class="pd-accordion" id="more-info">
-      <div class="pd-accordion-item">
-        <div class="pd-accordion-head" onclick="toggleAccordion(this)">
-          <h4>Full Ingredient List</h4><span class="pd-accordion-icon">+</span>
-        </div>
-        <div class="pd-accordion-body">
-          <div class="pd-accordion-content">
-            Wild Turmeric (Curcuma aromatica), Chickpea Flour (Cicer arietinum), Red Lentil Powder (Lens culinaris), Green Gram Flour (Vigna radiata), Sandalwood Powder (Santalum album), Rose Water (Rosa damascena), Neem Leaf Extract (Azadirachta indica), Honey (Apis mellifera), Vegetable Glycerin, Xanthan Gum (natural thickener). No parabens, SLS, SLES, artificial fragrances, or synthetic colorants.
-          </div>
-        </div>
-      </div>
-      <div class="pd-accordion-item">
-        <div class="pd-accordion-head" onclick="toggleAccordion(this)">
-          <h4>Storage &amp; Expiry</h4><span class="pd-accordion-icon">+</span>
-        </div>
-        <div class="pd-accordion-body">
-          <div class="pd-accordion-content">
-            Store in a cool, dry place away from direct sunlight. Best used within 6 months of manufacture. Do not store in humid bathrooms for extended periods. Manufactured date is printed on the base of the packaging. Shelf life: 12 months from date of manufacture.
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 
-<!-- ─── S13: Science ─── -->
-<div class="pd-section">
-  <div class="pd-container">
-    <div class="pd-expand-card" id="card-science">
-      <div class="pd-expand-card-bg" style="background-image:linear-gradient(135deg,#2C1F14,#C8922A);"></div>
-      <div class="pd-expand-card-inner">
-        <p class="pd-expand-eyebrow">Research-Backed</p>
-        <h2 class="pd-expand-title">Science Behind Cellular Brightening</h2>
-        <button class="pd-expand-toggle-btn" onclick="toggleExpand('card-science', this)">
-          Click to Know More ▾
-        </button>
-        <div class="pd-expand-body">
-          <div class="pd-benefit-rows">
-            <div class="pd-benefit-row">
-              <div class="pd-benefit-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></div>
-              <div class="pd-benefit-text">
-                <h4>Melanin Pathway Regulation</h4>
-                <p>Curcuminoids in wild turmeric inhibit tyrosinase — the enzyme responsible for melanin synthesis — at the source, preventing tan and dark spots before they form.</p>
-              </div>
-            </div>
-            <div class="pd-benefit-row">
-              <div class="pd-benefit-icon"><svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
-              <div class="pd-benefit-text">
-                <h4>Accelerated Cell Turnover</h4>
-                <p>Lentil saponins gently accelerate the natural desquamation (shedding) process, revealing fresh epidermal cells underneath at a healthier, more consistent rate.</p>
-              </div>
-            </div>
-            <div class="pd-benefit-row">
-              <div class="pd-benefit-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-              <div class="pd-benefit-text">
-                <h4>Oxidative Defence</h4>
-                <p>Polyphenols from sandalwood and turmeric neutralise free radicals generated by UV exposure and pollution, protecting cellular DNA from oxidative damage.</p>
-              </div>
-            </div>
-            <div class="pd-benefit-row">
-              <div class="pd-benefit-icon"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
-              <div class="pd-benefit-text">
-                <h4>Inflammation Modulation</h4>
-                <p>Curcumin's anti-inflammatory action downregulates NF-κB — a key inflammation signalling molecule — reducing post-acne redness and chronic skin inflammation.</p>
-              </div>
-            </div>
-            <div class="pd-benefit-row">
-              <div class="pd-benefit-icon"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
-              <div class="pd-benefit-text">
-                <h4>Barrier Health</h4>
-                <p>Honey's humectant properties draw moisture into the skin while creating a protective film that prevents transepidermal water loss (TEWL) after cleansing.</p>
-              </div>
-            </div>
+<!-- TAB: INGREDIENTS -->
+<div id="tab-ingredients" class="p2-tab-content" style="display:none;">
+  <div class="p2-section-alt">
+    <div class="p2-section">
+      <p class="p2-eyebrow">Full Transparency</p>
+      <h2 class="p2-section-title">What's Inside Every Jar</h2>
+      <p class="p2-section-sub">Six hero botanicals with centuries of Ayurvedic documentation. Zero synthetic fillers. Every ingredient on our label is pronounceable.</p>
+      <div class="p2-ing-grid">
+        <div class="p2-ing-card">
+          <div class="p2-ing-card-img">🌿</div>
+          <div class="p2-ing-card-body">
+            <div class="p2-ing-card-badge">Hero Active</div>
+            <div class="p2-ing-card-name">Wild Turmeric</div>
+            <div class="p2-ing-card-desc">Curcuma Aromatica — 5× richer in curcuminoids than kitchen turmeric. Brightens, detans, and calms inflammation at the cellular level.</div>
           </div>
         </div>
+        <div class="p2-ing-card">
+          <div class="p2-ing-card-img">🫘</div>
+          <div class="p2-ing-card-body">
+            <div class="p2-ing-card-badge">Cleansing Base</div>
+            <div class="p2-ing-card-name">Red Lentil + Besan</div>
+            <div class="p2-ing-card-desc">Protein-rich flour blend that gently exfoliates dead cells and emulsifies sebum — India's original face wash, used for thousands of years.</div>
+          </div>
+        </div>
+        <div class="p2-ing-card">
+          <div class="p2-ing-card-img">🪵</div>
+          <div class="p2-ing-card-body">
+            <div class="p2-ing-card-badge">Cooling Agent</div>
+            <div class="p2-ing-card-name">Sandalwood</div>
+            <div class="p2-ing-card-desc">Santalum Album — cooling, anti-inflammatory, rich in santalol which reduces skin redness and post-acne marks.</div>
+          </div>
+        </div>
+        <div class="p2-ing-card">
+          <div class="p2-ing-card-img">🌱</div>
+          <div class="p2-ing-card-body">
+            <div class="p2-ing-card-badge">Antibacterial</div>
+            <div class="p2-ing-card-name">Neem Leaf Extract</div>
+            <div class="p2-ing-card-desc">Azadirachta Indica — prevents acne-causing bacteria from colonising freshly cleansed pores.</div>
+          </div>
+        </div>
+        <div class="p2-ing-card">
+          <div class="p2-ing-card-img">🌹</div>
+          <div class="p2-ing-card-body">
+            <div class="p2-ing-card-badge">Hydration Base</div>
+            <div class="p2-ing-card-name">Rose Water</div>
+            <div class="p2-ing-card-desc">Rosa Damascena — natural pH-balancer and humectant, gentle enough for sensitive skin with light floral hydration.</div>
+          </div>
+        </div>
+        <div class="p2-ing-card">
+          <div class="p2-ing-card-img">🍯</div>
+          <div class="p2-ing-card-body">
+            <div class="p2-ing-card-badge">Barrier Repair</div>
+            <div class="p2-ing-card-name">Raw Honey</div>
+            <div class="p2-ing-card-desc">Apis Mellifera — draws moisture in and creates a protective film that prevents trans-epidermal water loss after cleansing.</div>
+          </div>
+        </div>
+      </div>
+      <div class="p2-full-ing">
+        <div class="p2-full-ing-label">Full INCI List</div>
+        <p>Wild Turmeric (Curcuma aromatica), Chickpea Flour (Cicer arietinum), Red Lentil Powder (Lens culinaris), Green Gram Flour (Vigna radiata), Sandalwood Powder (Santalum album), Rose Water (Rosa damascena), Neem Leaf Extract (Azadirachta indica), Honey (Apis mellifera), Vegetable Glycerin, Xanthan Gum. <strong>No parabens · No SLS/SLES · No synthetic fragrance · No artificial color.</strong></p>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ─── S15: Also Buy ─── -->
-<div class="pd-section" id="section-alsobuy" style="display:none;">
-  <div class="pd-container">
-    <p class="pd-eyebrow">Loved by Natural Lovers</p>
-    <h2 class="pd-section-title" style="margin-bottom:1.5rem;">Natural Lovers Also Buy!</h2>
-    <div class="pd-product-carousel" id="also-buy-row"><!-- populated by JS --></div>
-  </div>
-</div>
 
-<!-- ─── S16: Blog ─── -->
-<div class="pd-section pd-alt-bg">
-  <div class="pd-container">
-    <p class="pd-eyebrow">Learn More</p>
-    <h2 class="pd-section-title" style="margin-bottom:1.5rem;">Read &amp; Know More!</h2>
-    <div class="pd-blog-row">
-      <div class="pd-blog-card"><div class="pd-blog-img">📖</div><div class="pd-blog-body"><p class="pd-blog-title">The Ancient History of Ubtan: India's Original Skincare Secret</p><a class="pd-blog-link" href="#">Read blog →</a></div></div>
-      <div class="pd-blog-card"><div class="pd-blog-img">🌿</div><div class="pd-blog-body"><p class="pd-blog-title">Why Besan is the Best Natural Cleanser for Indian Skin</p><a class="pd-blog-link" href="#">Read blog →</a></div></div>
-      <div class="pd-blog-card"><div class="pd-blog-img">☀️</div><div class="pd-blog-body"><p class="pd-blog-title">Detan at Home: 5 Ayurvedic Rituals That Actually Work</p><a class="pd-blog-link" href="#">Read blog →</a></div></div>
-      <div class="pd-blog-card"><div class="pd-blog-img">🔬</div><div class="pd-blog-body"><p class="pd-blog-title">The Science Behind Turmeric's Skin Brightening Properties</p><a class="pd-blog-link" href="#">Read blog →</a></div></div>
-      <div class="pd-blog-card"><div class="pd-blog-img">💆</div><div class="pd-blog-body"><p class="pd-blog-title">Morning vs Evening Cleansing: What Ayurveda Recommends</p><a class="pd-blog-link" href="#">Read blog →</a></div></div>
+<!-- TAB: HOW TO USE -->
+<div id="tab-howto" class="p2-tab-content" style="display:none;">
+  <div class="p2-section">
+    <p class="p2-eyebrow">Application Ritual</p>
+    <h2 class="p2-section-title">Three Steps. Twice a Day.</h2>
+    <div class="p2-steps">
+      <div class="p2-step">
+        <div class="p2-step-num">01</div>
+        <div class="p2-step-title">Wet &amp; Activate</div>
+        <p class="p2-step-desc">Dampen your face with lukewarm water. Take a small amount (a 5-rupee-coin portion) and add a few drops of water to activate the botanical powders.</p>
+      </div>
+      <div class="p2-step">
+        <div class="p2-step-num">02</div>
+        <div class="p2-step-title">Massage Gently</div>
+        <p class="p2-step-desc">Using circular motions, massage the paste across your face for 60 seconds. The gentle grit exfoliates while the turmeric penetrates.</p>
+      </div>
+      <div class="p2-step">
+        <div class="p2-step-num">03</div>
+        <div class="p2-step-title">Rinse &amp; Reveal</div>
+        <p class="p2-step-desc">Rinse with cool water to close pores. Pat dry gently. Follow with toner or moisturiser while skin is still slightly damp for maximum absorption.</p>
+      </div>
+    </div>
+
+    <div class="p2-divider" style="margin:2rem 0;"></div>
+
+    <p class="p2-eyebrow">Your Daily Ritual</p>
+    <h3 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:1.5rem;font-weight:600;color:var(--text-dark);margin-bottom:1.5rem;">AM &amp; PM Routine</h3>
+    <div class="p2-routine-grid">
+      <div class="p2-routine-card">
+        <div class="p2-routine-card-head">
+          <span class="p2-routine-icon">☀️</span>
+          <span class="p2-routine-title">Morning Routine</span>
+        </div>
+        <ul class="p2-routine-list">
+          <li>Tikta Face Wash (activate, massage 60s, rinse)</li>
+          <li>Rose Water Toner (balance pH)</li>
+          <li>Malai Glow Cream (lightweight moisture)</li>
+          <li>SPF 30+ sunscreen (always)</li>
+        </ul>
+      </div>
+      <div class="p2-routine-card">
+        <div class="p2-routine-card-head">
+          <span class="p2-routine-icon">🌙</span>
+          <span class="p2-routine-title">Evening Routine</span>
+        </div>
+        <ul class="p2-routine-list">
+          <li>Double-cleanse if wearing SPF or makeup</li>
+          <li>Tikta Face Wash (90s evening massage)</li>
+          <li>Kumkumadi Drops (1–2 drops while damp)</li>
+          <li>Chandan Lepa overnight mask (2×/week)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="p2-divider" style="margin:2.5rem 0;"></div>
+
+    <p class="p2-eyebrow">Important Notes</p>
+    <h3 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:1.5rem;font-weight:600;color:var(--text-dark);margin-bottom:1rem;">Safety &amp; Storage</h3>
+    <div class="p2-accordion">
+      <div class="p2-acc-item">
+        <div class="p2-acc-head" onclick="toggleAcc(this)"><span>Who Should Use This?</span><span class="p2-acc-icon">+</span></div>
+        <div class="p2-acc-body"><div class="p2-acc-content">Safe for all skin types including sensitive skin. Ideal for ages 14 and above. Suitable for Indian skin tones and climates. Tested for year-round use across all seasons.</div></div>
+      </div>
+      <div class="p2-acc-item">
+        <div class="p2-acc-head" onclick="toggleAcc(this)"><span>Patch Test Advice</span><span class="p2-acc-icon">+</span></div>
+        <div class="p2-acc-body"><div class="p2-acc-content">Apply a small amount to the inner wrist or behind the ear. Wait 24 hours. If no redness or irritation appears, proceed with full use.</div></div>
+      </div>
+      <div class="p2-acc-item">
+        <div class="p2-acc-head" onclick="toggleAcc(this)"><span>Pregnancy &amp; Breastfeeding</span><span class="p2-acc-icon">+</span></div>
+        <div class="p2-acc-body"><div class="p2-acc-content">All ingredients are natural and generally safe. Please consult your doctor before use during pregnancy or breastfeeding — standard guidance for any new skincare product.</div></div>
+      </div>
+      <div class="p2-acc-item">
+        <div class="p2-acc-head" onclick="toggleAcc(this)"><span>Storage &amp; Shelf Life</span><span class="p2-acc-icon">+</span></div>
+        <div class="p2-acc-body"><div class="p2-acc-content">Store in a cool, dry place away from direct sunlight. Shelf life is 12 months from manufacture. Avoid storing in humid bathrooms. Use within 6 months of opening.</div></div>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- ─── S17: Reviews ─── -->
-<div class="pd-section" id="reviews">
-  <div class="pd-container">
-    <p class="pd-eyebrow">Customer Reviews</p>
-    <h2 class="pd-section-title" style="margin-bottom:1.5rem;">What Our Customers Say</h2>
+
+<!-- TAB: REVIEWS -->
+<div id="tab-reviews" class="p2-tab-content" style="display:none;">
+  <div class="p2-section" id="reviews">
+    <p class="p2-eyebrow">Customer Reviews</p>
+    <h2 class="p2-section-title" style="margin-bottom:1.5rem;">What Our Customers Say</h2>
     <div id="reviews-summary-wrap"></div>
     <div id="reviews-list">
       <p style="color:var(--text-light);font-size:13px;text-align:center;padding:2rem 0;">Loading reviews...</p>
@@ -380,21 +433,13 @@
   </div>
 </div>
 
-<!-- ─── S18: Other in Range ─── -->
-<div class="pd-section pd-beige-bg" id="section-range" style="display:none;">
-  <div class="pd-container">
-    <p class="pd-eyebrow">Explore More</p>
-    <h2 class="pd-section-title" style="margin-bottom:1.5rem;">Other Products in this Range</h2>
-    <div class="pd-product-carousel" id="range-row"><!-- populated by JS --></div>
-  </div>
-</div>
 
-<!-- ─── S19: Frequently Bought Together ─── -->
-<div class="pd-section" id="section-fbt" style="display:none;">
-  <div class="pd-container">
-    <p class="pd-eyebrow">Bundles</p>
-    <h2 class="pd-section-title" style="margin-bottom:1.5rem;">Frequently Bought Together</h2>
-    <div class="pd-product-carousel" id="fbt-row"><!-- populated by JS --></div>
+<!-- PAIR IT WITH -->
+<div class="p2-section-alt">
+  <div class="p2-section">
+    <p class="p2-eyebrow">Complete Your Ritual</p>
+    <h2 class="p2-section-title" style="margin-bottom:1.5rem;">Pair It With</h2>
+    <div class="p2-related-row" id="pd-related-row"></div>
   </div>
 </div>
 
