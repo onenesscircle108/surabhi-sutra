@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Brightening Ubtan Tikta Face Wash — Surabhi Sutra</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+
+  <style>
+  /* ═══════════════════════════════════════════
+     PRODUCT2 — skin1004-inspired redesign
+  ═══════════════════════════════════════════ */
+
+  :root{
+    --p2-dark:#1c1c1c;
+    --p2-mid:#5a5a5a;
+    --p2-light:#9a9a9a;
+    --p2-border:#e8e3dc;
+    --p2-beige:#f7f4ef;
+    --p2-sage:#28535e;
+    --p2-gold:#c8922a;
+    --p2-terracotta:#7a2121;
+    --p2-tag-bg:#eef3f1;
+    --p2-tag-fg:#28535e;
+  }
+
+  .p2-wrap{ max-width:1200px; margin:0 auto; padding:0 1.5rem; }
+
+  /* ════════════════════════════
+     HERO
+  ════════════════════════════ */
+  .p2-hero{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:3rem;
+    padding:2.5rem 1.5rem;
+    max-width:1200px;
+    margin:0 auto;
+  }
+  @media(max-width:860px){
+    .p2-hero{ grid-template-columns:1fr; gap:1.5rem; padding:1.25rem 1rem; }
+  }
+
+  /* ── GALLERY ── */
+  .p2-gallery{
+    display:grid;
+    grid-template-columns:72px 1fr;
+    gap:10px;
+    position:sticky;
+    top:80px;
+    align-self:start;
+  }
+  @media(max-width:860px){
+    .p2-gallery{ position:static; grid-template-columns:1fr; }
+  }
+
+  .p2-thumbs-v{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    max-height:520px;
+    overflow-y:auto;
+    scrollbar-width:none;
+  }
+  .p2-thumbs-v::-webkit-scrollbar{ display:none; }
+  .p2-thumb{
+    width:68px; height:68px; flex-shrink:0;
+    border:2px solid transparent;
+    border-radius:3px; overflow:hidden;
+    cursor:pointer;
+    transition:border-color .2s, opacity .2s;
+    opacity:.6;
+  }
+  .p2-thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .p2-thumb.active{ border-color:var(--p2-sage); opacity:1; }
+  .p2-thumb:hover{ opacity:1; }
+
+  .p2-main-wrap{
+    position:relative;
+    aspect-ratio:1/1;
+    background:var(--p2-beige);
+    border-radius:4px;
+    overflow:hidden;
+  }
+  .p2-main-img{
+    width:100%; height:100%;
+    object-fit:cover; display:block;
+    transition:opacity .3s;
+  }
+  .p2-gallery-arrow{
+    position:absolute; top:50%; transform:translateY(-50%);
+    width:36px; height:36px; border-radius:50%;
+    background:rgba(255,255,255,.92);
+    display:flex; align-items:center; justify-content:center;
+    font-size:18px; color:var(--p2-dark);
+    box-shadow:0 2px 8px rgba(0,0,0,.12);
+    cursor:pointer; z-index:10; border:none;
+    transition:background .2s;
+  }
+  .p2-gallery-arrow:hover{ background:#fff; }
+  .p2-gallery-arrow.prev{ left:10px; }
+  .p2-gallery-arrow.next{ right:10px; }
+
+  @media(max-width:860px){
+    .p2-thumbs-v{ flex-direction:row; max-height:none; overflow-x:auto; overflow-y:hidden; order:2; }
+    .p2-main-wrap{ order:1; }
+    .p2-thumb{ width:60px; height:60px; }
+  }
+
+  /* ── PRODUCT INFO ── */
+  .p2-info{ display:flex; flex-direction:column; }
+
+  .p2-badge-row{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:1rem; }
+  .p2-badge{
+    font-size:10px; font-weight:700;
+    letter-spacing:1.5px; text-transform:uppercase;
+    padding:4px 10px; border-radius:2px;
+    font-family:'Inter',system-ui,sans-serif;
+  }
+  .p2-badge-cert{ background:#eef3f1; color:var(--p2-sage); }
+  .p2-badge-new{ background:#fef3e0; color:var(--p2-gold); }
+
+  .p2-name{
+    font-family:'Cormorant Garamond',Georgia,serif;
+    font-size:clamp(1.8rem,3.5vw,2.6rem);
+    font-weight:600; color:var(--p2-dark);
+    line-height:1.15; margin-bottom:.5rem;
+  }
+  .p2-subtitle{
+    font-size:13px; color:var(--p2-mid);
+    letter-spacing:.3px; margin-bottom:1rem;
+    font-family:'Inter',system-ui,sans-serif;
+  }
+  .p2-rating-row{ display:flex; align-items:center; gap:8px; margin-bottom:1.25rem; }
+  .p2-stars{ color:#c8922a; font-size:14px; letter-spacing:1.5px; }
+  .p2-rating-val{ font-size:13px; font-weight:700; color:var(--p2-dark); }
+  .p2-rating-count{
+    font-size:12px; color:var(--p2-mid);
+    border-bottom:1px solid var(--p2-mid);
+    cursor:pointer; text-decoration:none;
+  }
+  .p2-divider{ height:1px; background:var(--p2-border); margin:1.25rem 0; }
+
+  .p2-tags-label{
+    font-size:10.5px; letter-spacing:2px; text-transform:uppercase;
+    color:var(--p2-light); margin-bottom:.6rem;
+    font-family:'Inter',system-ui,sans-serif;
+  }
+  .p2-tags{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:1.25rem; }
+  .p2-tag{
+    font-size:11.5px; padding:5px 12px;
+    background:var(--p2-tag-bg); color:var(--p2-tag-fg);
+    border-radius:20px; font-family:'Inter',system-ui,sans-serif; font-weight:500;
+  }
+
+  .p2-size-label{ font-size:10.5px; letter-spacing:2px; text-transform:uppercase; color:var(--p2-light); margin-bottom:.6rem; font-family:'Inter',system-ui,sans-serif; }
+  .p2-size-row{ display:flex; gap:8px; margin-bottom:1.25rem; }
+  .p2-size-pill{
+    padding:7px 18px; border-radius:20px;
+    border:1.5px solid var(--p2-border);
+    font-size:12px; font-family:'Inter',system-ui,sans-serif;
+    cursor:pointer; transition:border-color .2s, background .2s; background:#fff;
+  }
+  .p2-size-pill.active{ border-color:var(--p2-dark); background:var(--p2-dark); color:#fff; }
+
+  .p2-price-row{ display:flex; align-items:baseline; gap:10px; margin-bottom:1.5rem; }
+  .p2-price{ font-size:2rem; font-weight:700; color:var(--p2-dark); font-family:'Inter',system-ui,sans-serif; }
+  .p2-price-original{ font-size:1rem; color:var(--p2-light); text-decoration:line-through; font-family:'Inter',system-ui,sans-serif; }
+  .p2-discount{ font-size:11px; font-weight:700; background:#e8f5e9; color:#2e7d32; padding:3px 8px; border-radius:2px; font-family:'Inter',system-ui,sans-serif; letter-spacing:.5px; }
+
+  .p2-qty-row{ display:flex; align-items:center; border:1.5px solid var(--p2-border); border-radius:2px; width:fit-content; margin-bottom:1rem; }
+  .p2-qty-btn{ width:40px; height:44px; font-size:18px; color:var(--p2-dark); background:none; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background .2s; }
+  .p2-qty-btn:hover{ background:var(--p2-beige); }
+  .p2-qty-val{ width:44px; text-align:center; font-size:14px; font-weight:600; color:var(--p2-dark); border-left:1px solid var(--p2-border); border-right:1px solid var(--p2-border); height:44px; line-height:44px; font-family:'Inter',system-ui,sans-serif; }
+
+  .p2-atc-btn{
+    width:100%; padding:15px;
+    background:var(--p2-dark); color:#fff;
+    font-size:12px; font-weight:700; letter-spacing:2px; text-transform:uppercase;
+    border-radius:2px; border:none; cursor:pointer;
+    font-family:'Inter',system-ui,sans-serif;
+    transition:background .25s; margin-bottom:.75rem;
+  }
+  .p2-atc-btn:hover{ background:#000; }
+  .p2-atc-btn.added{ background:var(--p2-sage); }
+
+  .p2-buy-now{
+    display:block; text-align:center;
+    font-size:11.5px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase;
+    color:var(--p2-mid); text-decoration:underline; text-underline-offset:3px;
+    cursor:pointer; background:none; border:none; width:100%; margin-bottom:1.5rem;
+    font-family:'Inter',system-ui,sans-serif; transition:color .2s;
+  }
+  .p2-buy-now:hover{ color:var(--p2-dark); }
+
+  .p2-trust-strip{ display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-bottom:1.5rem; }
+  .p2-trust-item{ display:flex; flex-direction:column; align-items:center; gap:5px; padding:10px 6px; text-align:center; background:var(--p2-beige); border-radius:4px; }
+  .p2-trust-icon{ width:22px; height:22px; stroke:var(--p2-sage); fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+  .p2-trust-label{ font-size:9.5px; color:var(--p2-mid); line-height:1.3; font-family:'Inter',system-ui,sans-serif; font-weight:500; }
+
+  .p2-delivery{ display:flex; flex-direction:column; gap:8px; padding:14px 16px; border:1px solid var(--p2-border); border-radius:4px; }
+  .p2-delivery-row{ display:flex; align-items:flex-start; gap:10px; font-size:12.5px; color:var(--p2-mid); font-family:'Inter',system-ui,sans-serif; }
+  .p2-delivery-row svg{ width:16px; height:16px; flex-shrink:0; margin-top:1px; stroke:var(--p2-sage); fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+  .p2-delivery-row strong{ color:var(--p2-dark); }
+
+  /* ════════════════════════════
+     INGREDIENT HERO
+  ════════════════════════════ */
+  .p2-ing-hero{ background:var(--p2-dark); color:#fff; padding:5rem 1.5rem; text-align:center; }
+  .p2-ing-eyebrow{ font-size:10.5px; letter-spacing:4px; text-transform:uppercase; color:rgba(255,255,255,.45); margin-bottom:2rem; font-family:'Inter',system-ui,sans-serif; }
+  .p2-ing-hero-grid{ max-width:900px; margin:0 auto; display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:3rem; }
+  @media(max-width:700px){ .p2-ing-hero-grid{ grid-template-columns:1fr; gap:2rem; } .p2-ing-hero-divider{ display:none; } }
+  .p2-ing-hero-name{ font-family:'Cormorant Garamond',Georgia,serif; font-size:clamp(2.5rem,6vw,4.5rem); font-weight:600; line-height:1.1; color:#fff; text-align:right; }
+  @media(max-width:700px){ .p2-ing-hero-name{ text-align:center; } }
+  .p2-ing-hero-name span{ display:block; font-size:.45em; font-weight:400; color:rgba(255,255,255,.45); font-style:italic; margin-top:.3em; }
+  .p2-ing-hero-divider{ width:1px; height:120px; background:rgba(255,255,255,.12); }
+  .p2-ing-hero-stat{ text-align:left; }
+  @media(max-width:700px){ .p2-ing-hero-stat{ text-align:center; } }
+  .p2-ing-stat-num{ font-size:clamp(2rem,5vw,3.5rem); font-weight:700; color:var(--p2-gold); line-height:1; font-family:'Inter',system-ui,sans-serif; margin-bottom:.5rem; }
+  .p2-ing-stat-label{ font-size:13px; color:rgba(255,255,255,.55); line-height:1.7; font-family:'Inter',system-ui,sans-serif; }
+  .p2-ing-support{ max-width:700px; margin:3rem auto 0; display:flex; flex-wrap:wrap; justify-content:center; gap:10px; }
+  .p2-ing-chip{ padding:6px 16px; border-radius:20px; border:1px solid rgba(255,255,255,.12); font-size:11.5px; color:rgba(255,255,255,.6); font-family:'Inter',system-ui,sans-serif; letter-spacing:.5px; }
+
+  /* ════════════════════════════
+     STICKY TAB BAR
+  ════════════════════════════ */
+  .p2-tabs-bar{ position:sticky; top:60px; z-index:400; background:#fff; border-bottom:1px solid var(--p2-border); }
+  .p2-tabs-inner{ max-width:1200px; margin:0 auto; display:flex; overflow-x:auto; scrollbar-width:none; padding:0 1.5rem; }
+  .p2-tabs-inner::-webkit-scrollbar{ display:none; }
+  .p2-tab-btn{
+    padding:1rem 1.5rem; font-size:11.5px; font-weight:600;
+    letter-spacing:1.5px; text-transform:uppercase;
+    color:var(--p2-light); background:none; border:none; cursor:pointer;
+    white-space:nowrap; border-bottom:2px solid transparent;
+    font-family:'Inter',system-ui,sans-serif; transition:color .2s, border-color .2s; margin-bottom:-1px;
+  }
+  .p2-tab-btn.active{ color:var(--p2-dark); border-bottom-color:var(--p2-dark); }
+  .p2-tab-btn:hover{ color:var(--p2-dark); }
+
+  /* ════════════════════════════
+     SECTIONS
+  ════════════════════════════ */
+  .p2-section{ padding:5rem 1.5rem; max-width:1200px; margin:0 auto; }
+  .p2-section-alt{ background:var(--p2-beige); }
+  .p2-section-alt > .p2-section{ padding-top:5rem; padding-bottom:5rem; }
+  .p2-eyebrow{ font-size:10.5px; letter-spacing:3.5px; text-transform:uppercase; color:var(--p2-light); margin-bottom:.75rem; font-family:'Inter',system-ui,sans-serif; }
+  .p2-section-title{ font-family:'Cormorant Garamond',Georgia,serif; font-size:clamp(1.8rem,3vw,2.6rem); font-weight:600; color:var(--p2-dark); margin-bottom:2.5rem; }
+  .p2-section-sub{ font-size:14px; color:var(--p2-mid); line-height:1.8; max-width:600px; margin-bottom:2.5rem; font-family:'Inter',system-ui,sans-serif; }
+
+  /* Stats strip */
+  .p2-stats-strip{ background:#fff; border:1px solid var(--p2-border); border-radius:4px; display:grid; grid-template-columns:repeat(3,1fr); text-align:center; overflow:hidden; margin:3rem 0; }
+  @media(max-width:600px){ .p2-stats-strip{ grid-template-columns:1fr; } }
+  .p2-stat-item{ padding:2.5rem 1.5rem; border-right:1px solid var(--p2-border); }
+  .p2-stat-item:last-child{ border-right:none; }
+  .p2-stat-num{ font-size:2.8rem; font-weight:700; color:var(--p2-sage); line-height:1; font-family:'Inter',system-ui,sans-serif; margin-bottom:.5rem; }
+  .p2-stat-label{ font-size:12px; color:var(--p2-mid); font-family:'Inter',system-ui,sans-serif; line-height:1.5; }
+
+  /* Benefits grid */
+  .p2-benefits-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; }
+  @media(max-width:768px){ .p2-benefits-grid{ grid-template-columns:1fr 1fr; } }
+  @media(max-width:480px){ .p2-benefits-grid{ grid-template-columns:1fr; } }
+  .p2-benefit-card{ padding:2rem; background:#fff; border:1px solid var(--p2-border); border-radius:4px; transition:box-shadow .2s; }
+  .p2-benefit-card:hover{ box-shadow:0 4px 16px rgba(0,0,0,.06); }
+  .p2-benefit-icon-wrap{ width:48px; height:48px; background:var(--p2-tag-bg); border-radius:50%; display:flex; align-items:center; justify-content:center; margin-bottom:1.25rem; }
+  .p2-benefit-icon-wrap svg{ width:22px; height:22px; stroke:var(--p2-sage); fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+  .p2-benefit-title{ font-family:'Cormorant Garamond',Georgia,serif; font-size:1.15rem; font-weight:600; color:var(--p2-dark); margin-bottom:.6rem; }
+  .p2-benefit-desc{ font-size:13px; color:var(--p2-mid); line-height:1.7; font-family:'Inter',system-ui,sans-serif; }
+
+  /* Ingredients grid */
+  .p2-ing-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:1.5rem; }
+  .p2-ing-card{ background:#fff; border:1px solid var(--p2-border); border-radius:4px; overflow:hidden; transition:box-shadow .2s; }
+  .p2-ing-card:hover{ box-shadow:0 4px 16px rgba(0,0,0,.07); }
+  .p2-ing-card-img{ aspect-ratio:4/3; background:var(--p2-beige); display:flex; align-items:center; justify-content:center; font-size:3rem; }
+  .p2-ing-card-body{ padding:1.25rem; }
+  .p2-ing-card-badge{ font-size:9.5px; letter-spacing:1.5px; text-transform:uppercase; color:var(--p2-sage); font-weight:700; margin-bottom:.4rem; font-family:'Inter',system-ui,sans-serif; }
+  .p2-ing-card-name{ font-family:'Cormorant Garamond',Georgia,serif; font-size:1.1rem; font-weight:600; color:var(--p2-dark); margin-bottom:.4rem; }
+  .p2-ing-card-desc{ font-size:12px; color:var(--p2-mid); line-height:1.6; font-family:'Inter',system-ui,sans-serif; }
+  .p2-full-ing{ margin-top:2.5rem; padding:1.5rem; background:var(--p2-beige); border-radius:4px; }
+  .p2-full-ing-label{ font-size:10.5px; letter-spacing:2.5px; text-transform:uppercase; color:var(--p2-light); margin-bottom:.75rem; font-family:'Inter',system-ui,sans-serif; }
+  .p2-full-ing p{ font-size:12.5px; color:var(--p2-mid); line-height:1.8; font-family:'Inter',system-ui,sans-serif; }
+
+  /* How to Use */
+  .p2-steps{ display:grid; grid-template-columns:repeat(3,1fr); gap:2rem; margin-bottom:3rem; }
+  @media(max-width:700px){ .p2-steps{ grid-template-columns:1fr; } }
+  .p2-step{ display:flex; flex-direction:column; gap:.75rem; }
+  .p2-step-num{ width:40px; height:40px; border-radius:50%; background:var(--p2-dark); color:#fff; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; font-family:'Inter',system-ui,sans-serif; flex-shrink:0; }
+  .p2-step-title{ font-family:'Cormorant Garamond',Georgia,serif; font-size:1.1rem; font-weight:600; color:var(--p2-dark); }
+  .p2-step-desc{ font-size:13px; color:var(--p2-mid); line-height:1.7; font-family:'Inter',system-ui,sans-serif; }
+
+  .p2-routine-grid{ display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; }
+  @media(max-width:600px){ .p2-routine-grid{ grid-template-columns:1fr; } }
+  .p2-routine-card{ padding:1.75rem; border:1px solid var(--p2-border); border-radius:4px; }
+  .p2-routine-card-head{ display:flex; align-items:center; gap:10px; margin-bottom:1rem; }
+  .p2-routine-icon{ font-size:1.4rem; }
+  .p2-routine-title{ font-size:11px; letter-spacing:2px; text-transform:uppercase; font-weight:700; color:var(--p2-dark); font-family:'Inter',system-ui,sans-serif; }
+  .p2-routine-list{ list-style:none; display:flex; flex-direction:column; gap:6px; }
+  .p2-routine-list li{ font-size:13px; color:var(--p2-mid); font-family:'Inter',system-ui,sans-serif; padding-left:16px; position:relative; line-height:1.5; }
+  .p2-routine-list li::before{ content:'→'; position:absolute; left:0; color:var(--p2-sage); font-size:11px; }
+
+  /* Accordion */
+  .p2-accordion{ margin-top:2rem; }
+  .p2-acc-item{ border-bottom:1px solid var(--p2-border); }
+  .p2-acc-head{ display:flex; align-items:center; justify-content:space-between; padding:1.1rem 0; cursor:pointer; font-size:14px; font-weight:600; color:var(--p2-dark); font-family:'Inter',system-ui,sans-serif; user-select:none; }
+  .p2-acc-icon{ font-size:1.25rem; color:var(--p2-mid); transition:transform .3s; line-height:1; }
+  .p2-acc-item.open .p2-acc-icon{ transform:rotate(45deg); }
+  .p2-acc-body{ max-height:0; overflow:hidden; transition:max-height .35s ease; }
+  .p2-acc-item.open .p2-acc-body{ max-height:400px; }
+  .p2-acc-content{ font-size:13px; color:var(--p2-mid); line-height:1.8; padding-bottom:1.25rem; font-family:'Inter',system-ui,sans-serif; }
+
+  /* Reviews */
+  .p2-reviews-top{ display:grid; grid-template-columns:200px 1fr; gap:3rem; margin-bottom:3rem; align-items:start; }
+  @media(max-width:600px){ .p2-reviews-top{ grid-template-columns:1fr; gap:1.5rem; } }
+  .p2-rev-score{ text-align:center; padding:2rem; border:1px solid var(--p2-border); border-radius:4px; }
+  .p2-rev-big{ font-size:4rem; font-weight:700; color:var(--p2-dark); line-height:1; font-family:'Inter',system-ui,sans-serif; }
+  .p2-rev-stars{ color:var(--p2-gold); font-size:18px; letter-spacing:2px; margin:.5rem 0; }
+  .p2-rev-count{ font-size:12px; color:var(--p2-mid); font-family:'Inter',system-ui,sans-serif; }
+  .p2-rev-bars{ display:flex; flex-direction:column; gap:8px; padding-top:.5rem; }
+  .p2-rev-bar-row{ display:flex; align-items:center; gap:10px; font-size:12px; color:var(--p2-mid); font-family:'Inter',system-ui,sans-serif; }
+  .p2-rev-bar-label{ width:30px; text-align:right; flex-shrink:0; }
+  .p2-rev-bar-track{ flex:1; height:6px; background:var(--p2-beige); border-radius:3px; overflow:hidden; }
+  .p2-rev-bar-fill{ height:100%; background:var(--p2-gold); border-radius:3px; }
+  .p2-rev-bar-count{ width:24px; flex-shrink:0; }
+  .p2-reviews-list{ display:flex; flex-direction:column; gap:1.5rem; }
+  .p2-review-card{ padding:1.5rem; border:1px solid var(--p2-border); border-radius:4px; }
+  .p2-review-head{ display:flex; align-items:center; gap:12px; margin-bottom:.75rem; flex-wrap:wrap; }
+  .p2-review-avatar{ width:40px; height:40px; border-radius:50%; background:var(--p2-tag-bg); display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:700; color:var(--p2-sage); font-family:'Inter',system-ui,sans-serif; flex-shrink:0; }
+  .p2-review-meta{ flex:1; }
+  .p2-review-name{ font-size:13px; font-weight:600; color:var(--p2-dark); font-family:'Inter',system-ui,sans-serif; }
+  .p2-review-date{ font-size:11.5px; color:var(--p2-light); font-family:'Inter',system-ui,sans-serif; }
+  .p2-review-stars{ color:var(--p2-gold); font-size:13px; letter-spacing:1px; }
+  .p2-review-tag{ font-size:9.5px; letter-spacing:1.5px; text-transform:uppercase; background:var(--p2-tag-bg); color:var(--p2-sage); padding:3px 8px; border-radius:10px; font-family:'Inter',system-ui,sans-serif; font-weight:600; }
+  .p2-review-text{ font-size:13.5px; color:var(--p2-mid); line-height:1.7; font-family:'Inter',system-ui,sans-serif; }
+
+  /* Review form */
+  .p2-review-form{ margin-top:2.5rem; padding:2rem; border:1px solid var(--p2-border); border-radius:4px; }
+  .p2-review-form h3{ font-family:'Cormorant Garamond',Georgia,serif; font-size:1.4rem; font-weight:600; color:var(--p2-dark); margin-bottom:1.5rem; }
+  .p2-rform-row{ display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem; }
+  @media(max-width:500px){ .p2-rform-row{ grid-template-columns:1fr; } }
+  .p2-rform-group{ display:flex; flex-direction:column; gap:.4rem; margin-bottom:1rem; }
+  .p2-rform-group label{ font-size:10.5px; letter-spacing:2px; text-transform:uppercase; color:var(--p2-mid); font-family:'Inter',system-ui,sans-serif; }
+  .p2-rform-group input,.p2-rform-group textarea{ padding:10px 12px; border:1.5px solid var(--p2-border); border-radius:2px; font-size:13.5px; font-family:'Inter',system-ui,sans-serif; color:var(--p2-dark); background:#fff; outline:none; transition:border-color .2s; }
+  .p2-rform-group input:focus,.p2-rform-group textarea:focus{ border-color:var(--p2-sage); }
+  .p2-rform-group textarea{ resize:vertical; min-height:100px; }
+  .p2-star-picker{ display:flex; gap:6px; font-size:24px; color:var(--p2-border); cursor:pointer; }
+  .p2-star-picker .on{ color:var(--p2-gold); }
+  .p2-submit-btn{ margin-top:.5rem; padding:12px 32px; background:var(--p2-dark); color:#fff; font-size:11.5px; font-weight:700; letter-spacing:2px; text-transform:uppercase; border-radius:2px; border:none; cursor:pointer; font-family:'Inter',system-ui,sans-serif; transition:background .2s; }
+  .p2-submit-btn:hover{ background:#000; }
+
+  /* Related */
+  .p2-related-row{ display:flex; gap:1.25rem; overflow-x:auto; scrollbar-width:none; padding-bottom:.5rem; cursor:grab; }
+  .p2-related-row::-webkit-scrollbar{ display:none; }
+  .p2-related-card{ flex-shrink:0; width:200px; border:1px solid var(--p2-border); border-radius:4px; overflow:hidden; transition:box-shadow .2s; }
+  .p2-related-card:hover{ box-shadow:0 4px 16px rgba(0,0,0,.07); }
+  .p2-related-img{ aspect-ratio:1/1; background:var(--p2-beige); display:flex; align-items:center; justify-content:center; font-size:3rem; }
+  .p2-related-body{ padding:1rem; }
+  .p2-related-name{ font-size:13px; font-weight:600; color:var(--p2-dark); margin-bottom:.3rem; font-family:'Inter',system-ui,sans-serif; line-height:1.4; }
+  .p2-related-price{ font-size:12.5px; color:var(--p2-mid); font-family:'Inter',system-ui,sans-serif; }
+  .p2-related-btn{ display:block; width:100%; margin-top:.75rem; padding:8px; text-align:center; border:1.5px solid var(--p2-dark); font-size:10.5px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--p2-dark); background:none; border-radius:2px; cursor:pointer; font-family:'Inter',system-ui,sans-serif; transition:.2s; }
+  .p2-related-btn:hover{ background:var(--p2-dark); color:#fff; }
+
+  /* Sticky bar (mobile) */
+  .p2-sticky-bar{ display:none; position:fixed; bottom:0; left:0; right:0; background:#fff; border-top:1px solid var(--p2-border); padding:10px 1.25rem; align-items:center; gap:12px; z-index:500; box-shadow:0 -4px 16px rgba(0,0,0,.07); }
+  @media(max-width:768px){ .p2-sticky-bar{ display:flex; } }
+  @media(max-width:768px){ body{ padding-bottom:72px; } }
+  .p2-sticky-info{ flex:1; min-width:0; }
+  .p2-sticky-name{ font-size:13px; font-weight:600; color:var(--p2-dark); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-family:'Inter',system-ui,sans-serif; }
+  .p2-sticky-price{ font-size:13px; color:var(--p2-sage); font-weight:700; font-family:'Inter',system-ui,sans-serif; }
+  .p2-sticky-atc{ padding:12px 24px; background:var(--p2-dark); color:#fff; font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; border-radius:2px; border:none; cursor:pointer; white-space:nowrap; font-family:'Inter',system-ui,sans-serif; flex-shrink:0; transition:background .2s; }
+  .p2-sticky-atc:hover{ background:#000; }
+
+  /* Preview badge */
+  .p2-preview-badge{ position:fixed; top:80px; right:0; background:var(--p2-gold); color:#fff; font-size:10px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; padding:6px 14px; border-radius:4px 0 0 4px; z-index:999; font-family:'Inter',system-ui,sans-serif; box-shadow:0 2px 8px rgba(0,0,0,.15); }
+  </style>
+</head>
+<body>
+
+<div class="p2-preview-badge">Preview v2</div>
+
+<!-- ANNOUNCE BAR -->
+<div class="announce-bar">
+  <strong>Sale:</strong> Buy 1 Get 1 Free + 20% Off · Free shipping above ₹339 · Cash on Delivery available
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo" onclick="window.location.href='index.html'">SURABHI SUTRA</div>
+  <ul class="nav-links">
+    <li><a onclick="window.location.href='index.html'">Home</a></li>
+    <li><a onclick="window.location.href='index.html?goto=shop'">Shop</a></li>
+    <li><a onclick="window.location.href='about.html'">About</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="nav-icon-btn" title="Search" aria-label="Search">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    </button>
+    <button class="nav-cart" onclick="window.location.href='index.html?goto=cart'">
+      Cart&nbsp;(<span id="cart-count">0</span>)
+    </button>
+    <button class="nav-hamburger" onclick="document.getElementById('p2-mobile-nav').classList.toggle('open')" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE NAV -->
+<div id="p2-mobile-nav" class="mobile-nav-overlay">
+  <button class="mobile-nav-close" onclick="document.getElementById('p2-mobile-nav').classList.remove('open')">✕</button>
+  <nav class="mobile-nav-list">
+    <a onclick="window.location.href='index.html'">Home</a>
+    <a onclick="window.location.href='index.html?goto=shop'">Shop</a>
+    <a onclick="window.location.href='about.html'">About</a>
+    <button class="btn-primary" onclick="window.location.href='index.html?goto=cart'">Cart</button>
+  </nav>
+</div>
+
+
+<!-- ═══════════════════════════
+     HERO — GALLERY + INFO
+═══════════════════════════ -->
+<div class="p2-hero">
+
+  <!-- GALLERY: vertical thumbs + main image -->
+  <div class="p2-gallery">
+    <div class="p2-thumbs-v" id="p2-thumbs">
+      <div class="p2-thumb active" onclick="switchImg(0)">
+        <img src="https://placehold.co/140x140/f0ece4/28535e?text=1" alt="View 1">
+      </div>
+      <div class="p2-thumb" onclick="switchImg(1)">
+        <img src="https://placehold.co/140x140/e8f0ec/28535e?text=2" alt="View 2">
+      </div>
+      <div class="p2-thumb" onclick="switchImg(2)">
+        <img src="https://placehold.co/140x140/f5edcc/c8922a?text=3" alt="View 3">
+      </div>
+      <div class="p2-thumb" onclick="switchImg(3)">
+        <img src="https://placehold.co/140x140/ece8f0/7a2121?text=4" alt="View 4">
+      </div>
+      <div class="p2-thumb" onclick="switchImg(4)">
+        <img src="https://placehold.co/140x140/f0e8e0/28535e?text=5" alt="View 5">
+      </div>
+    </div>
+
+    <div class="p2-main-wrap">
+      <img class="p2-main-img" id="p2-main-img" src="https://placehold.co/600x600/f0ece4/28535e?text=Tikta+Face+Wash" alt="Brightening Ubtan Tikta Face Wash">
+      <button class="p2-gallery-arrow prev" onclick="shiftImg(-1)">&#8249;</button>
+      <button class="p2-gallery-arrow next" onclick="shiftImg(1)">&#8250;</button>
+    </div>
+  </div>
+
+  <!-- INFO COLUMN -->
+  <div class="p2-info">
+    <div class="p2-badge-row">
+      <span class="p2-badge p2-badge-cert">Ayurveda Certified</span>
+      <span class="p2-badge p2-badge-new">Small Batch</span>
+    </div>
+
+    <h1 class="p2-name">Brightening Ubtan<br>Tikta Face Wash</h1>
+    <p class="p2-subtitle">Ancient Bitter-Cleanse Formula · Wild Turmeric, Dals &amp; Besan</p>
+
+    <div class="p2-rating-row">
+      <span class="p2-stars">★★★★★</span>
+      <span class="p2-rating-val">4.8</span>
+      <a class="p2-rating-count" href="#reviews" onclick="switchTab('reviews')">528 Reviews</a>
+    </div>
+
+    <div class="p2-divider"></div>
+
+    <p class="p2-tags-label">Best For</p>
+    <div class="p2-tags">
+      <span class="p2-tag">All Skin Types</span>
+      <span class="p2-tag">Oily &amp; Combination</span>
+      <span class="p2-tag">Dull &amp; Uneven</span>
+      <span class="p2-tag">Acne-Prone</span>
+    </div>
+
+    <p class="p2-tags-label">Key Benefits</p>
+    <div class="p2-tags">
+      <span class="p2-tag">✦ Brightening</span>
+      <span class="p2-tag">✦ Detan</span>
+      <span class="p2-tag">✦ Gentle Cleanse</span>
+      <span class="p2-tag">✦ Pore-Refining</span>
+      <span class="p2-tag">✦ Non-Drying</span>
+    </div>
+
+    <div class="p2-divider"></div>
+
+    <p class="p2-size-label">Size</p>
+    <div class="p2-size-row">
+      <button class="p2-size-pill active">100g</button>
+      <button class="p2-size-pill" onclick="this.parentElement.querySelectorAll('.p2-size-pill').forEach(b=>b.classList.remove('active'));this.classList.add('active')">200g</button>
+    </div>
+
+    <div class="p2-price-row">
+      <span class="p2-price">₹269</span>
+      <span class="p2-price-original">₹317</span>
+      <span class="p2-discount">15% OFF</span>
+    </div>
+
+    <div class="p2-qty-row">
+      <button class="p2-qty-btn" onclick="changeQty(-1)">−</button>
+      <div class="p2-qty-val" id="p2-qty">1</div>
+      <button class="p2-qty-btn" onclick="changeQty(1)">+</button>
+    </div>
+
+    <button class="p2-atc-btn" id="p2-atc" onclick="addToCart()">Add to Cart</button>
+    <button class="p2-buy-now">Buy Now — Cash on Delivery Available</button>
+
+    <div class="p2-trust-strip">
+      <div class="p2-trust-item">
+        <svg class="p2-trust-icon" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span class="p2-trust-label">100% Natural</span>
+      </div>
+      <div class="p2-trust-item">
+        <svg class="p2-trust-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+        <span class="p2-trust-label">Cruelty Free</span>
+      </div>
+      <div class="p2-trust-item">
+        <svg class="p2-trust-icon" viewBox="0 0 24 24"><path d="M12 2C6 2 3 8 3 12c0 5 4 9 9 9s9-4 9-9C21 7 17 2 12 2z"/><path d="M12 2c0 0 0 10-6 14"/></svg>
+        <span class="p2-trust-label">Ayurveda Certified</span>
+      </div>
+      <div class="p2-trust-item">
+        <svg class="p2-trust-icon" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        <span class="p2-trust-label">Fast Delivery</span>
+      </div>
+    </div>
+
+    <div class="p2-delivery">
+      <div class="p2-delivery-row">
+        <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        <span><strong>Free shipping</strong> on orders above ₹339</span>
+      </div>
+      <div class="p2-delivery-row">
+        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span><strong>Estimated delivery</strong> in 3–5 business days</span>
+      </div>
+      <div class="p2-delivery-row">
+        <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <span>Fresh-made at our workshop in <strong>New Delhi</strong></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════
+     INGREDIENT HERO
+═══════════════════════════ -->
+<div class="p2-ing-hero">
+  <p class="p2-ing-eyebrow">The Hero Ingredient</p>
+  <div class="p2-ing-hero-grid">
+    <div class="p2-ing-hero-name">
+      Wild Turmeric
+      <span>Curcuma Aromatica</span>
+    </div>
+    <div class="p2-ing-hero-divider"></div>
+    <div class="p2-ing-hero-stat">
+      <div class="p2-ing-stat-num">5×</div>
+      <div class="p2-ing-stat-label">More curcuminoid potency than<br>regular kitchen turmeric —<br>the brightening difference you can see.</div>
+    </div>
+  </div>
+  <div class="p2-ing-support">
+    <span class="p2-ing-chip">Red Lentil · Clarity</span>
+    <span class="p2-ing-chip">Besan · Deep Cleanse</span>
+    <span class="p2-ing-chip">Sandalwood · Cooling</span>
+    <span class="p2-ing-chip">Neem · Anti-Bacterial</span>
+    <span class="p2-ing-chip">Rose Water · Hydration</span>
+    <span class="p2-ing-chip">Honey · Barrier Repair</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════
+     STICKY TAB BAR
+═══════════════════════════ -->
+<div class="p2-tabs-bar" id="p2-tabs-bar">
+  <div class="p2-tabs-inner">
+    <button class="p2-tab-btn active" data-tab="benefits" onclick="switchTab('benefits')">Key Benefits</button>
+    <button class="p2-tab-btn" data-tab="ingredients" onclick="switchTab('ingredients')">Ingredients</button>
+    <button class="p2-tab-btn" data-tab="howto" onclick="switchTab('howto')">How to Use</button>
+    <button class="p2-tab-btn" data-tab="reviews" onclick="switchTab('reviews')">Reviews (528)</button>
+  </div>
+</div>
+
+
+<!-- TAB: BENEFITS -->
+<div id="tab-benefits" class="p2-tab-content">
+  <div class="p2-section" style="padding-bottom:0;">
+    <div class="p2-stats-strip">
+      <div class="p2-stat-item">
+        <div class="p2-stat-num">4.8★</div>
+        <div class="p2-stat-label">Average rating from<br>528 verified customers</div>
+      </div>
+      <div class="p2-stat-item">
+        <div class="p2-stat-num">5,000</div>
+        <div class="p2-stat-label">Years of Ayurvedic wisdom<br>in every sachet</div>
+      </div>
+      <div class="p2-stat-item">
+        <div class="p2-stat-num">0%</div>
+        <div class="p2-stat-label">Parabens · SLS · Synthetic<br>fragrance · Artificial color</div>
+      </div>
+    </div>
+  </div>
+  <div class="p2-section">
+    <p class="p2-eyebrow">Why It Works</p>
+    <h2 class="p2-section-title">Six Reasons Your Skin Will Love This</h2>
+    <div class="p2-benefits-grid">
+      <div class="p2-benefit-card">
+        <div class="p2-benefit-icon-wrap"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div class="p2-benefit-title">Brightens Over Time</div>
+        <p class="p2-benefit-desc">Wild turmeric's curcuminoids inhibit tyrosinase — the enzyme behind dark spots and tan. Visible skin-tone evening in 3–4 weeks of daily use.</p>
+      </div>
+      <div class="p2-benefit-card">
+        <div class="p2-benefit-icon-wrap"><svg viewBox="0 0 24 24"><path d="M12 2C6 2 3 8 3 12c0 5 4 9 9 9s9-4 9-9C21 7 17 2 12 2z"/><path d="M12 2c0 0 0 10-6 14"/></svg></div>
+        <div class="p2-benefit-title">Tikta Rasa Cleansing</div>
+        <p class="p2-benefit-desc">Ayurveda's bitter-cleanse principle draws out toxins and excess sebum without disrupting your skin's natural moisture barrier. No tight feeling after washing.</p>
+      </div>
+      <div class="p2-benefit-card">
+        <div class="p2-benefit-icon-wrap"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div class="p2-benefit-title">Barrier-Safe Formula</div>
+        <p class="p2-benefit-desc">No sulfates. The lentil and chickpea base gently exfoliates while honey restores hydration at the ceramide level after every wash.</p>
+      </div>
+      <div class="p2-benefit-card">
+        <div class="p2-benefit-icon-wrap"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>
+        <div class="p2-benefit-title">Pore-Refining Action</div>
+        <p class="p2-benefit-desc">Red lentil saponins deep-cleanse pores, removing oxidised sebum that causes blackheads and enlarged-looking pores.</p>
+      </div>
+      <div class="p2-benefit-card">
+        <div class="p2-benefit-icon-wrap"><svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
+        <div class="p2-benefit-title">Anti-Pollution Shield</div>
+        <p class="p2-benefit-desc">Neem and sandalwood polyphenols neutralise free radicals from UV and urban pollution — protecting cellular DNA between washes.</p>
+      </div>
+      <div class="p2-benefit-card">
+        <div class="p2-benefit-icon-wrap"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+        <div class="p2-benefit-title">Fresh Daily Promise</div>
+        <p class="p2-benefit-desc">Made in small batches at our workshop. Your jar is made fresh and packed with full-potency actives — not sitting in a warehouse for years.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- TAB: INGREDIENTS -->
+<div id="tab-ingredients" class="p2-tab-content" style="display:none;">
+  <div class="p2-section-alt">
+    <div class="p2-section">
+      <p class="p2-eyebrow">Full Transparency</p>
+      <h2 class="p2-section-title">What's Inside Every Jar</h2>
+      <p class="p2-section-sub">Six hero botanicals with centuries of Ayurvedic documentation. Zero synthetic fillers. Every ingredient on our label is pronounceable.</p>
+      <div class="p2-ing-grid">
+        <div class="p2-ing-card">
+          <div class="p2-ing-card-img">🌿</div>
+          <div class="p2-ing-card-body">
+            <div class="p2-ing-card-badge">Hero Active</div>
+            <div class="p2-ing-card-name">Wild Turmeric</div>
+            <div class="p2-ing-card-desc">Curcuma Aromatica — 5× richer in curcuminoids than kitchen turmeric. Brightens, detans, and calms inflammation at the cellular level.</div>
+          </div>
+        </div>
+        <div class="p2-ing-card">
+          <div class="p2-ing-card-img">🫘</div>
+          <div class="p2-ing-card-body">
+            <div class="p2-ing-card-badge">Cleansing Base</div>
+            <div class="p2-ing-card-name">Red Lentil + Besan</div>
+            <div class="p2-ing-card-desc">Protein-rich flour blend that gently exfoliates dead cells and emulsifies sebum — India's original face wash, used for thousands of years.</div>
+          </div>
+        </div>
+        <div class="p2-ing-card">
+          <div class="p2-ing-card-img">🪵</div>
+          <div class="p2-ing-card-body">
+            <div class="p2-ing-card-badge">Cooling Agent</div>
+            <div class="p2-ing-card-name">Sandalwood</div>
+            <div class="p2-ing-card-desc">Santalum Album — cooling, anti-inflammatory, rich in santalol which reduces skin redness and post-acne marks.</div>
+          </div>
+        </div>
+        <div class="p2-ing-card">
+          <div class="p2-ing-card-img">🌱</div>
+          <div class="p2-ing-card-body">
+            <div class="p2-ing-card-badge">Antibacterial</div>
+            <div class="p2-ing-card-name">Neem Leaf Extract</div>
+            <div class="p2-ing-card-desc">Azadirachta Indica — prevents acne-causing bacteria from colonising freshly cleansed pores.</div>
+          </div>
+        </div>
+        <div class="p2-ing-card">
+          <div class="p2-ing-card-img">🌹</div>
+          <div class="p2-ing-card-body">
+            <div class="p2-ing-card-badge">Hydration Base</div>
+            <div class="p2-ing-card-name">Rose Water</div>
+            <div class="p2-ing-card-desc">Rosa Damascena — natural pH-balancer and humectant, gentle enough for sensitive skin with light floral hydration.</div>
+          </div>
+        </div>
+        <div class="p2-ing-card">
+          <div class="p2-ing-card-img">🍯</div>
+          <div class="p2-ing-card-body">
+            <div class="p2-ing-card-badge">Barrier Repair</div>
+            <div class="p2-ing-card-name">Raw Honey</div>
+            <div class="p2-ing-card-desc">Apis Mellifera — draws moisture in and creates a protective film that prevents trans-epidermal water loss after cleansing.</div>
+          </div>
+        </div>
+      </div>
+      <div class="p2-full-ing">
+        <div class="p2-full-ing-label">Full INCI List</div>
+        <p>Wild Turmeric (Curcuma aromatica), Chickpea Flour (Cicer arietinum), Red Lentil Powder (Lens culinaris), Green Gram Flour (Vigna radiata), Sandalwood Powder (Santalum album), Rose Water (Rosa damascena), Neem Leaf Extract (Azadirachta indica), Honey (Apis mellifera), Vegetable Glycerin, Xanthan Gum. <strong>No parabens · No SLS/SLES · No synthetic fragrance · No artificial color.</strong></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- TAB: HOW TO USE -->
+<div id="tab-howto" class="p2-tab-content" style="display:none;">
+  <div class="p2-section">
+    <p class="p2-eyebrow">Application Ritual</p>
+    <h2 class="p2-section-title">Three Steps. Twice a Day.</h2>
+    <div class="p2-steps">
+      <div class="p2-step">
+        <div class="p2-step-num">01</div>
+        <div class="p2-step-title">Wet &amp; Activate</div>
+        <p class="p2-step-desc">Dampen your face with lukewarm water. Take a small amount (a 5-rupee-coin portion) and add a few drops of water to activate the botanical powders.</p>
+      </div>
+      <div class="p2-step">
+        <div class="p2-step-num">02</div>
+        <div class="p2-step-title">Massage Gently</div>
+        <p class="p2-step-desc">Using circular motions, massage the paste across your face for 60 seconds. The gentle grit exfoliates while the turmeric penetrates. Take your time — this is your ritual.</p>
+      </div>
+      <div class="p2-step">
+        <div class="p2-step-num">03</div>
+        <div class="p2-step-title">Rinse &amp; Reveal</div>
+        <p class="p2-step-desc">Rinse with cool water to close pores. Pat dry gently. Follow with toner or moisturiser while skin is still slightly damp for maximum absorption.</p>
+      </div>
+    </div>
+
+    <div class="p2-divider" style="margin:2rem 0;"></div>
+
+    <p class="p2-eyebrow">Your Daily Ritual</p>
+    <h3 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:1.5rem;font-weight:600;color:var(--p2-dark);margin-bottom:1.5rem;">AM &amp; PM Routine</h3>
+    <div class="p2-routine-grid">
+      <div class="p2-routine-card">
+        <div class="p2-routine-card-head">
+          <span class="p2-routine-icon">☀️</span>
+          <span class="p2-routine-title">Morning Routine</span>
+        </div>
+        <ul class="p2-routine-list">
+          <li>Tikta Face Wash (activate, massage 60s, rinse)</li>
+          <li>Rose Water Toner (balance pH)</li>
+          <li>Malai Glow Cream (lightweight moisture)</li>
+          <li>SPF 30+ sunscreen (always)</li>
+        </ul>
+      </div>
+      <div class="p2-routine-card">
+        <div class="p2-routine-card-head">
+          <span class="p2-routine-icon">🌙</span>
+          <span class="p2-routine-title">Evening Routine</span>
+        </div>
+        <ul class="p2-routine-list">
+          <li>Double-cleanse if wearing SPF or makeup</li>
+          <li>Tikta Face Wash (90s evening massage)</li>
+          <li>Kumkumadi Drops (1–2 drops while damp)</li>
+          <li>Chandan Lepa overnight mask (2×/week)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="p2-divider" style="margin:2.5rem 0;"></div>
+
+    <p class="p2-eyebrow">Important Notes</p>
+    <h3 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:1.5rem;font-weight:600;color:var(--p2-dark);margin-bottom:1rem;">Safety &amp; Storage</h3>
+    <div class="p2-accordion">
+      <div class="p2-acc-item">
+        <div class="p2-acc-head" onclick="toggleAcc(this)"><span>Who Should Use This?</span><span class="p2-acc-icon">+</span></div>
+        <div class="p2-acc-body"><div class="p2-acc-content">Safe for all skin types including sensitive skin. Ideal for ages 14 and above. Suitable for Indian skin tones and climates. Tested for year-round use across all seasons.</div></div>
+      </div>
+      <div class="p2-acc-item">
+        <div class="p2-acc-head" onclick="toggleAcc(this)"><span>Patch Test Advice</span><span class="p2-acc-icon">+</span></div>
+        <div class="p2-acc-body"><div class="p2-acc-content">Apply a small amount to the inner wrist or behind the ear. Wait 24 hours. If no redness or irritation appears, proceed with full use.</div></div>
+      </div>
+      <div class="p2-acc-item">
+        <div class="p2-acc-head" onclick="toggleAcc(this)"><span>Pregnancy &amp; Breastfeeding</span><span class="p2-acc-icon">+</span></div>
+        <div class="p2-acc-body"><div class="p2-acc-content">All ingredients are natural and generally safe. Please consult your doctor before use during pregnancy or breastfeeding — standard guidance for any new skincare product.</div></div>
+      </div>
+      <div class="p2-acc-item">
+        <div class="p2-acc-head" onclick="toggleAcc(this)"><span>Storage &amp; Shelf Life</span><span class="p2-acc-icon">+</span></div>
+        <div class="p2-acc-body"><div class="p2-acc-content">Store in a cool, dry place away from direct sunlight. Shelf life is 12 months from manufacture. Avoid storing in humid bathrooms. Use within 6 months of opening.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- TAB: REVIEWS -->
+<div id="tab-reviews" class="p2-tab-content" style="display:none;">
+  <div class="p2-section" id="reviews">
+    <p class="p2-eyebrow">Verified Customers</p>
+    <h2 class="p2-section-title">What Our Community Says</h2>
+    <div class="p2-reviews-top">
+      <div class="p2-rev-score">
+        <div class="p2-rev-big">4.8</div>
+        <div class="p2-rev-stars">★★★★★</div>
+        <div class="p2-rev-count">528 reviews</div>
+      </div>
+      <div class="p2-rev-bars">
+        <div class="p2-rev-bar-row"><span class="p2-rev-bar-label">5★</span><div class="p2-rev-bar-track"><div class="p2-rev-bar-fill" style="width:82%"></div></div><span class="p2-rev-bar-count">433</span></div>
+        <div class="p2-rev-bar-row"><span class="p2-rev-bar-label">4★</span><div class="p2-rev-bar-track"><div class="p2-rev-bar-fill" style="width:12%"></div></div><span class="p2-rev-bar-count">63</span></div>
+        <div class="p2-rev-bar-row"><span class="p2-rev-bar-label">3★</span><div class="p2-rev-bar-track"><div class="p2-rev-bar-fill" style="width:4%"></div></div><span class="p2-rev-bar-count">21</span></div>
+        <div class="p2-rev-bar-row"><span class="p2-rev-bar-label">2★</span><div class="p2-rev-bar-track"><div class="p2-rev-bar-fill" style="width:1%"></div></div><span class="p2-rev-bar-count">7</span></div>
+        <div class="p2-rev-bar-row"><span class="p2-rev-bar-label">1★</span><div class="p2-rev-bar-track"><div class="p2-rev-bar-fill" style="width:0.5%"></div></div><span class="p2-rev-bar-count">4</span></div>
+      </div>
+    </div>
+    <div class="p2-reviews-list">
+      <div class="p2-review-card">
+        <div class="p2-review-head">
+          <div class="p2-review-avatar">P</div>
+          <div class="p2-review-meta"><div class="p2-review-name">Priya S. — Mumbai</div><div class="p2-review-date">April 2025 · Verified Purchase</div></div>
+          <div class="p2-review-stars">★★★★★</div>
+          <span class="p2-review-tag">Oily Skin</span>
+        </div>
+        <p class="p2-review-text">"I've been using this for two months and my skin has genuinely transformed. The tan from last summer is gone, my pores look smaller, and I actually look forward to washing my face now. The turmeric smell is subtle and lovely. Worth every rupee."</p>
+      </div>
+      <div class="p2-review-card">
+        <div class="p2-review-head">
+          <div class="p2-review-avatar">A</div>
+          <div class="p2-review-meta"><div class="p2-review-name">Aisha K. — London</div><div class="p2-review-date">March 2025 · Verified Purchase</div></div>
+          <div class="p2-review-stars">★★★★★</div>
+          <span class="p2-review-tag">Sensitive Skin</span>
+        </div>
+        <p class="p2-review-text">"Ordered from London — shipping was fast and packaging was beautiful. As someone with rosacea-prone skin I'm very careful about what I use, but this is so gentle. No stinging, no redness. My skin feels clean without that horrible tight feeling."</p>
+      </div>
+      <div class="p2-review-card">
+        <div class="p2-review-head">
+          <div class="p2-review-avatar">R</div>
+          <div class="p2-review-meta"><div class="p2-review-name">Rahul D. — Delhi</div><div class="p2-review-date">January 2025 · Verified Purchase</div></div>
+          <div class="p2-review-stars">★★★★★</div>
+          <span class="p2-review-tag">Men's Skin</span>
+        </div>
+        <p class="p2-review-text">"Bought this on my wife's recommendation. Was skeptical about a 'face wash powder' but honestly it's the best thing I've put on my face. My skin no longer looks dull after shaving and the post-shave irritation has reduced significantly. Converted."</p>
+      </div>
+    </div>
+    <div class="p2-review-form">
+      <h3>Write a Review</h3>
+      <div class="p2-rform-row">
+        <div class="p2-rform-group"><label>Your Name *</label><input type="text" placeholder="e.g. Priya Sharma"></div>
+        <div class="p2-rform-group"><label>Email Address *</label><input type="email" placeholder="priya@example.com"></div>
+      </div>
+      <div class="p2-rform-group">
+        <label>Your Rating *</label>
+        <div class="p2-star-picker" id="p2-star-picker">
+          <span onclick="setStars(1)">★</span><span onclick="setStars(2)">★</span><span onclick="setStars(3)">★</span><span onclick="setStars(4)">★</span><span onclick="setStars(5)">★</span>
+        </div>
+      </div>
+      <div class="p2-rform-group"><label>Your Review *</label><textarea placeholder="Share your experience..."></textarea></div>
+      <button class="p2-submit-btn">Submit Review</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- RELATED PRODUCTS -->
+<div class="p2-section-alt">
+  <div class="p2-section">
+    <p class="p2-eyebrow">Complete Your Ritual</p>
+    <h2 class="p2-section-title" style="margin-bottom:1.5rem;">Pair It With</h2>
+    <div class="p2-related-row" id="p2-related">
+      <div class="p2-related-card"><div class="p2-related-img">🌹</div><div class="p2-related-body"><div class="p2-related-name">Rose Water Toner</div><div class="p2-related-price">₹199</div><button class="p2-related-btn">Add to Cart</button></div></div>
+      <div class="p2-related-card"><div class="p2-related-img">🥛</div><div class="p2-related-body"><div class="p2-related-name">Malai Glow Cream</div><div class="p2-related-price">₹299</div><button class="p2-related-btn">Add to Cart</button></div></div>
+      <div class="p2-related-card"><div class="p2-related-img">🔴</div><div class="p2-related-body"><div class="p2-related-name">Kumkumadi Drops</div><div class="p2-related-price">₹449</div><button class="p2-related-btn">Add to Cart</button></div></div>
+      <div class="p2-related-card"><div class="p2-related-img">🪵</div><div class="p2-related-body"><div class="p2-related-name">Chandan Lepa</div><div class="p2-related-price">₹249</div><button class="p2-related-btn">Add to Cart</button></div></div>
+      <div class="p2-related-card"><div class="p2-related-img">🌿</div><div class="p2-related-body"><div class="p2-related-name">Neem Face Pack</div><div class="p2-related-price">₹219</div><button class="p2-related-btn">Add to Cart</button></div></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <div class="site-footer-brand">
+      <h4>Surabhi Sutra</h4>
+      <p>Five thousand years of Ayurvedic wisdom in every jar. Fresh-made, small-batch, crafted without compromise.</p>
+      <div class="site-footer-socials">
+        <a href="#" title="Telegram">T</a>
+        <a href="#" title="Facebook">f</a>
+        <a href="#" title="Instagram">ig</a>
+      </div>
+    </div>
+    <div><h4>Shop For</h4><ul><li><a href="index.html?goto=shop">Face Care</a></li><li><a href="index.html?goto=shop">Hair Care</a></li><li><a href="index.html?goto=shop">Body Care</a></li><li><a href="index.html?goto=shop">Baby Care</a></li></ul></div>
+    <div><h4>Useful Links</h4><ul><li><a href="#">FAQs</a></li><li><a href="#">Track Order</a></li><li><a href="#">Returns Policy</a></li><li><a href="about.html">About Us</a></li></ul></div>
+    <div><h4>Contact</h4><ul><li><a href="#">WhatsApp Us</a></li><li><a href="#">hello@surabhisutra.in</a></li></ul></div>
+  </div>
+  <div class="site-footer-bottom">© 2025 Surabhi Sutra · All rights reserved · Made with love in India</div>
+</footer>
+
+
+<!-- STICKY BOTTOM BAR (mobile) -->
+<div class="p2-sticky-bar">
+  <div class="p2-sticky-info">
+    <div class="p2-sticky-name">Brightening Ubtan Tikta Face Wash</div>
+    <div class="p2-sticky-price">₹269 <s style="color:var(--p2-light);font-size:.85em;font-weight:400;">₹317</s></div>
+  </div>
+  <button class="p2-sticky-atc" onclick="addToCart()">Add to Cart</button>
+</div>
+
+
+<script>
+/* ── GALLERY ── */
+const imgs = [
+  'https://placehold.co/600x600/f0ece4/28535e?text=Tikta+Face+Wash',
+  'https://placehold.co/600x600/e8f0ec/28535e?text=Side+View',
+  'https://placehold.co/600x600/f5edcc/c8922a?text=Ingredients',
+  'https://placehold.co/600x600/ece8f0/7a2121?text=Texture',
+  'https://placehold.co/600x600/f0e8e0/28535e?text=In+Use'
+];
+let activeImg = 0;
+
+function switchImg(i){
+  activeImg = i;
+  document.getElementById('p2-main-img').src = imgs[i];
+  document.querySelectorAll('.p2-thumb').forEach((t,j) => t.classList.toggle('active', j === i));
+}
+function shiftImg(d){ switchImg((activeImg + d + imgs.length) % imgs.length); }
+
+/* Swipe */
+let touchX = 0;
+const mainWrap = document.querySelector('.p2-main-wrap');
+mainWrap.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; }, {passive:true});
+mainWrap.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - touchX;
+  if(Math.abs(dx) > 40) shiftImg(dx < 0 ? 1 : -1);
+});
+
+/* ── TABS ── */
+function switchTab(tab){
+  document.querySelectorAll('.p2-tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  document.querySelectorAll('.p2-tab-content').forEach(s => s.style.display = 'none');
+  document.getElementById('tab-' + tab).style.display = '';
+  document.getElementById('p2-tabs-bar').scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+/* ── QTY ── */
+let qty = 1;
+function changeQty(d){ qty = Math.max(1, qty + d); document.getElementById('p2-qty').textContent = qty; }
+
+/* ── ADD TO CART ── */
+function addToCart(){
+  const btn = document.getElementById('p2-atc');
+  if(btn){ btn.textContent = 'Added ✓'; btn.classList.add('added'); }
+  try{
+    const cart = JSON.parse(localStorage.getItem('surabhi_cart') || '[]');
+    const ex = cart.find(i => i.id === 'tikta-face-wash');
+    if(ex) ex.qty += qty; else cart.push({id:'tikta-face-wash', name:'Brightening Ubtan Tikta Face Wash', price:269, qty});
+    localStorage.setItem('surabhi_cart', JSON.stringify(cart));
+    const count = cart.reduce((s,i) => s+i.qty, 0);
+    const el = document.getElementById('cart-count');
+    if(el) el.textContent = count;
+  }catch{}
+  setTimeout(()=>{ if(btn){ btn.textContent='Add to Cart'; btn.classList.remove('added'); } }, 1800);
+}
+
+/* ── ACCORDION ── */
+function toggleAcc(head){
+  const item = head.closest('.p2-acc-item');
+  const wasOpen = item.classList.contains('open');
+  document.querySelectorAll('.p2-acc-item').forEach(i => i.classList.remove('open'));
+  if(!wasOpen) item.classList.add('open');
+}
+
+/* ── STARS ── */
+let selectedStars = 0;
+function setStars(n){
+  selectedStars = n;
+  document.querySelectorAll('#p2-star-picker span').forEach((s,i) => s.classList.toggle('on', i < n));
+}
+
+/* ── DRAGGABLE CAROUSEL ── */
+(function(){
+  const el = document.getElementById('p2-related');
+  let down = false, startX = 0, scrollLeft = 0;
+  el.addEventListener('mousedown', e => { down=true; startX=e.pageX-el.offsetLeft; scrollLeft=el.scrollLeft; el.style.cursor='grabbing'; });
+  el.addEventListener('mouseleave', () => { down=false; el.style.cursor='grab'; });
+  el.addEventListener('mouseup', () => { down=false; el.style.cursor='grab'; });
+  el.addEventListener('mousemove', e => { if(!down) return; e.preventDefault(); el.scrollLeft = scrollLeft - (e.pageX - el.offsetLeft - startX) * 1.2; });
+})();
+
+/* ── CART COUNT ON LOAD ── */
+try{
+  const cart = JSON.parse(localStorage.getItem('surabhi_cart') || '[]');
+  const el = document.getElementById('cart-count');
+  if(el) el.textContent = cart.reduce((s,i) => s+i.qty, 0);
+}catch{}
+</script>
+</body>
+</html>
