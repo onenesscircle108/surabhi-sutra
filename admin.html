@@ -413,6 +413,32 @@ body{font-family:Arial,sans-serif;background:var(--beige);min-height:100vh;}
             <div class="form-group"><label>Card 4 Description</label><textarea id="promise-desc-3"></textarea></div>
           </div>
         </div>
+
+        <div class="section-card">
+          <h4>Shop by Category Section</h4>
+          <div class="content-grid">
+            <div class="form-group"><label>Eyebrow Label</label><input type="text" id="content-cats-eyebrow"/></div>
+            <div class="form-group"><label>Section Title</label><input type="text" id="content-cats-title"/></div>
+          </div>
+          <p style="font-size:12px;color:#888;margin:0.5rem 0 1rem;">For each tile: paste an image URL <strong>or</strong> leave it blank to use the emoji. When an image is used, it fills the tile with a dark overlay giving a transparent photo effect.</p>
+          <div id="cat-tiles-editor"></div>
+        </div>
+
+        <div class="section-card">
+          <h4>Our Philosophy Section</h4>
+          <div class="content-grid">
+            <div class="form-group"><label>Eyebrow Label</label><input type="text" id="content-phil-eyebrow"/></div>
+            <div class="form-group"><label>Button Text</label><input type="text" id="content-phil-btn"/></div>
+          </div>
+          <div class="form-group"><label>Heading (HTML allowed, e.g. &lt;em&gt;italic&lt;/em&gt;)</label><input type="text" id="content-phil-heading"/></div>
+          <div class="form-group"><label>Body Text</label><textarea id="content-phil-body" style="height:100px;"></textarea></div>
+          <p style="font-size:12px;color:#888;margin:0.5rem 0 0.25rem;">Left panel — image or icon:</p>
+          <div class="content-grid">
+            <div class="form-group"><label>Panel Image URL (optional)</label><input type="text" id="content-phil-image" placeholder="https://... — leave blank to use icon"/></div>
+            <div class="form-group"><label>Icon / Emoji (if no image)</label><input type="text" id="content-phil-icon" placeholder="☘️"/></div>
+          </div>
+        </div>
+
         <div style="margin-top:1rem;">
           <button class="btn" onclick="saveSiteContent()">Save Website Text</button>
           <button class="btn btn-grey" onclick="resetSiteContent()">Reset Defaults</button>
@@ -931,7 +957,21 @@ const DEFAULT_SITE_CONTENT = {
     {title:'Cruelty Free',description:'Certified cruelty-free and vegan. We honor all beings in our pursuit of beauty.'},
     {title:'Small Batch',description:'Crafted in small batches to preserve the integrity and potency of each ingredient.'},
     {title:'Ayurveda Rooted',description:'Formulas inspired by five thousand years of wisdom, thoughtfully adapted for contemporary skin.'}
-  ]
+  ],
+  catsEyebrow:'Shop by Category',
+  catsTitle:'Find Your Ritual',
+  catTiles:[
+    {name:'Face Care',    emoji:'🌸', imageUrl:'', bg:'linear-gradient(135deg,#f5edcc,#e8d8b0)'},
+    {name:'Hair Care',    emoji:'🌿', imageUrl:'', bg:'linear-gradient(135deg,#dceadf,#c4d8c8)'},
+    {name:'Body Wellness',emoji:'✨', imageUrl:'', bg:'linear-gradient(135deg,#e8dece,#d4c4ac)'},
+    {name:'Baby & Kids',  emoji:'🤍', imageUrl:'', bg:'linear-gradient(135deg,#f0e8f0,#dccce0)'}
+  ],
+  philEyebrow:'Our Philosophy',
+  philHeading:'Five Thousand Years.<br><em>One Purpose.</em>',
+  philBody:"Surabhi Sutra is not just skincare — it is a ritual. Rooted in the ancient Ayurvedic tradition of Panchakarma and Dinacharya, our formulations bring the botanical wisdom of India's sages into your morning routine. No shortcuts. No synthetics. Just nature, distilled.",
+  philBtn:'Read Our Story',
+  philIcon:'☘️',
+  philImageUrl:''
 };
 const DEFAULT_BUNDLE_SETTINGS = {
   enabled:true,regularLabel:'Regular',builderLabel:'Bundle & Save',
@@ -1184,8 +1224,23 @@ function getSiteContent() { try { return mergeSiteContent(JSON.parse(localStorag
 function mergeSiteContent(c) {
   return {...DEFAULT_SITE_CONTENT,...c,
     marqueeItems: Array.isArray(c.marqueeItems)&&c.marqueeItems.length ? c.marqueeItems.filter(i=>String(i||'').trim()) : DEFAULT_SITE_CONTENT.marqueeItems,
-    promiseItems: DEFAULT_SITE_CONTENT.promiseItems.map((item,i)=>({...item,...(c.promiseItems?.[i]||{})}))
+    promiseItems: DEFAULT_SITE_CONTENT.promiseItems.map((item,i)=>({...item,...(c.promiseItems?.[i]||{})})),
+    catTiles: Array.isArray(c.catTiles)&&c.catTiles.length ? DEFAULT_SITE_CONTENT.catTiles.map((t,i)=>({...t,...(c.catTiles?.[i]||{})})) : DEFAULT_SITE_CONTENT.catTiles
   };
+}
+function renderCatTileEditors(tiles) {
+  const wrap = document.getElementById('cat-tiles-editor');
+  if(!wrap) return;
+  wrap.innerHTML = tiles.map((t,i)=>`
+    <div style="border:1px solid var(--border);border-radius:6px;padding:1rem;margin-bottom:0.75rem;background:#fafafa;">
+      <p style="font-size:12px;font-weight:700;color:var(--brown);margin-bottom:0.75rem;">Tile ${i+1}</p>
+      <div class="content-grid">
+        <div class="form-group"><label>Name</label><input type="text" id="cat-tile-name-${i}" value="${escA(t.name)}"/></div>
+        <div class="form-group"><label>Emoji (if no image)</label><input type="text" id="cat-tile-emoji-${i}" value="${escA(t.emoji||'')}" style="font-size:20px;"/></div>
+      </div>
+      <div class="form-group"><label>Image URL (optional — overrides emoji)</label><input type="text" id="cat-tile-img-${i}" value="${escA(t.imageUrl||'')}" placeholder="https://..."/></div>
+      <div class="form-group"><label>Background Gradient (used when no image)</label><input type="text" id="cat-tile-bg-${i}" value="${escA(t.bg||'')}"/></div>
+    </div>`).join('');
 }
 function renderContentEditor() {
   const c = getSiteContent();
@@ -1201,6 +1256,15 @@ function renderContentEditor() {
     document.getElementById('promise-title-'+i).value = item.title;
     document.getElementById('promise-desc-'+i).value  = item.description;
   });
+  document.getElementById('content-cats-eyebrow').value = c.catsEyebrow;
+  document.getElementById('content-cats-title').value   = c.catsTitle;
+  renderCatTileEditors(c.catTiles);
+  document.getElementById('content-phil-eyebrow').value = c.philEyebrow;
+  document.getElementById('content-phil-heading').value = c.philHeading;
+  document.getElementById('content-phil-body').value    = c.philBody;
+  document.getElementById('content-phil-btn').value     = c.philBtn;
+  document.getElementById('content-phil-icon').value    = c.philIcon||'☘️';
+  document.getElementById('content-phil-image').value   = c.philImageUrl||'';
 }
 function collectSiteContent() {
   return mergeSiteContent({
@@ -1215,7 +1279,21 @@ function collectSiteContent() {
     promiseItems:     DEFAULT_SITE_CONTENT.promiseItems.map((_,i)=>({
       title:       document.getElementById('promise-title-'+i).value.trim(),
       description: document.getElementById('promise-desc-'+i).value.trim()
-    }))
+    })),
+    catsEyebrow: document.getElementById('content-cats-eyebrow').value.trim(),
+    catsTitle:   document.getElementById('content-cats-title').value.trim(),
+    catTiles:    DEFAULT_SITE_CONTENT.catTiles.map((_,i)=>({
+      name:     document.getElementById('cat-tile-name-'+i).value.trim(),
+      emoji:    document.getElementById('cat-tile-emoji-'+i).value.trim(),
+      imageUrl: document.getElementById('cat-tile-img-'+i).value.trim(),
+      bg:       document.getElementById('cat-tile-bg-'+i).value.trim()
+    })),
+    philEyebrow:  document.getElementById('content-phil-eyebrow').value.trim(),
+    philHeading:  document.getElementById('content-phil-heading').value.trim(),
+    philBody:     document.getElementById('content-phil-body').value.trim(),
+    philBtn:      document.getElementById('content-phil-btn').value.trim(),
+    philIcon:     document.getElementById('content-phil-icon').value.trim(),
+    philImageUrl: document.getElementById('content-phil-image').value.trim()
   });
 }
 function saveSiteContent()  { localStorage.setItem('surabhi_site_content', JSON.stringify(collectSiteContent())); showAlert('content-alert','Website text updated.','success'); }

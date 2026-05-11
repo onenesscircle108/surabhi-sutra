@@ -576,7 +576,78 @@ function initMarquee(){
 // ─────────────────────────────
 // INIT
 // ─────────────────────────────
+// ─────────────────────────────
+// APPLY SITE CONTENT
+// ─────────────────────────────
+const _DEFAULT_CAT_TILES = [
+  {name:'Face Care',    emoji:'🌸', imageUrl:'', bg:'linear-gradient(135deg,#f5edcc,#e8d8b0)'},
+  {name:'Hair Care',    emoji:'🌿', imageUrl:'', bg:'linear-gradient(135deg,#dceadf,#c4d8c8)'},
+  {name:'Body Wellness',emoji:'✨', imageUrl:'', bg:'linear-gradient(135deg,#e8dece,#d4c4ac)'},
+  {name:'Baby & Kids',  emoji:'🤍', imageUrl:'', bg:'linear-gradient(135deg,#f0e8f0,#dccce0)'}
+];
+
+function applySiteContent(){
+  try{
+    const c = JSON.parse(localStorage.getItem('surabhi_site_content')||'{}');
+
+    // Hero
+    const set = (id,val,html)=>{ const el=document.getElementById(id); if(el&&val){ html?el.innerHTML=val:el.textContent=val; }};
+    set('hero-eyebrow', c.heroEyebrow);
+    set('hero-title',   c.heroTitle,   true);
+    set('hero-sub',     c.heroSubtext);
+
+    // Bestsellers
+    set('bestsellers-label', c.bestsellersLabel);
+    set('bestsellers-title', c.bestsellersTitle);
+
+    // Promise
+    set('promise-label', c.promiseLabel);
+    set('promise-title', c.promiseTitle);
+
+    // Category heading
+    set('cats-eyebrow', c.catsEyebrow);
+    set('cats-title',   c.catsTitle);
+
+    // Category tiles
+    const catsGrid = document.getElementById('cats-grid');
+    if(catsGrid){
+      const tiles = Array.isArray(c.catTiles) && c.catTiles.length ? c.catTiles : _DEFAULT_CAT_TILES;
+      catsGrid.innerHTML = tiles.map(t=>{
+        const hasImg = t.imageUrl && t.imageUrl.trim();
+        const bgStyle = hasImg
+          ? `background-image:url('${t.imageUrl}');background-size:cover;background-position:center;`
+          : `background:${t.bg||'linear-gradient(135deg,#f5edcc,#e8d8b0)'};`;
+        return `<div class="cat-tile" onclick="showPage('shop')">
+          <div class="cat-tile-bg" style="${bgStyle}">${hasImg?'':t.emoji||''}</div>
+          <div class="cat-tile-overlay"></div>
+          <div class="cat-tile-label"><span class="cat-tile-name">${t.name}</span><span class="cat-tile-sub">Explore →</span></div>
+        </div>`;
+      }).join('');
+    }
+
+    // Philosophy
+    set('phil-eyebrow', c.philEyebrow);
+    set('phil-heading', c.philHeading, true);
+    set('phil-body',    c.philBody);
+    set('phil-btn',     c.philBtn);
+
+    // Philosophy panel image
+    const panel = document.getElementById('editorial-panel');
+    const icon  = document.getElementById('editorial-icon');
+    if(panel && c.philImageUrl && c.philImageUrl.trim()){
+      panel.style.backgroundImage    = `url('${c.philImageUrl}')`;
+      panel.style.backgroundSize     = 'cover';
+      panel.style.backgroundPosition = 'center';
+      if(icon) icon.style.display = 'none';
+    } else if(panel){
+      panel.style.backgroundImage = '';
+      if(icon){ icon.style.display=''; set('editorial-icon', c.philIcon||'☘️'); }
+    }
+  }catch(e){ console.warn('applySiteContent:',e); }
+}
+
 document.addEventListener('DOMContentLoaded',()=>{
+  applySiteContent();
   loadWelcomeContent();
 
   // Support deep-linking from product-detail page: ?goto=cart or ?goto=checkout
