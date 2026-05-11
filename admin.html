@@ -99,6 +99,11 @@ body{font-family:Arial,sans-serif;background:var(--beige);min-height:100vh;}
 .pp-check-item span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .badge-pending{background:#FFF3CD;color:#856404;}
 .badge-confirmed{background:#D4EDDA;color:#155724;}
+.badge-processing{background:#CCE5FF;color:#004085;}
+.badge-shipped{background:#D1ECF1;color:#0C5460;}
+.badge-delivered{background:#D4EDDA;color:#155724;font-weight:700;}
+.badge-cancelled{background:#F8D7DA;color:#721C24;}
+.order-status-select{border:1px solid var(--border);border-radius:4px;padding:4px 6px;font-size:12px;}
 
 .alert{padding:10px 15px;border-radius:4px;margin-bottom:1rem;font-size:14px;}
 .alert-success{background:#D4EDDA;color:#155724;}
@@ -256,6 +261,8 @@ body{font-family:Arial,sans-serif;background:var(--beige);min-height:100vh;}
       <li><button class="nav-btn" onclick="showSection('productpage',this)">📄 Product Page</button></li>
       <li><button class="nav-btn" onclick="showSection('fomo',this)">📣 FOMO</button></li>
       <li><button class="nav-btn" onclick="showSection('orders',this)">🛒 Orders</button></li>
+      <li><button class="nav-btn" onclick="showSection('promos',this)">🏷️ Promo Codes</button></li>
+      <li><button class="nav-btn" onclick="showSection('instagram',this)">📸 Instagram</button></li>
       <li><button class="nav-btn" onclick="showSection('about',this)">📖 About Page</button></li>
       <li><button class="nav-btn" onclick="showSection('returns',this)">↩️ Return Policy</button></li>
       <li><button class="nav-btn" onclick="showSection('announce',this)">📢 Announce Bar</button></li>
@@ -276,12 +283,28 @@ body{font-family:Arial,sans-serif;background:var(--beige);min-height:100vh;}
     <!-- DASHBOARD -->
     <div id="dashboard" class="section active">
       <div class="page-title">Dashboard Overview</div>
-      <div class="stats">
+      <div class="stats" style="grid-template-columns:repeat(3,1fr);">
         <div class="stat-card"><div class="stat-num" id="stat-p">0</div><div class="stat-label">Products</div></div>
-        <div class="stat-card"><div class="stat-num" id="stat-o">0</div><div class="stat-label">Orders</div></div>
-        <div class="stat-card"><div class="stat-num" id="stat-r">₹0</div><div class="stat-label">Revenue</div></div>
+        <div class="stat-card"><div class="stat-num" id="stat-o">0</div><div class="stat-label">Total Orders</div></div>
+        <div class="stat-card"><div class="stat-num" id="stat-r">₹0</div><div class="stat-label">Total Revenue</div></div>
+        <div class="stat-card"><div class="stat-num" id="stat-m">0</div><div class="stat-label">Orders This Month</div></div>
+        <div class="stat-card"><div class="stat-num" id="stat-avg">₹0</div><div class="stat-label">Avg Order Value</div></div>
+        <div class="stat-card"><div class="stat-num" id="stat-pending" style="color:var(--red);">0</div><div class="stat-label">Pending Orders</div></div>
       </div>
-      <div class="form-box"><p style="font-size:14px;color:#666;">Welcome back! Use the sidebar to manage your products and orders.</p></div>
+
+      <!-- Low Stock Alert -->
+      <div class="form-box" id="low-stock-box" style="display:none;">
+        <h3 style="color:var(--red);margin-bottom:1rem;">⚠️ Low Stock Alert</h3>
+        <table class="data-table"><thead><tr><th>Product</th><th>Category</th><th>Qty Left</th></tr></thead>
+        <tbody id="low-stock-tbody"></tbody></table>
+      </div>
+
+      <!-- Recent Orders -->
+      <div class="form-box" id="recent-orders-box" style="display:none;">
+        <h3 style="margin-bottom:1rem;">Recent Orders</h3>
+        <table class="data-table"><thead><tr><th>Order ID</th><th>Customer</th><th>Amount</th><th>Status</th></tr></thead>
+        <tbody id="recent-orders-tbody"></tbody></table>
+      </div>
     </div>
 
     <!-- PRODUCTS -->
@@ -709,15 +732,61 @@ body{font-family:Arial,sans-serif;background:var(--beige);min-height:100vh;}
     <!-- ORDERS -->
     <div id="orders" class="section">
       <div class="page-title">Customer Orders</div>
+      <div id="orders-alert"></div>
       <div class="data-table-wrap">
         <table class="data-table">
           <thead>
-            <tr><th>Order ID</th><th>Customer</th><th>Phone</th><th>Amount</th><th>Date</th><th>Status</th></tr>
+            <tr><th>Order ID</th><th>Customer</th><th>Phone</th><th>Amount</th><th>Date</th><th>Status</th><th>Update</th></tr>
           </thead>
           <tbody id="orders-tbody">
-            <tr><td colspan="6" class="empty-state">No orders yet.</td></tr>
+            <tr><td colspan="7" class="empty-state">No orders yet.</td></tr>
           </tbody>
         </table>
+      </div>
+    </div>
+
+    <!-- PROMO CODES -->
+    <div id="promos" class="section">
+      <div class="page-title">Promo Codes</div>
+      <div id="promos-alert"></div>
+      <div class="form-box">
+        <h3>Add New Code</h3>
+        <div class="form-row">
+          <div class="form-group"><label>Code</label><input type="text" id="new-promo-code" placeholder="e.g. SUMMER40" style="text-transform:uppercase;"/></div>
+          <div class="form-group"><label>Type</label>
+            <select id="new-promo-type"><option value="percent">Percentage (%)</option><option value="flat">Flat Amount (₹)</option></select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Discount Value</label><input type="number" id="new-promo-value" placeholder="e.g. 40"/></div>
+          <div class="form-group"><label>Min Order (₹, 0 = none)</label><input type="number" id="new-promo-min" placeholder="0" value="0"/></div>
+        </div>
+        <button class="btn" onclick="addPromo()">Add Promo Code</button>
+      </div>
+      <div class="form-box">
+        <h3>Active Codes</h3>
+        <div id="promos-list"><p style="color:#888;font-size:13px;">No promo codes yet.</p></div>
+      </div>
+    </div>
+
+    <!-- INSTAGRAM FEED -->
+    <div id="instagram" class="section">
+      <div class="page-title">Instagram Reels Feed</div>
+      <div id="instagram-alert"></div>
+      <div class="form-box">
+        <h3>Feed Settings</h3>
+        <div class="form-row">
+          <div class="form-group"><label>Section Title</label><input type="text" id="ig-title" placeholder="Follow the Ritual"/></div>
+          <div class="form-group"><label>Subtitle / Handle</label><input type="text" id="ig-subtitle" placeholder="@surabhisutra"/></div>
+        </div>
+        <h3 style="margin-top:1.5rem;margin-bottom:0.5rem;">Reels</h3>
+        <p style="font-size:12px;color:#888;margin-bottom:1rem;">Paste your Instagram Reel URLs (e.g. https://www.instagram.com/reel/ABC123/). They'll auto-play on the homepage.</p>
+        <div id="ig-reels-editor"></div>
+        <button class="btn btn-sm" onclick="addIgReel()" style="margin-top:0.5rem;">+ Add Reel</button>
+        <div style="margin-top:1.25rem;">
+          <button class="btn" onclick="saveInstagramSettings()">Save</button>
+          <button class="btn btn-grey" onclick="resetInstagramSettings()">Reset</button>
+        </div>
       </div>
     </div>
 
@@ -1204,6 +1273,8 @@ async function showSection(id, btn) {
   if (id === 'bundle')      renderBundleEditor();
   if (id === 'productpage') { await loadProducts(); renderProductPageEditor(); }
   if (id === 'orders')      { await loadOrders(); renderOrders(); }
+  if (id === 'promos')      renderPromos();
+  if (id === 'instagram')   renderInstagramEditor();
   if (id === 'fomo')        renderFomoEditor();
   if (id === 'about')       { renderAboutEditor(); renderFaqEditor(); }
   if (id === 'returns')     renderReturnsEditor();
@@ -1214,9 +1285,33 @@ async function showSection(id, btn) {
 
 // ─── DASHBOARD ─────────────────────────────────────────────
 function renderDashboard() {
-  document.getElementById('stat-p').textContent = products.length;
-  document.getElementById('stat-o').textContent = orders.length;
-  document.getElementById('stat-r').textContent = '₹' + orders.reduce((s,o) => s+(o.total_amount||0), 0).toLocaleString();
+  const total    = orders.reduce((s,o)=>s+(o.total_amount||0),0);
+  const now      = new Date();
+  const thisMonth= orders.filter(o=>{ const d=new Date(o.timestamp); return d.getFullYear()===now.getFullYear()&&d.getMonth()===now.getMonth(); });
+  const pending  = orders.filter(o=>(o.status||'pending')==='pending');
+  const avg      = orders.length ? Math.round(total/orders.length) : 0;
+
+  document.getElementById('stat-p').textContent       = products.length;
+  document.getElementById('stat-o').textContent       = orders.length;
+  document.getElementById('stat-r').textContent       = '₹'+total.toLocaleString();
+  document.getElementById('stat-m').textContent       = thisMonth.length;
+  document.getElementById('stat-avg').textContent     = '₹'+avg.toLocaleString();
+  document.getElementById('stat-pending').textContent = pending.length;
+
+  // Low stock (qty < 10)
+  const LOW = 10;
+  const lowStock = products.filter(p=>p.quantity>=0 && p.quantity<LOW).sort((a,b)=>a.quantity-b.quantity);
+  const lsBox = document.getElementById('low-stock-box');
+  const lsTbody = document.getElementById('low-stock-tbody');
+  if(lowStock.length){ lsBox.style.display=''; lsTbody.innerHTML=lowStock.map(p=>`<tr><td>${p.name}</td><td>${p.category}</td><td style="font-weight:700;color:var(--red);">${p.quantity}</td></tr>`).join(''); }
+  else lsBox.style.display='none';
+
+  // Recent orders (last 5)
+  const roBox   = document.getElementById('recent-orders-box');
+  const roTbody = document.getElementById('recent-orders-tbody');
+  const recent  = [...orders].reverse().slice(0,5);
+  if(recent.length){ roBox.style.display=''; roTbody.innerHTML=recent.map(o=>`<tr><td><strong>${o.order_id}</strong></td><td>${o.customer_name}</td><td>₹${(o.total_amount||0).toLocaleString()}</td><td><span class="badge badge-${o.status||'pending'}">${o.status||'pending'}</span></td></tr>`).join(''); }
+  else roBox.style.display='none';
 }
 
 // ─── SITE CONTENT ──────────────────────────────────────────
@@ -1599,17 +1694,143 @@ function renderProducts() {
 // ─── RENDER ORDERS ─────────────────────────────────────────
 function renderOrders() {
   const tbody = document.getElementById('orders-tbody');
-  if (!orders.length) { tbody.innerHTML = '<tr><td colspan="6" class="empty-state">No orders yet.</td></tr>'; return; }
-  tbody.innerHTML = orders.map(o =>
-    '<tr>' +
-    '<td><strong>' + o.order_id + '</strong></td>' +
-    '<td>' + o.customer_name + '</td>' +
-    '<td>' + (o.customer_phone || '-') + '</td>' +
-    '<td>₹' + (o.total_amount || 0).toLocaleString() + '</td>' +
-    '<td>' + (o.timestamp ? new Date(o.timestamp).toLocaleDateString('en-IN') : '-') + '</td>' +
-    '<td><span class="badge badge-' + (o.status || 'pending') + '">' + (o.status || 'pending') + '</span></td>' +
-    '</tr>'
-  ).join('');
+  if (!orders.length) { tbody.innerHTML = '<tr><td colspan="7" class="empty-state">No orders yet.</td></tr>'; return; }
+  const statusOptions = ['pending','confirmed','processing','shipped','delivered','cancelled'];
+  tbody.innerHTML = orders.map(o => {
+    const cur = o.status||'pending';
+    const opts = statusOptions.map(s=>`<option value="${s}"${s===cur?' selected':''}>${s}</option>`).join('');
+    return '<tr>' +
+      '<td><strong>' + o.order_id + '</strong></td>' +
+      '<td>' + o.customer_name + '<br><small style="color:#888;">' + (o.customer_phone||'') + '</small></td>' +
+      '<td>' + (o.customer_phone || '-') + '</td>' +
+      '<td>₹' + (o.total_amount || 0).toLocaleString() + '</td>' +
+      '<td>' + (o.timestamp ? new Date(o.timestamp).toLocaleDateString('en-IN') : '-') + '</td>' +
+      '<td><span class="badge badge-' + cur + '">' + cur + '</span></td>' +
+      '<td><select class="order-status-select" style="padding:4px 6px;font-size:12px;border:1px solid var(--border);border-radius:4px;">' + opts + '</select>' +
+      ' <button class="btn btn-sm" style="padding:4px 10px;font-size:11px;" onclick="updateOrderStatus(\'' + o.order_id + '\',this)">Save</button></td>' +
+      '</tr>';
+  }).join('');
+}
+
+async function updateOrderStatus(orderId, btn) {
+  const select = btn.previousElementSibling;
+  const status = select.value;
+  const origTxt = btn.textContent;
+  btn.disabled = true; btn.textContent = '…';
+  try {
+    const res  = await fetch(WEBHOOK, { method:'POST', body: JSON.stringify({ action:'updateOrderStatus', order_id:orderId, status }) });
+    const data = await res.json();
+    if(data.success){
+      const o = orders.find(x=>x.order_id===orderId);
+      if(o) o.status = status;
+      showAlert('orders-alert','Order status updated.','success');
+      renderOrders();
+    } else {
+      showAlert('orders-alert', data.message||'Update failed.', 'error');
+    }
+  } catch(e) {
+    showAlert('orders-alert','Network error.','error');
+  } finally {
+    btn.disabled=false; btn.textContent=origTxt;
+  }
+}
+
+// ─── PROMO CODES ───────────────────────────────────────────
+function getPromos(){ try{ return JSON.parse(localStorage.getItem('surabhi_promos')||'[]'); }catch{ return []; } }
+function savePromosList(list){ localStorage.setItem('surabhi_promos', JSON.stringify(list)); }
+
+function renderPromos(){
+  const list = getPromos();
+  const el   = document.getElementById('promos-list');
+  if(!list.length){ el.innerHTML='<p style="color:#888;font-size:13px;">No promo codes yet.</p>'; return; }
+  el.innerHTML = `<table class="data-table"><thead><tr><th>Code</th><th>Type</th><th>Value</th><th>Min Order</th><th>Active</th><th>Action</th></tr></thead><tbody>` +
+    list.map((p,i)=>`<tr>
+      <td><strong style="letter-spacing:1px;">${p.code}</strong></td>
+      <td>${p.type==='percent'?'%':'₹ flat'}</td>
+      <td>${p.type==='percent'?p.value+'%':'₹'+p.value}</td>
+      <td>${p.minOrder?'₹'+p.minOrder:'None'}</td>
+      <td><label style="cursor:pointer;"><input type="checkbox" ${p.active!==false?'checked':''} onchange="togglePromo(${i},this.checked)"/> On</label></td>
+      <td><button class="btn btn-red btn-sm" onclick="deletePromo(${i})">Delete</button></td>
+    </tr>`).join('') + '</tbody></table>';
+}
+
+function addPromo(){
+  const code  = (document.getElementById('new-promo-code').value||'').trim().toUpperCase();
+  const type  = document.getElementById('new-promo-type').value;
+  const value = Number(document.getElementById('new-promo-value').value)||0;
+  const min   = Number(document.getElementById('new-promo-min').value)||0;
+  if(!code||!value){ showAlert('promos-alert','Code and value are required.','error'); return; }
+  const list = getPromos();
+  if(list.find(p=>p.code===code)){ showAlert('promos-alert','Code already exists.','error'); return; }
+  list.push({ code, type, value, minOrder:min, active:true });
+  savePromosList(list);
+  renderPromos();
+  document.getElementById('new-promo-code').value='';
+  document.getElementById('new-promo-value').value='';
+  document.getElementById('new-promo-min').value='0';
+  showAlert('promos-alert','Promo code added.','success');
+}
+
+function deletePromo(i){
+  const list = getPromos(); list.splice(i,1); savePromosList(list); renderPromos();
+}
+function togglePromo(i, active){
+  const list = getPromos(); list[i].active=active; savePromosList(list);
+}
+
+// ─── INSTAGRAM FEED ────────────────────────────────────────
+const DEFAULT_INSTAGRAM = { title:'Follow the Ritual', subtitle:'@surabhisutra', reels:[] };
+function getInstagram(){ try{ return {...DEFAULT_INSTAGRAM,...JSON.parse(localStorage.getItem('surabhi_instagram')||'{}')}; }catch{ return {...DEFAULT_INSTAGRAM}; } }
+
+function renderInstagramEditor(){
+  const ig = getInstagram();
+  document.getElementById('ig-title').value    = ig.title;
+  document.getElementById('ig-subtitle').value = ig.subtitle;
+  renderIgReels(ig.reels||[]);
+}
+
+function renderIgReels(reels){
+  const wrap = document.getElementById('ig-reels-editor');
+  if(!wrap) return;
+  wrap.innerHTML = reels.map((r,i)=>`
+    <div style="border:1px solid var(--border);border-radius:6px;padding:1rem;margin-bottom:0.75rem;background:#fafafa;">
+      <div class="form-group"><label>Reel ${i+1} URL</label>
+        <input type="url" id="ig-reel-url-${i}" value="${escA(r.url||'')}" placeholder="https://www.instagram.com/reel/..."/></div>
+      <div class="form-group"><label>Caption (optional)</label>
+        <input type="text" id="ig-reel-cap-${i}" value="${escA(r.caption||'')}" placeholder="Short caption..."/></div>
+      <button class="btn btn-red btn-sm" onclick="removeIgReel(${i})">Remove</button>
+    </div>`).join('');
+}
+
+function addIgReel(){
+  const ig = getInstagram(); ig.reels.push({url:'',caption:''});
+  localStorage.setItem('surabhi_instagram',JSON.stringify(ig));
+  renderIgReels(ig.reels);
+}
+function removeIgReel(i){
+  const ig = getInstagram(); ig.reels.splice(i,1);
+  localStorage.setItem('surabhi_instagram',JSON.stringify(ig));
+  renderInstagramEditor();
+}
+function collectIgReels(){
+  const count = document.getElementById('ig-reels-editor').children.length;
+  const reels = [];
+  for(let i=0;i<count;i++){
+    const url = document.getElementById('ig-reel-url-'+i)?.value.trim();
+    const cap = document.getElementById('ig-reel-cap-'+i)?.value.trim()||'';
+    if(url) reels.push({url,caption:cap});
+  }
+  return reels;
+}
+function saveInstagramSettings(){
+  const ig = { title:document.getElementById('ig-title').value.trim()||DEFAULT_INSTAGRAM.title, subtitle:document.getElementById('ig-subtitle').value.trim(), reels:collectIgReels() };
+  localStorage.setItem('surabhi_instagram',JSON.stringify(ig));
+  showAlert('instagram-alert','Instagram feed saved.','success');
+}
+function resetInstagramSettings(){
+  localStorage.setItem('surabhi_instagram',JSON.stringify(DEFAULT_INSTAGRAM));
+  renderInstagramEditor();
+  showAlert('instagram-alert','Reset to defaults.','success');
 }
 
 // ─── ALERT ─────────────────────────────────────────────────

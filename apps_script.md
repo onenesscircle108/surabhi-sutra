@@ -44,6 +44,7 @@ function doPost(e) {
     if (data.action === 'saveAdmin')            return saveAdmin(data);
     if (data.action === 'deleteAdmin')          return deleteAdmin(data);
     if (data.action === 'updateAdminPassword')  return updateAdminPassword(data);
+    if (data.action === 'updateOrderStatus')    return updateOrderStatus(data);
 
     return jsonResponse({
       success: false,
@@ -643,6 +644,43 @@ function verifyAdminOTP(data) {
 
   } catch (err) {
     return jsonResponse({ success: false, message: 'verifyAdminOTP error: ' + err.message });
+  }
+}
+
+/* ======================================================
+   UPDATE ORDER STATUS
+====================================================== */
+
+function updateOrderStatus(data) {
+  const lock = LockService.getScriptLock();
+  try {
+    lock.waitLock(30000);
+
+    const sheet = getSheet(ORDERS_SHEET);
+    if (!sheet) return jsonResponse({ success: false, message: 'Orders Sheet not found' });
+
+    const orderId   = String(data.order_id || '').trim();
+    const newStatus = String(data.status   || '').trim().toLowerCase();
+
+    if (!orderId)   return jsonResponse({ success: false, message: 'order_id is required' });
+    if (!newStatus) return jsonResponse({ success: false, message: 'status is required' });
+
+    const sheetData = sheet.getDataRange().getValues();
+
+    for (let i = 1; i < sheetData.length; i++) {
+      if (String(sheetData[i][0] || '').trim() === orderId) {
+        sheet.getRange(i + 1, 9).setValue(newStatus); // column 9 = status
+        SpreadsheetApp.flush();
+        return jsonResponse({ success: true, message: 'Order status updated' });
+      }
+    }
+
+    return jsonResponse({ success: false, message: 'Order not found: ' + orderId });
+
+  } catch (err) {
+    return jsonResponse({ success: false, message: 'updateOrderStatus error: ' + err.message });
+  } finally {
+    try { lock.releaseLock(); } catch (_) {}
   }
 }
 

@@ -59,7 +59,7 @@
   </ul>
 
   <div class="nav-right">
-    <button class="nav-icon-btn" title="Search" aria-label="Search">
+    <button class="nav-icon-btn" title="Search" aria-label="Search" onclick="openSearch()">
       <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
     </button>
     <button class="nav-icon-btn" title="Wishlist" aria-label="Wishlist">
@@ -87,6 +87,18 @@
   </nav>
 </div>
 
+
+<!-- SEARCH OVERLAY -->
+<div id="search-overlay" style="display:none;position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,0.55);align-items:flex-start;justify-content:center;" onclick="closeSearch()">
+  <div style="background:#fff;width:90%;max-width:600px;margin-top:80px;border-radius:8px;padding:1.5rem;box-shadow:0 8px 40px rgba(0,0,0,0.2);" onclick="event.stopPropagation()">
+    <div style="display:flex;gap:10px;align-items:center;margin-bottom:1rem;">
+      <svg viewBox="0 0 24 24" style="width:18px;height:18px;flex-shrink:0;stroke:currentColor;fill:none;stroke-width:2;color:#888;"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="search-input" placeholder="Search products…" oninput="liveSearch(this.value)" onkeydown="if(event.key==='Escape')closeSearch()" style="flex:1;border:none;outline:none;font-size:16px;font-family:inherit;"/>
+      <button onclick="closeSearch()" style="background:none;border:none;font-size:20px;cursor:pointer;color:#888;line-height:1;">✕</button>
+    </div>
+    <div id="search-results"></div>
+  </div>
+</div>
 
 <!-- ═══════════════════════════
      HOME PAGE
@@ -422,6 +434,12 @@
 
         <div class="checkout-order-summary" id="checkout-summary"></div>
 
+        <div class="promo-row">
+          <input type="text" id="co-promo" placeholder="Promo code" style="text-transform:uppercase;" onkeydown="if(event.key==='Enter')applyPromo()"/>
+          <button onclick="applyPromo()" class="promo-apply-btn">Apply</button>
+        </div>
+        <div id="promo-msg" style="font-size:13px;margin-bottom:0.75rem;min-height:1.2em;"></div>
+
         <button class="btn-primary" id="place-order-btn" onclick="placeOrder()">
           Place Order
         </button>
@@ -441,6 +459,16 @@
   </section>
 </div><!-- end #checkout -->
 
+<!-- INSTAGRAM REELS FEED -->
+<section id="insta-section" style="display:none;padding:72px 0;background:var(--cream);border-top:1px solid var(--border);">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:2rem;">
+      <p class="section-label" id="insta-feed-title">Follow the Ritual</p>
+      <h2 class="section-title" id="insta-feed-sub" style="margin-bottom:0;"></h2>
+    </div>
+    <div id="insta-reels" style="display:flex;gap:16px;overflow-x:auto;padding-bottom:1rem;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;"></div>
+  </div>
+</section>
 
 <!-- ═══════════════════════════
      FOOTER

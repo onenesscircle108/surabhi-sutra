@@ -89,7 +89,8 @@ function showPage(page){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById(page).classList.add('active');
   window.scrollTo(0,0);
-  if(page==='shop') renderShop();
+  if(page==='shop')     renderShop();
+  if(page==='checkout') renderCheckoutSummary();
 }
 
 function toggleMobileMenu(){
@@ -188,17 +189,44 @@ async function fetchProducts(){
 // ─────────────────────────────
 // RENDER
 // ─────────────────────────────
+// ─────────────────────────────
+// REVIEWS (avg per product)
+// ─────────────────────────────
+let reviewsByProduct = {};
+async function fetchReviews(){
+  try{
+    const res  = await fetch(`${API_URL}?action=getReviews`);
+    const data = await res.json();
+    if(data.success){
+      reviewsByProduct = {};
+      (data.reviews||[]).forEach(r=>{
+        if(!r.product_id||!r.stars) return;
+        if(!reviewsByProduct[r.product_id]) reviewsByProduct[r.product_id]=[];
+        reviewsByProduct[r.product_id].push(Number(r.stars));
+      });
+    }
+  }catch(e){}
+}
+function getProductRating(id){
+  const arr = reviewsByProduct[id];
+  if(!arr||!arr.length) return null;
+  return { avg:(arr.reduce((s,x)=>s+x,0)/arr.length).toFixed(1), count:arr.length };
+}
+
 function productCard(p){
-  const img = p.images?.[0] || '';
+  const img    = p.images?.[0] || '';
+  const rating = getProductRating(p.id);
+  const stars  = rating ? `<div class="card-stars">⭐ ${rating.avg} <span class="card-rev-count">(${rating.count})</span></div>` : '';
 
   return `
   <div class="product-card" onclick="openProduct('${escapeAttr(p.id)}')">
     <div class="product-img">
-      ${img ? `<img src="${img}">` : ''}
+      ${img ? `<img src="${img}" loading="lazy">` : ''}
     </div>
     <div class="product-info">
-      <p>${p.name}</p>
-      <p>₹ ${p.price}</p>
+      <p class="card-name">${p.name}</p>
+      ${stars}
+      <p class="card-price">₹ ${p.price}</p>
     </div>
   </div>`;
 }
@@ -646,6 +674,180 @@ function applySiteContent(){
   }catch(e){ console.warn('applySiteContent:',e); }
 }
 
+// ─────────────────────────────
+// SEARCH OVERLAY
+// ─────────────────────────────
+function openSearch(){
+  document.getElementById('search-overlay').style.display='flex';
+  document.body.style.overflow='hidden';
+  setTimeout(()=>document.getElementById('search-input')?.focus(),50);
+}
+function closeSearch(){
+  document.getElementById('search-overlay').style.display='none';
+  document.body.style.overflow='';
+}
+function liveSearch(q){
+  const el = document.getElementById('search-results');
+  if(!el) return;
+  const query = (q||'').trim().toLowerCase();
+  if(!query){ el.innerHTML=''; return; }
+  const hits = products.filter(p=>
+    (p.name||'').toLowerCase().includes(query)||
+    (p.category||'').toLowerCase().includes(query)
+  ).slice(0,6);
+  el.innerHTML = hits.length
+    ? hits.map(p=>`<div class="search-result-item" onclick="closeSearch();openProduct('${escapeAttr(p.id)}')">
+        ${p.images?.[0]?`<img src="${p.images[0]}" class="search-thumb">`:'<div class="search-thumb search-thumb-empty"></div>'}
+        <div><div class="search-item-name">${p.name}</div><div class="search-item-price">₹${p.price}</div></div>
+      </div>`).join('')
+    : '<p class="search-empty">No products found.</p>';
+}
+
+// ─────────────────────────────
+// PROMO CODES
+// ─────────────────────────────
+let activePromo = null;
+
+function applyPromo(){
+  const input = document.getElementById('co-promo');
+  const msgEl = document.getElementById('promo-msg');
+  const code  = (input?.value||'').trim().toUpperCase();
+  if(!code){ if(msgEl) msgEl.innerHTML=''; return; }
+
+  const promos = JSON.parse(localStorage.getItem('surabhi_promos')||'[]');
+  const promo  = promos.find(pr=>pr.code.toUpperCase()===code && pr.active!==false);
+  if(!promo){
+    if(msgEl) msgEl.innerHTML='<span style="color:#c0392b;">Invalid or expired promo code.</span>';
+    return;
+  }
+
+  const subtotal = cart.reduce((s,i)=>s+i.price*i.qty,0);
+  if(promo.minOrder && subtotal < Number(promo.minOrder)){
+    if(msgEl) msgEl.innerHTML=`<span style="color:#c0392b;">Min order ₹${promo.minOrder} required.</span>`;
+    return;
+  }
+
+  const discount = promo.type==='percent'
+    ? Math.round(subtotal * Number(promo.value)/100)
+    : Math.min(Number(promo.value), subtotal);
+
+  activePromo = { code:promo.code, discount };
+  if(msgEl) msgEl.innerHTML=`<span style="color:#27ae60;">✓ ${promo.code} applied — ₹${discount} off!</span>`;
+  renderCheckoutSummary();
+}
+
+function clearPromo(){
+  activePromo = null;
+  const input = document.getElementById('co-promo');
+  const msgEl = document.getElementById('promo-msg');
+  if(input) input.value='';
+  if(msgEl) msgEl.innerHTML='';
+  renderCheckoutSummary();
+}
+
+// ─────────────────────────────
+// CHECKOUT SUMMARY + PLACE ORDER
+// ─────────────────────────────
+function renderCheckoutSummary(){
+  const el = document.getElementById('checkout-summary');
+  if(!el) return;
+  if(!cart.length){ el.innerHTML=''; return; }
+
+  const subtotal = cart.reduce((s,i)=>s+i.price*i.qty,0);
+  const discount = activePromo?.discount||0;
+  const total    = Math.max(0, subtotal-discount);
+
+  el.innerHTML=`
+    <div class="co-summary-box">
+      <div class="co-summary-title">Order Summary</div>
+      ${cart.map(i=>`<div class="co-summary-row"><span>${i.name} × ${i.qty}</span><span>₹${(i.price*i.qty).toLocaleString()}</span></div>`).join('')}
+      <div class="co-summary-divider"></div>
+      <div class="co-summary-row"><span>Subtotal</span><span>₹${subtotal.toLocaleString()}</span></div>
+      ${discount?`<div class="co-summary-row co-discount"><span>Promo (${activePromo.code})</span><span>−₹${discount.toLocaleString()}</span></div>`:''}
+      <div class="co-summary-row co-total"><span>Total</span><span>₹${total.toLocaleString()}</span></div>
+    </div>`;
+}
+
+async function placeOrder(){
+  const name    = document.getElementById('co-name')?.value.trim();
+  const email   = document.getElementById('co-email')?.value.trim();
+  const phone   = document.getElementById('co-phone')?.value.trim();
+  const address = document.getElementById('co-address')?.value.trim();
+  const alertEl = document.getElementById('checkout-alert');
+
+  if(!name||!email||!phone||!address){
+    if(alertEl) alertEl.innerHTML='<div style="color:#c0392b;padding:8px;margin-bottom:12px;background:#fdecea;border-radius:4px;">Please fill in all fields.</div>';
+    return;
+  }
+  if(!cart.length){
+    if(alertEl) alertEl.innerHTML='<div style="color:#c0392b;padding:8px;margin-bottom:12px;background:#fdecea;border-radius:4px;">Your cart is empty.</div>';
+    return;
+  }
+
+  const subtotal = cart.reduce((s,i)=>s+i.price*i.qty,0);
+  const discount = activePromo?.discount||0;
+  const total    = Math.max(0, subtotal-discount);
+  const orderId  = 'ORD-'+Date.now();
+  const itemsStr = JSON.stringify(cart.map(i=>`${i.name} ×${i.qty}`));
+
+  const btn = document.getElementById('place-order-btn');
+  if(btn){ btn.disabled=true; btn.textContent='Placing order…'; }
+  if(alertEl) alertEl.innerHTML='';
+
+  try{
+    const res  = await fetch(API_URL,{
+      method:'POST',
+      body: JSON.stringify({
+        action:'saveOrder', order_id:orderId,
+        customer_name:name, customer_email:email,
+        customer_phone:phone, customer_address:address,
+        items:itemsStr, total_amount:total,
+        timestamp:new Date().toISOString(), status:'pending'
+      })
+    });
+    const data = await res.json();
+    if(data.success){
+      cart=[]; localStorage.setItem('surabhi_cart',JSON.stringify(cart)); updateCartUI();
+      activePromo=null;
+      document.getElementById('checkout-form-wrap').style.display='none';
+      document.getElementById('order-confirmation').style.display='block';
+      document.getElementById('confirmation-msg').textContent=
+        `Thank you ${name}! Your order ${orderId} has been placed. We'll reach you at ${phone} shortly.`;
+    } else {
+      if(alertEl) alertEl.innerHTML=`<div style="color:#c0392b;padding:8px;margin-bottom:12px;background:#fdecea;border-radius:4px;">${data.message||'Order failed. Please try again.'}</div>`;
+    }
+  }catch(e){
+    if(alertEl) alertEl.innerHTML='<div style="color:#c0392b;padding:8px;margin-bottom:12px;background:#fdecea;border-radius:4px;">Network error. Please try again.</div>';
+  }finally{
+    if(btn){ btn.disabled=false; btn.textContent='Place Order'; }
+  }
+}
+
+// ─────────────────────────────
+// INSTAGRAM FEED
+// ─────────────────────────────
+function renderInstagramFeed(){
+  try{
+    const ig      = JSON.parse(localStorage.getItem('surabhi_instagram')||'{}');
+    const reels   = ig.reels||[];
+    const section = document.getElementById('insta-section');
+    if(!section||!reels.length){ if(section) section.style.display='none'; return; }
+    const titleEl = document.getElementById('insta-feed-title');
+    const subEl   = document.getElementById('insta-feed-sub');
+    if(titleEl) titleEl.textContent = ig.title||'Follow the Ritual';
+    if(subEl)   subEl.textContent   = ig.subtitle||'';
+    section.style.display='';
+    document.getElementById('insta-reels').innerHTML = reels.filter(r=>r.url).map(r=>{
+      const embedUrl = r.url.replace(/\/?$/,'') + '/embed/';
+      return `<div class="insta-reel-card">
+        <iframe src="${embedUrl}" width="320" height="480" frameborder="0" scrolling="no"
+          allow="autoplay; encrypted-media" allowtransparency="true" loading="lazy"></iframe>
+        ${r.caption?`<p class="insta-reel-caption">${r.caption}</p>`:''}
+      </div>`;
+    }).join('');
+  }catch(e){}
+}
+
 document.addEventListener('DOMContentLoaded',()=>{
   applySiteContent();
   loadWelcomeContent();
@@ -666,6 +868,8 @@ document.addEventListener('DOMContentLoaded',()=>{
   }
 
   fetchProducts();
+  fetchReviews();
   updateCartUI();
   initMarquee();
+  renderInstagramFeed();
 });
