@@ -1,7 +1,7 @@
 // ─────────────────────────────
 // CONFIG & STATE
 // ─────────────────────────────
-const API_URL = 'https://script.google.com/macros/s/AKfycbw4WcGOBWlADPu-IKLVS563UROCSxhG1qHyooa_6-LTSVzAZNYVAzf32JIIcC8DMncP/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbwIKKT8D9REXRRHFLHTFWMVP_WbQQyO6ryHzEd7MfbwsGZIjxYdY0g64tWNoP_MWukd/exec';
 
 const params    = new URLSearchParams(location.search);
 const productId = params.get('id');
