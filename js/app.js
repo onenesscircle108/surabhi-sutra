@@ -5,14 +5,28 @@ const API_URL    = 'https://script.google.com/macros/s/AKfycby41ODtHTDs0oXNyZLfP
 const API_BACKUP = 'https://script.google.com/macros/s/AKfycbxY8IBlJ0ry42dsKVdg6SbwVRpynO3Zjw5-OJOSvQXNIHVPzYBskKRU_jX4ASXa7JzBVw/exec'; // fill in backup /exec URL once deployed
 
 async function apiFetch(url, options){
+  const backupUrl = API_BACKUP ? url.replace(API_URL, API_BACKUP) : null;
+  const isWrite   = options && options.method === 'POST';
+
+  if(isWrite && backupUrl){
+    // Write to both simultaneously — backup sheet stays always in sync
+    const [primary, backup] = await Promise.allSettled([
+      fetch(url, options).then(r => r.json()),
+      fetch(backupUrl, options).then(r => r.json())
+    ]);
+    if(primary.status === 'fulfilled') return primary.value;
+    if(backup.status  === 'fulfilled') return backup.value;
+    throw new Error('Both API endpoints failed');
+  }
+
+  // Reads: primary first, backup only if primary fails
   try{
     const res = await fetch(url, options);
     if(!res.ok) throw new Error(`HTTP ${res.status}`);
     return await res.json();
   }catch(e){
-    if(!API_BACKUP) throw e;
-    console.warn('Primary API failed, trying backup:', e.message);
-    const backupUrl = url.replace(API_URL, API_BACKUP);
+    if(!backupUrl) throw e;
+    console.warn('Primary read failed, using backup:', e.message);
     const res = await fetch(backupUrl, options);
     return res.json();
   }
