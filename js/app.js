@@ -1,7 +1,22 @@
 // ─────────────────────────────
 // CONFIG
 // ─────────────────────────────
-const API_URL = 'https://script.google.com/macros/s/AKfycby41ODtHTDs0oXNyZLfPcHGf-tvce7YiDvaqpWo645uPgHu5a83phSz7eZHDCx6Jwsm/exec';
+const API_URL    = 'https://script.google.com/macros/s/AKfycby41ODtHTDs0oXNyZLfPcHGf-tvce7YiDvaqpWo645uPgHu5a83phSz7eZHDCx6Jwsm/exec';
+const API_BACKUP = ''; // fill in backup /exec URL once deployed
+
+async function apiFetch(url, options){
+  try{
+    const res = await fetch(url, options);
+    if(!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.json();
+  }catch(e){
+    if(!API_BACKUP) throw e;
+    console.warn('Primary API failed, trying backup:', e.message);
+    const backupUrl = url.replace(API_URL, API_BACKUP);
+    const res = await fetch(backupUrl, options);
+    return res.json();
+  }
+}
 
 // ─────────────────────────────
 // STATE
@@ -166,8 +181,7 @@ async function fetchProducts(){
 
   // Fetch fresh in the background and update silently
   try{
-    const res  = await fetch(`${API_URL}?action=getProducts`);
-    const data = await res.json();
+    const data = await apiFetch(`${API_URL}?action=getProducts`);
     if(!data.success){ console.error(data); return; }
 
     products = parseProducts(data.products);
@@ -191,8 +205,7 @@ async function fetchProducts(){
 let reviewsByProduct = {};
 async function fetchReviews(){
   try{
-    const res  = await fetch(`${API_URL}?action=getReviews`);
-    const data = await res.json();
+    const data = await apiFetch(`${API_URL}?action=getReviews`);
     if(data.success){
       reviewsByProduct = {};
       (data.reviews||[]).forEach(r=>{
@@ -818,7 +831,7 @@ async function placeOrder(){
   if(alertEl) alertEl.innerHTML='';
 
   try{
-    const res  = await fetch(API_URL,{
+    const data = await apiFetch(API_URL,{
       method:'POST',
       body: JSON.stringify({
         action:'saveOrder', order_id:orderId,
@@ -828,7 +841,6 @@ async function placeOrder(){
         timestamp:new Date().toISOString(), status:'pending'
       })
     });
-    const data = await res.json();
     if(data.success){
       cart=[]; localStorage.setItem('surabhi_cart',JSON.stringify(cart)); updateCartUI();
       activePromo=null;

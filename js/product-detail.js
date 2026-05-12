@@ -1,7 +1,22 @@
 // ─────────────────────────────
 // CONFIG & STATE
 // ─────────────────────────────
-const API_URL = 'https://script.google.com/macros/s/AKfycby41ODtHTDs0oXNyZLfPcHGf-tvce7YiDvaqpWo645uPgHu5a83phSz7eZHDCx6Jwsm/exec';
+const API_URL    = 'https://script.google.com/macros/s/AKfycby41ODtHTDs0oXNyZLfPcHGf-tvce7YiDvaqpWo645uPgHu5a83phSz7eZHDCx6Jwsm/exec';
+const API_BACKUP = ''; // fill in backup /exec URL once deployed
+
+async function apiFetch(url, options){
+  try{
+    const res = await fetch(url, options);
+    if(!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.json();
+  }catch(e){
+    if(!API_BACKUP) throw e;
+    console.warn('Primary API failed, trying backup:', e.message);
+    const backupUrl = url.replace(API_URL, API_BACKUP);
+    const res = await fetch(backupUrl, options);
+    return res.json();
+  }
+}
 
 const params    = new URLSearchParams(location.search);
 const productId = params.get('id');
@@ -971,8 +986,7 @@ async function fetchProduct() {
 
   // ── STEP 2: fetch fresh data, update cache and re-render ──
   try {
-    const res  = await fetch(`${API_URL}?action=getProducts`);
-    const data = await res.json();
+    const data = await apiFetch(`${API_URL}?action=getProducts`);
     if (!data.success) { if (!cached.length) showToast('Failed to load product'); return; }
 
     allProducts = parseProducts(data.products);
@@ -996,8 +1010,7 @@ async function fetchProduct() {
 async function fetchReviews() {
   try {
     const url  = `${API_URL}?action=getReviews${productId ? '&product_id=' + encodeURIComponent(productId) : ''}`;
-    const res  = await fetch(url);
-    const data = await res.json();
+    const data = await apiFetch(url);
     if (!data.success) { renderNoReviews(); return; }
     renderReviews(data.reviews || []);
   } catch { renderNoReviews(); }
@@ -1108,11 +1121,10 @@ async function submitReview() {
   if (btn) { btn.disabled = true; btn.textContent = 'Submitting...'; }
 
   try {
-    const res  = await fetch(API_URL, {
+    const data = await apiFetch(API_URL, {
       method: 'POST',
       body:   JSON.stringify({ action: 'saveReview', name, email, stars, comment, product_id: productId || '' })
     });
-    const data = await res.json();
     if (data.success) {
       showAlert('Thank you for your review! It will appear shortly.', 'success');
       // Reset form
