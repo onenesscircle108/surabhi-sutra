@@ -136,54 +136,49 @@ function dismissWelcome(){
   }, 900);
 }
 
+const PRODUCTS_CACHE_KEY = 'surabhi_products_cache';
+const PRODUCTS_CACHE_TTL = 10 * 60 * 1000; // 10 minutes
+
+function parseProducts(raw){
+  return raw.map(p=>{
+    const safeParse=(v,fb=[])=>{try{return typeof v==='string'?JSON.parse(v):v;}catch{return fb;}};
+    return {
+      id:p.id, name:p.name, category:p.category,
+      description:p.description, price:p.price,
+      images:safeParse(p.images, p.image_url?[p.image_url]:[]),
+      benefits:safeParse(p.benefits,[]),
+      bundle:p.bundle_enabled==='yes'
+    };
+  });
+}
+
 async function fetchProducts(){
+  // Render from cache immediately so the page feels instant
   try{
-    const res = await fetch(`${API_URL}?action=getProducts`);
-    const data = await res.json();
-
-    if(!data.success){
-      console.error(data);
-      showToast("Failed to load products");
-      return;
+    const cached = JSON.parse(localStorage.getItem(PRODUCTS_CACHE_KEY)||'null');
+    if(cached && cached.products?.length && (Date.now()-cached.ts)<PRODUCTS_CACHE_TTL){
+      products = cached.products;
+      renderHome(); renderShop();
+      productsLoaded = true;
+      if(welcomeMinTimerComplete) dismissWelcome();
     }
+  }catch(e){}
 
-    products = data.products.map(p => {
-      // SAFE PARSE JSON FIELDS
-      const safeParse = (v, fallback=[])=>{
-        try{
-          return typeof v === 'string' ? JSON.parse(v) : v;
-        }catch{
-          return fallback;
-        }
-      };
+  // Fetch fresh in the background and update silently
+  try{
+    const res  = await fetch(`${API_URL}?action=getProducts`);
+    const data = await res.json();
+    if(!data.success){ console.error(data); return; }
 
-      return {
-        id: p.id,
-        name: p.name,
-        category: p.category,
-        description: p.description,
-        price: p.price,
+    products = parseProducts(data.products);
+    localStorage.setItem(PRODUCTS_CACHE_KEY, JSON.stringify({ts:Date.now(), products}));
 
-        // 👇 IMPORTANT FIX
-        images: safeParse(p.images, p.image_url ? [p.image_url] : []),
-
-        benefits: safeParse(p.benefits, []),
-
-        bundle: p.bundle_enabled === 'yes'
-      };
-    });
-
-    console.log("✅ Loaded products:", products);
-
-    renderHome();
-    renderShop();
-
+    renderHome(); renderShop();
     productsLoaded = true;
     if(welcomeMinTimerComplete) dismissWelcome();
-
   }catch(err){
     console.error(err);
-    showToast("Error loading products");
+    if(!products.length) showToast('Error loading products');
   }
 }
 
@@ -268,7 +263,12 @@ function filterShop(query){
   const el = document.getElementById('shop-products');
   if(!el) return;
   if(!products.length){
-    el.innerHTML='<p class="loading-text">Loading products...</p>';
+    el.innerHTML=Array(6).fill(`<div class="product-card skeleton-card">
+      <div class="product-img skeleton-pulse"></div>
+      <div class="product-info">
+        <div class="skeleton-line" style="width:75%;"></div>
+        <div class="skeleton-line" style="width:40%;margin-top:6px;"></div>
+      </div></div>`).join('');
     return;
   }
   const q = (query||'').trim().toLowerCase();
