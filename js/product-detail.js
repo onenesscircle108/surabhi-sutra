@@ -1365,11 +1365,16 @@ function makeDraggable(el) {
 function openSearch() {
   document.getElementById('search-overlay').style.display = 'flex';
   document.body.style.overflow = 'hidden';
+  // hide fixed UI that sits above the overlay in stacking order
+  const hide = ['pd-float-bar', 'fomo-badge'];
+  hide.forEach(id => { const el = document.getElementById(id); if (el) el.style.visibility = 'hidden'; });
   setTimeout(() => document.getElementById('search-input')?.focus(), 50);
 }
 function closeSearch() {
   document.getElementById('search-overlay').style.display = 'none';
   document.body.style.overflow = '';
+  const show = ['pd-float-bar', 'fomo-badge'];
+  show.forEach(id => { const el = document.getElementById(id); if (el) el.style.visibility = ''; });
 }
 function liveSearch(q) {
   const el = document.getElementById('search-results');
