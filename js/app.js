@@ -7,6 +7,7 @@ const API_URL = 'https://script.google.com/macros/s/AKfycby41ODtHTDs0oXNyZLfPcHG
 // STATE
 // ─────────────────────────────
 let cart = JSON.parse(localStorage.getItem('surabhi_cart') || '[]');
+let wishlist = JSON.parse(localStorage.getItem('surabhi_wishlist') || '[]');
 let products = [];
 let currentProduct = null;
 let currentQty = 1;
@@ -213,15 +214,35 @@ function getProductRating(id){
   return { avg:(arr.reduce((s,x)=>s+x,0)/arr.length).toFixed(1), count:arr.length };
 }
 
+function isWishlisted(id){ return wishlist.includes(String(id)); }
+
+function toggleWishlist(id, e){
+  e.stopPropagation();
+  const sid = String(id);
+  const idx = wishlist.indexOf(sid);
+  if(idx === -1) wishlist.push(sid);
+  else wishlist.splice(idx, 1);
+  localStorage.setItem('surabhi_wishlist', JSON.stringify(wishlist));
+  // refresh the heart on all visible cards for this product
+  document.querySelectorAll(`.card-wishlist[data-id="${CSS.escape(sid)}"]`).forEach(btn=>{
+    btn.classList.toggle('wishlisted', isWishlisted(sid));
+    btn.title = isWishlisted(sid) ? 'Remove from wishlist' : 'Add to wishlist';
+  });
+}
+
 function productCard(p){
   const img    = p.images?.[0] || '';
   const rating = getProductRating(p.id);
   const stars  = rating ? `<div class="card-stars">⭐ ${rating.avg} <span class="card-rev-count">(${rating.count})</span></div>` : '';
+  const loved  = isWishlisted(p.id);
 
   return `
   <div class="product-card" onclick="openProduct('${escapeAttr(p.id)}')">
     <div class="product-img">
       ${img ? `<img src="${img}" loading="lazy">` : ''}
+      <button class="card-wishlist${loved?' wishlisted':''}" data-id="${escapeAttr(p.id)}"
+        onclick="toggleWishlist('${escapeAttr(p.id)}',event)"
+        title="${loved?'Remove from wishlist':'Add to wishlist'}">&#10084;</button>
     </div>
     <div class="product-info">
       <p class="card-name">${p.name}</p>
@@ -666,9 +687,11 @@ function applySiteContent(){
       panel.style.backgroundImage    = `url('${c.philImageUrl}')`;
       panel.style.backgroundSize     = 'cover';
       panel.style.backgroundPosition = 'center';
+      panel.classList.add('has-image');
       if(icon) icon.style.display = 'none';
     } else if(panel){
       panel.style.backgroundImage = '';
+      panel.classList.remove('has-image');
       if(icon){ icon.style.display=''; set('editorial-icon', c.philIcon||'☘️'); }
     }
   }catch(e){ console.warn('applySiteContent:',e); }
@@ -838,12 +861,16 @@ function renderInstagramFeed(){
     if(subEl)   subEl.textContent   = ig.subtitle||'';
     section.style.display='';
     document.getElementById('insta-reels').innerHTML = reels.filter(r=>r.url).map(r=>{
-      const embedUrl = r.url.replace(/\/?$/,'') + '/embed/';
-      return `<div class="insta-reel-card">
-        <iframe src="${embedUrl}" width="320" height="480" frameborder="0" scrolling="no"
-          allow="autoplay; encrypted-media" allowtransparency="true" loading="lazy"></iframe>
+      const url = r.url.trim().replace(/\/?$/,'/');
+      return `<a class="insta-reel-card" href="${url}" target="_blank" rel="noopener noreferrer">
+        <div class="insta-reel-thumb">
+          <svg viewBox="0 0 24 24" fill="white" width="48" height="48" style="opacity:.85">
+            <path d="M8 5v14l11-7z"/>
+          </svg>
+        </div>
         ${r.caption?`<p class="insta-reel-caption">${r.caption}</p>`:''}
-      </div>`;
+        <span class="insta-reel-cta">Watch on Instagram ↗</span>
+      </a>`;
     }).join('');
   }catch(e){}
 }
