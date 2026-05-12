@@ -2,7 +2,7 @@
 // CONFIG & STATE
 // ─────────────────────────────
 const API_URL    = 'https://script.google.com/macros/s/AKfycby41ODtHTDs0oXNyZLfPcHGf-tvce7YiDvaqpWo645uPgHu5a83phSz7eZHDCx6Jwsm/exec';
-const API_BACKUP = ''; // fill in backup /exec URL once deployed
+const API_BACKUP = 'https://script.google.com/macros/s/AKfycbyFtuhsTT9gNuxPhTxufSoG-TiGmzsEG-t5KgsKRnocDgg2ULnIm5DsUs_IHjw4rK8JLg/exec'; // fill in backup /exec URL once deployed
 
 async function apiFetch(url, options){
   try{
