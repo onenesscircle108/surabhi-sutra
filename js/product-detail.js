@@ -1360,6 +1360,35 @@ function makeDraggable(el) {
 }
 
 // ─────────────────────────────
+// SEARCH OVERLAY
+// ─────────────────────────────
+function openSearch() {
+  document.getElementById('search-overlay').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => document.getElementById('search-input')?.focus(), 50);
+}
+function closeSearch() {
+  document.getElementById('search-overlay').style.display = 'none';
+  document.body.style.overflow = '';
+}
+function liveSearch(q) {
+  const el = document.getElementById('search-results');
+  if (!el) return;
+  const query = (q || '').trim().toLowerCase();
+  if (!query) { el.innerHTML = ''; return; }
+  const hits = allProducts.filter(p =>
+    (p.name     || '').toLowerCase().includes(query) ||
+    (p.category || '').toLowerCase().includes(query)
+  ).slice(0, 6);
+  el.innerHTML = hits.length
+    ? hits.map(p => `<div class="search-result-item" onclick="closeSearch();window.location.href='product-detail.html?id=${esc(p.id)}'">
+        ${p.images?.[0] ? `<img src="${p.images[0]}" class="search-thumb">` : '<div class="search-thumb search-thumb-empty"></div>'}
+        <div><div class="search-item-name">${p.name}</div><div class="search-item-price">₹${p.price}</div></div>
+      </div>`).join('')
+    : '<p class="search-empty">No products found.</p>';
+}
+
+// ─────────────────────────────
 // INIT
 // ─────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {

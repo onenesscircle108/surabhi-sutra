@@ -58,6 +58,18 @@
 })();
 </script>
 
+<!-- SEARCH OVERLAY -->
+<div id="search-overlay" style="display:none;position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,0.55);align-items:flex-start;justify-content:center;" onclick="closeSearch()">
+  <div style="background:#fff;width:90%;max-width:600px;margin-top:80px;border-radius:8px;padding:1.5rem;box-shadow:0 8px 40px rgba(0,0,0,0.2);" onclick="event.stopPropagation()">
+    <div style="display:flex;gap:10px;align-items:center;margin-bottom:1rem;">
+      <svg viewBox="0 0 24 24" style="width:18px;height:18px;flex-shrink:0;stroke:currentColor;fill:none;stroke-width:2;color:#888;"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="search-input" placeholder="Search products…" oninput="liveSearch(this.value)" onkeydown="if(event.key==='Escape')closeSearch()" style="flex:1;border:none;outline:none;font-size:16px;font-family:inherit;"/>
+      <button onclick="closeSearch()" style="background:none;border:none;font-size:20px;cursor:pointer;color:#888;line-height:1;">✕</button>
+    </div>
+    <div id="search-results"></div>
+  </div>
+</div>
+
 <!-- NAV -->
 <nav>
   <div class="nav-logo" onclick="window.location.href='index.html'">SURABHI SUTRA</div>
@@ -67,7 +79,7 @@
     <li><a onclick="window.location.href='about.html'">About</a></li>
   </ul>
   <div class="nav-right">
-    <button class="nav-icon-btn" title="Search" aria-label="Search" onclick="window.location.href='index.html?goto=shop'">
+    <button class="nav-icon-btn" title="Search" aria-label="Search" onclick="openSearch()">
       <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
     </button>
     <button class="nav-cart" onclick="openCartDrawer()">
