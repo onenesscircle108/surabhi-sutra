@@ -1,5 +1,6 @@
 ```javascript
-const SHEET_ID        = '1H0evnxkTV52RcIdKWHiAH7jl5bpwqIvAdKikGVgywV8';
+const SHEET_ID        = '1H0evnxkTV52RcIdKWHiAH7jl5bpwqIvAdKikGVgywV8'; // PRIMARY sheet
+const BACKUP_SHEET_ID = '1ZprREAddUSS5W6mRWWWwyKtWJrWjbrhr_EsiGFfg7eE';  // BACKUP sheet
 const PRODUCTS_SHEET  = 'Products Sheet';
 const ORDERS_SHEET    = 'Orders Sheet';
 const REVIEWS_SHEET   = 'Reviews';
@@ -7,7 +8,7 @@ const ADMIN_SHEET     = 'Admin_id';
 const PRODUCT_COLUMNS = 10;
 const REVIEW_COLUMNS  = 5;
 const ADMIN_COLUMNS   = 4;
-const SCRIPT_VERSION  = '2026-05-09-v1';
+const SCRIPT_VERSION  = '2026-05-12-v1';
 
 function doGet(e) {
   try {
@@ -792,6 +793,67 @@ function updateAdminPassword(data) {
 
   } catch (err) {
     return jsonResponse({ success: false, message: 'updateAdminPassword error: ' + err.message });
+  } finally {
+    try { lock.releaseLock(); } catch (_) {}
+  }
+}
+
+/* ======================================================
+   BACKUP SYNC
+   Copies all sheet data from primary → backup spreadsheet.
+
+   HOW TO SET UP THE DAILY TRIGGER (do this once):
+   1. In the PRIMARY Apps Script editor, click ⏰ Triggers (left sidebar)
+   2. Click "+ Add Trigger" (bottom right)
+   3. Choose function: syncToBackup
+   4. Event source: Time-driven
+   5. Type: Day timer → Midnight to 1am
+   6. Save — Google will run it automatically every night.
+
+   HOW TO SET UP THE BACKUP SCRIPT:
+   In the BACKUP Apps Script editor (the copy you made), change line 1 to:
+       const SHEET_ID = '1ZprREAddUSS5W6mRWWWwyKtWJrWjbrhr_EsiGFfg7eE';
+   Then redeploy it as a new version. That way the backup script
+   reads data from the backup sheet, not the primary.
+====================================================== */
+
+function syncToBackup() {
+  const lock = LockService.getScriptLock();
+  try {
+    lock.waitLock(60000);
+
+    const primary = SpreadsheetApp.openById(SHEET_ID);
+    const backup  = SpreadsheetApp.openById(BACKUP_SHEET_ID);
+
+    const sheets = [PRODUCTS_SHEET, ORDERS_SHEET, REVIEWS_SHEET, ADMIN_SHEET];
+
+    for (const name of sheets) {
+      const src  = primary.getSheetByName(name);
+      const dest = backup.getSheetByName(name);
+
+      if (!src || !dest) {
+        Logger.log('syncToBackup: sheet not found — ' + name);
+        continue;
+      }
+
+      const lastRow = src.getLastRow();
+      const lastCol = src.getLastColumn();
+
+      dest.clearContents();
+
+      if (lastRow > 0 && lastCol > 0) {
+        const data = src.getRange(1, 1, lastRow, lastCol).getValues();
+        dest.getRange(1, 1, lastRow, lastCol).setValues(data);
+      }
+    }
+
+    PropertiesService.getScriptProperties()
+      .setProperty('LAST_BACKUP_SYNC', new Date().toISOString());
+
+    Logger.log('syncToBackup completed: ' + new Date().toISOString());
+
+  } catch (err) {
+    Logger.log('syncToBackup error: ' + err.message);
   } finally {
     try { lock.releaseLock(); } catch (_) {}
   }
