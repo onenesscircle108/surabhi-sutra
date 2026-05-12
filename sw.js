@@ -1,4 +1,4 @@
-const CACHE = 'surabhi-v1';
+const CACHE = 'surabhi-v2';
 const PRECACHE = [
   '/',
   '/index.html',

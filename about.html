@@ -264,6 +264,7 @@
 <div id="mobile-nav-overlay" class="mobile-nav-overlay">
   <button class="mobile-nav-close" onclick="document.getElementById('mobile-nav-overlay').classList.remove('open')" aria-label="Close menu">✕</button>
   <nav class="mobile-nav-list">
+    <a onclick="document.getElementById('mobile-nav-overlay').classList.remove('open');openSearch()">Search</a>
     <a onclick="window.location.href='index.html'">Home</a>
     <a onclick="window.location.href='index.html?goto=shop'">Shop</a>
     <a onclick="window.location.href='about.html'" style="color:var(--terracotta);">About</a>
