@@ -262,7 +262,7 @@ body{font-family:Arial,sans-serif;background:var(--beige);min-height:100vh;}
       <li><button class="nav-btn" onclick="showSection('fomo',this)">📣 FOMO</button></li>
       <li><button class="nav-btn" onclick="showSection('orders',this)">🛒 Orders</button></li>
       <li><button class="nav-btn" onclick="showSection('promos',this)">🏷️ Promo Codes</button></li>
-      <li><button class="nav-btn" onclick="showSection('instagram',this)">📸 Instagram</button></li>
+      <li><button class="nav-btn" onclick="showSection('instagram',this)">🎬 Follow the Ritual</button></li>
       <li><button class="nav-btn" onclick="showSection('about',this)">📖 About Page</button></li>
       <li><button class="nav-btn" onclick="showSection('returns',this)">↩️ Return Policy</button></li>
       <li><button class="nav-btn" onclick="showSection('announce',this)">📢 Announce Bar</button></li>
@@ -771,22 +771,13 @@ body{font-family:Arial,sans-serif;background:var(--beige);min-height:100vh;}
 
     <!-- INSTAGRAM FEED -->
     <div id="instagram" class="section">
-      <div class="page-title">Instagram Reels Feed</div>
+      <div class="page-title">Follow the Ritual — Video Grid</div>
       <div id="instagram-alert"></div>
-      <div class="form-box">
-        <h3>Feed Settings</h3>
-        <div class="form-row">
-          <div class="form-group"><label>Section Title</label><input type="text" id="ig-title" placeholder="Follow the Ritual"/></div>
-          <div class="form-group"><label>Subtitle / Handle</label><input type="text" id="ig-subtitle" placeholder="@surabhisutra"/></div>
-        </div>
-        <h3 style="margin-top:1.5rem;margin-bottom:0.5rem;">Reels</h3>
-        <p style="font-size:12px;color:#888;margin-bottom:1rem;">Paste your Instagram Reel URLs (e.g. https://www.instagram.com/reel/ABC123/). They'll auto-play on the homepage.</p>
-        <div id="ig-reels-editor"></div>
-        <button class="btn btn-sm" onclick="addIgReel()" style="margin-top:0.5rem;">+ Add Reel</button>
-        <div style="margin-top:1.25rem;">
-          <button class="btn" onclick="saveInstagramSettings()">Save</button>
-          <button class="btn btn-grey" onclick="resetInstagramSettings()">Reset</button>
-        </div>
+      <p style="color:#666;font-size:13px;margin-bottom:1.5rem;">6 boxes appear on the homepage. Add a video link to any slot and it will autoplay muted &amp; looped. Leave blank to show the emoji. Supports YouTube, YouTube Shorts, or direct MP4 URLs.</p>
+      <div id="ritual-slots-editor"></div>
+      <div style="margin-top:1.5rem;">
+        <button class="btn" onclick="saveRitualSettings()">Save</button>
+        <button class="btn btn-grey" onclick="resetRitualSettings()">Reset to Emojis</button>
       </div>
     </div>
 
@@ -1778,59 +1769,65 @@ function togglePromo(i, active){
   const list = getPromos(); list[i].active=active; savePromosList(list);
 }
 
-// ─── INSTAGRAM FEED ────────────────────────────────────────
-const DEFAULT_INSTAGRAM = { title:'Follow the Ritual', subtitle:'@surabhisutra', reels:[] };
-function getInstagram(){ try{ return {...DEFAULT_INSTAGRAM,...JSON.parse(localStorage.getItem('surabhi_instagram')||'{}')}; }catch{ return {...DEFAULT_INSTAGRAM}; } }
+// ─── FOLLOW THE RITUAL GRID ────────────────────────────────
+const RITUAL_SLOT_DEFAULTS = [
+  {emoji:'🌿',videoUrl:'',caption:''},
+  {emoji:'🌸',videoUrl:'',caption:''},
+  {emoji:'✨',videoUrl:'',caption:''},
+  {emoji:'🧴',videoUrl:'',caption:''},
+  {emoji:'🌺',videoUrl:'',caption:''},
+  {emoji:'💆',videoUrl:'',caption:''}
+];
 
-function renderInstagramEditor(){
-  const ig = getInstagram();
-  document.getElementById('ig-title').value    = ig.title;
-  document.getElementById('ig-subtitle').value = ig.subtitle;
-  renderIgReels(ig.reels||[]);
+function getRitual(){
+  try{
+    const d = JSON.parse(localStorage.getItem('surabhi_ritual')||'{}');
+    const slots = (d.slots && d.slots.length===6) ? d.slots : RITUAL_SLOT_DEFAULTS.map((def,i)=>({...def,...((d.slots||[])[i]||{})}));
+    return {slots};
+  }catch{ return {slots:[...RITUAL_SLOT_DEFAULTS]}; }
 }
 
-function renderIgReels(reels){
-  const wrap = document.getElementById('ig-reels-editor');
+function renderInstagramEditor(){
+  const {slots} = getRitual();
+  const wrap = document.getElementById('ritual-slots-editor');
   if(!wrap) return;
-  wrap.innerHTML = reels.map((r,i)=>`
-    <div style="border:1px solid var(--border);border-radius:6px;padding:1rem;margin-bottom:0.75rem;background:#fafafa;">
-      <div class="form-group"><label>Reel ${i+1} URL</label>
-        <input type="url" id="ig-reel-url-${i}" value="${escA(r.url||'')}" placeholder="https://www.instagram.com/reel/..."/></div>
-      <div class="form-group"><label>Caption (optional)</label>
-        <input type="text" id="ig-reel-cap-${i}" value="${escA(r.caption||'')}" placeholder="Short caption..."/></div>
-      <button class="btn btn-red btn-sm" onclick="removeIgReel(${i})">Remove</button>
+  wrap.innerHTML = slots.map((s,i)=>`
+    <div class="form-box" style="margin-bottom:1rem;">
+      <h3 style="margin-bottom:0.75rem;">Slot ${i+1}</h3>
+      <div class="form-row">
+        <div class="form-group" style="max-width:90px;">
+          <label>Emoji</label>
+          <input type="text" id="ritual-emoji-${i}" value="${escA(s.emoji||'🌿')}" maxlength="4" style="text-align:center;font-size:1.5rem;"/>
+        </div>
+        <div class="form-group" style="flex:1;">
+          <label>Video URL <span style="font-weight:400;color:#888;">(YouTube, YouTube Shorts, or direct .mp4)</span></label>
+          <input type="url" id="ritual-video-${i}" value="${escA(s.videoUrl||'')}" placeholder="https://youtube.com/shorts/... or https://...mp4"/>
+        </div>
+        <div class="form-group" style="max-width:200px;">
+          <label>Caption <span style="font-weight:400;color:#888;">(optional)</span></label>
+          <input type="text" id="ritual-cap-${i}" value="${escA(s.caption||'')}" placeholder="Short text overlay..."/>
+        </div>
+      </div>
     </div>`).join('');
 }
 
-function addIgReel(){
-  const ig = getInstagram(); ig.reels.push({url:'',caption:''});
-  localStorage.setItem('surabhi_instagram',JSON.stringify(ig));
-  renderIgReels(ig.reels);
+function collectRitualSlots(){
+  return RITUAL_SLOT_DEFAULTS.map((_,i)=>({
+    emoji:    document.getElementById('ritual-emoji-'+i)?.value.trim() || RITUAL_SLOT_DEFAULTS[i].emoji,
+    videoUrl: document.getElementById('ritual-video-'+i)?.value.trim() || '',
+    caption:  document.getElementById('ritual-cap-'+i)?.value.trim()   || ''
+  }));
 }
-function removeIgReel(i){
-  const ig = getInstagram(); ig.reels.splice(i,1);
-  localStorage.setItem('surabhi_instagram',JSON.stringify(ig));
+
+function saveRitualSettings(){
+  localStorage.setItem('surabhi_ritual', JSON.stringify({slots:collectRitualSlots()}));
+  showAlert('instagram-alert','Ritual grid saved.','success');
+}
+
+function resetRitualSettings(){
+  localStorage.setItem('surabhi_ritual', JSON.stringify({slots:RITUAL_SLOT_DEFAULTS}));
   renderInstagramEditor();
-}
-function collectIgReels(){
-  const count = document.getElementById('ig-reels-editor').children.length;
-  const reels = [];
-  for(let i=0;i<count;i++){
-    const url = document.getElementById('ig-reel-url-'+i)?.value.trim();
-    const cap = document.getElementById('ig-reel-cap-'+i)?.value.trim()||'';
-    if(url) reels.push({url,caption:cap});
-  }
-  return reels;
-}
-function saveInstagramSettings(){
-  const ig = { title:document.getElementById('ig-title').value.trim()||DEFAULT_INSTAGRAM.title, subtitle:document.getElementById('ig-subtitle').value.trim(), reels:collectIgReels() };
-  localStorage.setItem('surabhi_instagram',JSON.stringify(ig));
-  showAlert('instagram-alert','Instagram feed saved.','success');
-}
-function resetInstagramSettings(){
-  localStorage.setItem('surabhi_instagram',JSON.stringify(DEFAULT_INSTAGRAM));
-  renderInstagramEditor();
-  showAlert('instagram-alert','Reset to defaults.','success');
+  showAlert('instagram-alert','Reset to emoji defaults.','success');
 }
 
 // ─── ALERT ─────────────────────────────────────────────────

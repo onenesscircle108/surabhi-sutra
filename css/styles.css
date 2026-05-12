@@ -1429,12 +1429,14 @@ nav{
 .co-discount{color:#27ae60;}
 .co-total{font-weight:700;font-size:16px;margin-top:4px;color:var(--text-dark);}
 
-/* ── INSTAGRAM REELS ── */
-.insta-reel-card{flex-shrink:0;scroll-snap-align:start;background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045);border-radius:12px;overflow:hidden;width:220px;text-decoration:none;display:flex;flex-direction:column;transition:transform .2s,box-shadow .2s;}
-.insta-reel-card:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(0,0,0,.18);}
-.insta-reel-thumb{height:320px;display:flex;align-items:center;justify-content:center;}
-.insta-reel-caption{padding:10px 14px 6px;font-size:13px;color:#fff;line-height:1.4;flex:1;}
-.insta-reel-cta{display:block;padding:8px 14px 14px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.8);}
+/* ── RITUAL GRID ── */
+.ritual-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;}
+.ritual-slot{aspect-ratio:9/16;border-radius:12px;overflow:hidden;position:relative;background:linear-gradient(145deg,var(--sage) 0%,var(--terracotta) 100%);}
+.ritual-slot-emoji{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:3rem;}
+.ritual-slot video,.ritual-slot iframe{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border:none;}
+.ritual-slot-caption{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.55));color:#fff;font-size:11px;padding:20px 10px 8px;line-height:1.3;}
+@media(max-width:900px){.ritual-grid{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:540px){.ritual-grid{grid-template-columns:repeat(2,1fr);gap:8px;}}
 
 /* ── WISHLIST HEART BUTTON ── */
 .card-wishlist{position:absolute;top:8px;right:8px;background:rgba(255,255,255,.85);border:none;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:#ccc;transition:color .2s,background .2s;backdrop-filter:blur(4px);line-height:1;}

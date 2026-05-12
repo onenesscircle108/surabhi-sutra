@@ -847,30 +847,43 @@ async function placeOrder(){
 }
 
 // ─────────────────────────────
-// INSTAGRAM FEED
+// FOLLOW THE RITUAL GRID
 // ─────────────────────────────
-function renderInstagramFeed(){
+const RITUAL_DEFAULTS = [
+  {emoji:'🌿',videoUrl:'',caption:''},
+  {emoji:'🌸',videoUrl:'',caption:''},
+  {emoji:'✨',videoUrl:'',caption:''},
+  {emoji:'🧴',videoUrl:'',caption:''},
+  {emoji:'🌺',videoUrl:'',caption:''},
+  {emoji:'💆',videoUrl:'',caption:''}
+];
+
+function getYouTubeId(url){
+  const m = url.match(/(?:youtube\.com\/(?:watch\?v=|shorts\/|embed\/)|youtu\.be\/)([^&?/\s]{11})/);
+  return m ? m[1] : null;
+}
+
+function renderRitualSection(){
   try{
-    const ig      = JSON.parse(localStorage.getItem('surabhi_instagram')||'{}');
-    const reels   = ig.reels||[];
-    const section = document.getElementById('insta-section');
-    if(!section||!reels.length){ if(section) section.style.display='none'; return; }
-    const titleEl = document.getElementById('insta-feed-title');
-    const subEl   = document.getElementById('insta-feed-sub');
-    if(titleEl) titleEl.textContent = ig.title||'Follow the Ritual';
-    if(subEl)   subEl.textContent   = ig.subtitle||'';
-    section.style.display='';
-    document.getElementById('insta-reels').innerHTML = reels.filter(r=>r.url).map(r=>{
-      const url = r.url.trim().replace(/\/?$/,'/');
-      return `<a class="insta-reel-card" href="${url}" target="_blank" rel="noopener noreferrer">
-        <div class="insta-reel-thumb">
-          <svg viewBox="0 0 24 24" fill="white" width="48" height="48" style="opacity:.85">
-            <path d="M8 5v14l11-7z"/>
-          </svg>
-        </div>
-        ${r.caption?`<p class="insta-reel-caption">${r.caption}</p>`:''}
-        <span class="insta-reel-cta">Watch on Instagram ↗</span>
-      </a>`;
+    const data  = JSON.parse(localStorage.getItem('surabhi_ritual')||'{}');
+    const slots = (data.slots && data.slots.length) ? data.slots : RITUAL_DEFAULTS;
+    const grid  = document.getElementById('ritual-grid');
+    if(!grid) return;
+    grid.innerHTML = slots.map(slot => {
+      let media = '';
+      if(slot.videoUrl && slot.videoUrl.trim()){
+        const ytId = getYouTubeId(slot.videoUrl);
+        if(ytId){
+          media = `<iframe src="https://www.youtube.com/embed/${ytId}?autoplay=1&mute=1&loop=1&playlist=${ytId}&controls=0&modestbranding=1&playsinline=1"
+            frameborder="0" allow="autoplay; encrypted-media" allowfullscreen loading="lazy"></iframe>`;
+        } else {
+          media = `<video autoplay muted loop playsinline><source src="${slot.videoUrl}"></video>`;
+        }
+      }
+      return `<div class="ritual-slot">
+        ${media || `<div class="ritual-slot-emoji">${slot.emoji||'🌿'}</div>`}
+        ${slot.caption ? `<div class="ritual-slot-caption">${slot.caption}</div>` : ''}
+      </div>`;
     }).join('');
   }catch(e){}
 }
@@ -898,5 +911,5 @@ document.addEventListener('DOMContentLoaded',()=>{
   fetchReviews();
   updateCartUI();
   initMarquee();
-  renderInstagramFeed();
+  renderRitualSection();
 });
