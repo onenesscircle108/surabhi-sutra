@@ -8,16 +8,18 @@ const ADMIN_SHEET     = 'Admin_id';
 const PRODUCT_COLUMNS = 10;
 const REVIEW_COLUMNS  = 5;
 const ADMIN_COLUMNS   = 4;
-const SCRIPT_VERSION  = '2026-05-12-v1';
+const SCRIPT_VERSION  = '2026-05-12-v2';
 
 function doGet(e) {
   try {
     const action = e.parameter.action;
 
-    if (action === 'getProducts') return getProducts();
-    if (action === 'getOrders')   return getOrders();
-    if (action === 'getReviews')  return getReviews(e);
-    if (action === 'getAdmins')   return getAdmins();
+    if (action === 'getProducts')   return getProducts();
+    if (action === 'getOrders')     return getOrders();
+    if (action === 'getReviews')    return getReviews(e);
+    if (action === 'getAdmins')     return getAdmins();
+    if (action === 'validatePromo') return validatePromo(e);
+    if (action === 'getPromos')     return getPromos();
 
     return jsonResponse({
       success: false,
@@ -46,6 +48,9 @@ function doPost(e) {
     if (data.action === 'deleteAdmin')          return deleteAdmin(data);
     if (data.action === 'updateAdminPassword')  return updateAdminPassword(data);
     if (data.action === 'updateOrderStatus')    return updateOrderStatus(data);
+    if (data.action === 'savePromo')            return savePromo(data);
+    if (data.action === 'deletePromo')          return deletePromo(data);
+    if (data.action === 'togglePromo')          return togglePromo(data);
 
     return jsonResponse({
       success: false,
@@ -351,6 +356,9 @@ function saveOrder(data) {
       String(data.timestamp || new Date().toISOString()),
       String(data.status || 'pending')
     ]);
+
+    // Notify all admins by email (non-blocking — failure doesn't reject the order)
+    try { sendOrderNotification(data); } catch (mailErr) { Logger.log('Order email failed: ' + mailErr.message); }
 
     return jsonResponse({
       success: true,
@@ -796,6 +804,152 @@ function updateAdminPassword(data) {
   } finally {
     try { lock.releaseLock(); } catch (_) {}
   }
+}
+
+/* ======================================================
+   ORDER EMAIL NOTIFICATION
+====================================================== */
+
+function sendOrderNotification(order) {
+  const sheet = getSheet(ADMIN_SHEET);
+  if (!sheet) return;
+
+  const rows = getSheetDataRows(sheet, ADMIN_COLUMNS);
+  const adminEmails = rows
+    .map(r => String(r.values[2] || '').trim())
+    .filter(Boolean);
+
+  if (!adminEmails.length) return;
+
+  const items = (() => {
+    try { return JSON.parse(order.items || '[]').join(', '); }
+    catch { return String(order.items || ''); }
+  })();
+
+  const subject = '🛍️ New Order: ' + (order.order_id || '') + ' — ₹' + (order.total_amount || 0);
+  const body =
+    'New order received on Surabhi Sutra!\n\n' +
+    'Order ID  : ' + (order.order_id       || '') + '\n' +
+    'Customer  : ' + (order.customer_name  || '') + '\n' +
+    'Phone     : ' + (order.customer_phone || '') + '\n' +
+    'Email     : ' + (order.customer_email || '') + '\n' +
+    'Address   : ' + (order.customer_address || '') + '\n\n' +
+    'Items     : ' + items + '\n' +
+    'Total     : ₹' + (order.total_amount || 0) + '\n\n' +
+    'Placed at : ' + (order.timestamp || new Date().toISOString()) + '\n\n' +
+    'Log in to your admin panel to manage this order.';
+
+  for (const email of adminEmails) {
+    MailApp.sendEmail({ to: email, subject, body });
+  }
+}
+
+/* ======================================================
+   PROMO CODES  (stored in Script Properties as JSON)
+   No separate sheet needed — promos are small and infrequent.
+====================================================== */
+
+function _getPromoList() {
+  try {
+    return JSON.parse(PropertiesService.getScriptProperties().getProperty('PROMO_CODES') || '[]');
+  } catch (_) { return []; }
+}
+
+function _setPromoList(list) {
+  PropertiesService.getScriptProperties().setProperty('PROMO_CODES', JSON.stringify(list));
+}
+
+function getPromos() {
+  return jsonResponse({ success: true, promos: _getPromoList() });
+}
+
+function validatePromo(e) {
+  try {
+    const code     = String((e && e.parameter && e.parameter.code)     || '').trim().toUpperCase();
+    const subtotal = Number((e && e.parameter && e.parameter.subtotal) || 0);
+
+    if (!code) return jsonResponse({ success: false, message: 'No code provided.' });
+
+    const promo = _getPromoList().find(p => p.code.toUpperCase() === code && p.active !== false);
+    if (!promo) return jsonResponse({ success: false, message: 'Invalid or expired promo code.' });
+
+    if (promo.minOrder && subtotal < Number(promo.minOrder)) {
+      return jsonResponse({ success: false, message: 'Min order ₹' + promo.minOrder + ' required.' });
+    }
+
+    const discount = promo.type === 'percent'
+      ? Math.round(subtotal * Number(promo.value) / 100)
+      : Math.min(Number(promo.value), subtotal);
+
+    return jsonResponse({ success: true, code: promo.code, discount, type: promo.type, value: promo.value });
+
+  } catch (err) {
+    return jsonResponse({ success: false, message: 'validatePromo error: ' + err.message });
+  }
+}
+
+function savePromo(data) {
+  const lock = LockService.getScriptLock();
+  try {
+    lock.waitLock(30000);
+
+    const code  = String(data.code  || '').trim().toUpperCase();
+    const type  = String(data.type  || 'percent').trim();
+    const value = Number(data.value)    || 0;
+    const min   = Number(data.minOrder) || 0;
+
+    if (!code || !value) return jsonResponse({ success: false, message: 'Code and value are required.' });
+
+    const list = _getPromoList();
+    if (list.find(p => p.code === code)) return jsonResponse({ success: false, message: 'Code already exists.' });
+
+    list.push({ code, type, value, minOrder: min, active: true });
+    _setPromoList(list);
+
+    return jsonResponse({ success: true, message: 'Promo code saved.' });
+
+  } catch (err) {
+    return jsonResponse({ success: false, message: 'savePromo error: ' + err.message });
+  } finally { try { lock.releaseLock(); } catch (_) {} }
+}
+
+function deletePromo(data) {
+  const lock = LockService.getScriptLock();
+  try {
+    lock.waitLock(30000);
+
+    const code = String(data.code || '').trim().toUpperCase();
+    if (!code) return jsonResponse({ success: false, message: 'Code is required.' });
+
+    _setPromoList(_getPromoList().filter(p => p.code !== code));
+    return jsonResponse({ success: true, message: 'Promo deleted.' });
+
+  } catch (err) {
+    return jsonResponse({ success: false, message: 'deletePromo error: ' + err.message });
+  } finally { try { lock.releaseLock(); } catch (_) {} }
+}
+
+function togglePromo(data) {
+  const lock = LockService.getScriptLock();
+  try {
+    lock.waitLock(30000);
+
+    const code   = String(data.code || '').trim().toUpperCase();
+    const active = (data.active !== false && data.active !== 'false');
+
+    if (!code) return jsonResponse({ success: false, message: 'Code is required.' });
+
+    const list  = _getPromoList();
+    const promo = list.find(p => p.code === code);
+    if (!promo) return jsonResponse({ success: false, message: 'Code not found.' });
+
+    promo.active = active;
+    _setPromoList(list);
+    return jsonResponse({ success: true, message: 'Promo updated.' });
+
+  } catch (err) {
+    return jsonResponse({ success: false, message: 'togglePromo error: ' + err.message });
+  } finally { try { lock.releaseLock(); } catch (_) {} }
 }
 
 /* ======================================================

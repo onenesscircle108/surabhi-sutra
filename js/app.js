@@ -176,7 +176,8 @@ function parseProducts(raw){
       description:p.description, price:p.price,
       images:safeParse(p.images, p.image_url?[p.image_url]:[]),
       benefits:safeParse(p.benefits,[]),
-      bundle:p.bundle_enabled==='yes'
+      bundle:p.bundle_enabled==='yes',
+      stock:Number(p.quantity)||0
     };
   });
 }
@@ -253,15 +254,17 @@ function toggleWishlist(id, e){
 }
 
 function productCard(p){
-  const img    = p.images?.[0] || '';
-  const rating = getProductRating(p.id);
-  const stars  = rating ? `<div class="card-stars">⭐ ${rating.avg} <span class="card-rev-count">(${rating.count})</span></div>` : '';
-  const loved  = isWishlisted(p.id);
+  const img     = p.images?.[0] || '';
+  const rating  = getProductRating(p.id);
+  const stars   = rating ? `<div class="card-stars">⭐ ${rating.avg} <span class="card-rev-count">(${rating.count})</span></div>` : '';
+  const loved   = isWishlisted(p.id);
+  const oos     = p.stock === 0;
 
   return `
-  <div class="product-card" onclick="openProduct('${escapeAttr(p.id)}')">
+  <div class="product-card${oos?' oos':''}" onclick="${oos?'':'openProduct(\''+escapeAttr(p.id)+'\')'}">
     <div class="product-img">
-      ${img ? `<img src="${img}" loading="lazy">` : ''}
+      ${img ? `<img src="${img}" loading="lazy" alt="${escapeAttr(p.name)}">` : ''}
+      ${oos ? '<div class="card-oos-badge">Out of Stock</div>' : ''}
       <button class="card-wishlist${loved?' wishlisted':''}" data-id="${escapeAttr(p.id)}"
         onclick="toggleWishlist('${escapeAttr(p.id)}',event)"
         title="${loved?'Remove from wishlist':'Add to wishlist'}">&#10084;</button>
@@ -269,7 +272,7 @@ function productCard(p){
     <div class="product-info">
       <p class="card-name">${p.name}</p>
       ${stars}
-      <p class="card-price">₹ ${p.price}</p>
+      <p class="card-price">${oos?'<span class="card-oos-text">Unavailable</span>':`₹ ${p.price}`}</p>
     </div>
   </div>`;
 }
@@ -758,32 +761,31 @@ function liveSearch(q){
 // ─────────────────────────────
 let activePromo = null;
 
-function applyPromo(){
+async function applyPromo(){
   const input = document.getElementById('co-promo');
   const msgEl = document.getElementById('promo-msg');
+  const btnEl = document.getElementById('apply-promo-btn');
   const code  = (input?.value||'').trim().toUpperCase();
   if(!code){ if(msgEl) msgEl.innerHTML=''; return; }
 
-  const promos = JSON.parse(localStorage.getItem('surabhi_promos')||'[]');
-  const promo  = promos.find(pr=>pr.code.toUpperCase()===code && pr.active!==false);
-  if(!promo){
-    if(msgEl) msgEl.innerHTML='<span style="color:#c0392b;">Invalid or expired promo code.</span>';
-    return;
-  }
-
   const subtotal = cart.reduce((s,i)=>s+i.price*i.qty,0);
-  if(promo.minOrder && subtotal < Number(promo.minOrder)){
-    if(msgEl) msgEl.innerHTML=`<span style="color:#c0392b;">Min order ₹${promo.minOrder} required.</span>`;
-    return;
+  if(btnEl){ btnEl.disabled=true; btnEl.textContent='Checking…'; }
+  if(msgEl) msgEl.innerHTML='';
+
+  try{
+    const data = await apiFetch(`${API_URL}?action=validatePromo&code=${encodeURIComponent(code)}&subtotal=${subtotal}`);
+    if(data.success){
+      activePromo = { code:data.code, discount:data.discount };
+      if(msgEl) msgEl.innerHTML=`<span style="color:#27ae60;">✓ ${data.code} applied — ₹${data.discount} off!</span>`;
+      renderCheckoutSummary();
+    } else {
+      if(msgEl) msgEl.innerHTML=`<span style="color:#c0392b;">${data.message||'Invalid or expired promo code.'}</span>`;
+    }
+  }catch(e){
+    if(msgEl) msgEl.innerHTML='<span style="color:#c0392b;">Could not validate promo. Try again.</span>';
+  }finally{
+    if(btnEl){ btnEl.disabled=false; btnEl.textContent='Apply'; }
   }
-
-  const discount = promo.type==='percent'
-    ? Math.round(subtotal * Number(promo.value)/100)
-    : Math.min(Number(promo.value), subtotal);
-
-  activePromo = { code:promo.code, discount };
-  if(msgEl) msgEl.innerHTML=`<span style="color:#27ae60;">✓ ${promo.code} applied — ₹${discount} off!</span>`;
-  renderCheckoutSummary();
 }
 
 function clearPromo(){

@@ -462,6 +462,11 @@ body{font-family:Arial,sans-serif;background:var(--beige);min-height:100vh;}
           </div>
         </div>
 
+        <div class="form-group" style="margin-top:1rem;">
+          <label>WhatsApp Phone Number <span style="font-size:11px;color:#888;">(with country code, e.g. 919876543210)</span></label>
+          <input type="text" id="content-whatsapp-phone" placeholder="919876543210 — shown as floating chat button"/>
+        </div>
+
         <div style="margin-top:1rem;">
           <button class="btn" onclick="saveSiteContent()">Save Website Text</button>
           <button class="btn btn-grey" onclick="resetSiteContent()">Reset Defaults</button>
@@ -1060,7 +1065,8 @@ const DEFAULT_SITE_CONTENT = {
   philBody:"Surabhi Sutra is not just skincare — it is a ritual. Rooted in the ancient Ayurvedic tradition of Panchakarma and Dinacharya, our formulations bring the botanical wisdom of India's sages into your morning routine. No shortcuts. No synthetics. Just nature, distilled.",
   philBtn:'Read Our Story',
   philIcon:'☘️',
-  philImageUrl:''
+  philImageUrl:'',
+  whatsappPhone:''
 };
 const DEFAULT_BUNDLE_SETTINGS = {
   enabled:true,regularLabel:'Regular',builderLabel:'Bundle & Save',
@@ -1374,6 +1380,7 @@ function renderContentEditor() {
   document.getElementById('content-phil-btn').value     = c.philBtn;
   document.getElementById('content-phil-icon').value    = c.philIcon||'☘️';
   document.getElementById('content-phil-image').value   = c.philImageUrl||'';
+  document.getElementById('content-whatsapp-phone').value = c.whatsappPhone||'';
 }
 function collectSiteContent() {
   return mergeSiteContent({
@@ -1402,7 +1409,8 @@ function collectSiteContent() {
     philBody:     document.getElementById('content-phil-body').value.trim(),
     philBtn:      document.getElementById('content-phil-btn').value.trim(),
     philIcon:     document.getElementById('content-phil-icon').value.trim(),
-    philImageUrl: document.getElementById('content-phil-image').value.trim()
+    philImageUrl:    document.getElementById('content-phil-image').value.trim(),
+    whatsappPhone:   document.getElementById('content-whatsapp-phone').value.trim().replace(/\D/g,'')
   });
 }
 function saveSiteContent()  { localStorage.setItem('surabhi_site_content', JSON.stringify(collectSiteContent())); showAlert('content-alert','Website text updated.','success'); }
@@ -1745,47 +1753,72 @@ async function updateOrderStatus(orderId, btn) {
   }
 }
 
-// ─── PROMO CODES ───────────────────────────────────────────
-function getPromos(){ try{ return JSON.parse(localStorage.getItem('surabhi_promos')||'[]'); }catch{ return []; } }
-function savePromosList(list){ localStorage.setItem('surabhi_promos', JSON.stringify(list)); }
-
-function renderPromos(){
-  const list = getPromos();
-  const el   = document.getElementById('promos-list');
-  if(!list.length){ el.innerHTML='<p style="color:#888;font-size:13px;">No promo codes yet.</p>'; return; }
-  el.innerHTML = `<table class="data-table"><thead><tr><th>Code</th><th>Type</th><th>Value</th><th>Min Order</th><th>Active</th><th>Action</th></tr></thead><tbody>` +
-    list.map((p,i)=>`<tr>
-      <td><strong style="letter-spacing:1px;">${p.code}</strong></td>
-      <td>${p.type==='percent'?'%':'₹ flat'}</td>
-      <td>${p.type==='percent'?p.value+'%':'₹'+p.value}</td>
-      <td>${p.minOrder?'₹'+p.minOrder:'None'}</td>
-      <td><label style="cursor:pointer;"><input type="checkbox" ${p.active!==false?'checked':''} onchange="togglePromo(${i},this.checked)"/> On</label></td>
-      <td><button class="btn btn-red btn-sm" onclick="deletePromo(${i})">Delete</button></td>
-    </tr>`).join('') + '</tbody></table>';
+// ─── PROMO CODES (server-side via Apps Script Script Properties) ──
+async function renderPromos(){
+  const el = document.getElementById('promos-list');
+  el.innerHTML='<p style="color:#888;font-size:13px;">Loading…</p>';
+  try{
+    const data = await apiFetch(WEBHOOK+'?action=getPromos');
+    const list = (data.success && data.promos) ? data.promos : [];
+    if(!list.length){ el.innerHTML='<p style="color:#888;font-size:13px;">No promo codes yet.</p>'; return; }
+    el.innerHTML = `<table class="data-table"><thead><tr><th>Code</th><th>Type</th><th>Value</th><th>Min Order</th><th>Active</th><th>Action</th></tr></thead><tbody>` +
+      list.map(p=>`<tr>
+        <td><strong style="letter-spacing:1px;">${p.code}</strong></td>
+        <td>${p.type==='percent'?'%':'₹ flat'}</td>
+        <td>${p.type==='percent'?p.value+'%':'₹'+p.value}</td>
+        <td>${p.minOrder?'₹'+p.minOrder:'None'}</td>
+        <td><label style="cursor:pointer;"><input type="checkbox" ${p.active!==false?'checked':''} onchange="togglePromo('${p.code}',this.checked)"/> On</label></td>
+        <td><button class="btn btn-red btn-sm" onclick="deletePromo('${p.code}')">Delete</button></td>
+      </tr>`).join('') + '</tbody></table>';
+  }catch(e){
+    el.innerHTML='<p style="color:#c0392b;font-size:13px;">Failed to load promos.</p>';
+  }
 }
 
-function addPromo(){
+async function addPromo(){
   const code  = (document.getElementById('new-promo-code').value||'').trim().toUpperCase();
   const type  = document.getElementById('new-promo-type').value;
   const value = Number(document.getElementById('new-promo-value').value)||0;
   const min   = Number(document.getElementById('new-promo-min').value)||0;
   if(!code||!value){ showAlert('promos-alert','Code and value are required.','error'); return; }
-  const list = getPromos();
-  if(list.find(p=>p.code===code)){ showAlert('promos-alert','Code already exists.','error'); return; }
-  list.push({ code, type, value, minOrder:min, active:true });
-  savePromosList(list);
-  renderPromos();
-  document.getElementById('new-promo-code').value='';
-  document.getElementById('new-promo-value').value='';
-  document.getElementById('new-promo-min').value='0';
-  showAlert('promos-alert','Promo code added.','success');
+  try{
+    const data = await apiFetch(WEBHOOK,{
+      method:'POST',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body: JSON.stringify({ action:'savePromo', code, type, value, minOrder:min })
+    });
+    if(!data.success) throw new Error(data.message||'Save failed');
+    document.getElementById('new-promo-code').value='';
+    document.getElementById('new-promo-value').value='';
+    document.getElementById('new-promo-min').value='0';
+    showAlert('promos-alert','Promo code added.','success');
+    renderPromos();
+  }catch(e){
+    showAlert('promos-alert','Error: '+e.message,'error');
+  }
 }
 
-function deletePromo(i){
-  const list = getPromos(); list.splice(i,1); savePromosList(list); renderPromos();
+async function deletePromo(code){
+  if(!confirm('Delete promo code '+code+'?')) return;
+  try{
+    const data = await apiFetch(WEBHOOK,{
+      method:'POST',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body: JSON.stringify({ action:'deletePromo', code })
+    });
+    if(!data.success) throw new Error(data.message||'Delete failed');
+    renderPromos();
+  }catch(e){ showAlert('promos-alert','Error: '+e.message,'error'); }
 }
-function togglePromo(i, active){
-  const list = getPromos(); list[i].active=active; savePromosList(list);
+
+async function togglePromo(code, active){
+  try{
+    await apiFetch(WEBHOOK,{
+      method:'POST',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body: JSON.stringify({ action:'togglePromo', code, active })
+    });
+  }catch(e){ showAlert('promos-alert','Toggle failed: '+e.message,'error'); renderPromos(); }
 }
 
 // ─── FOLLOW THE RITUAL GRID ────────────────────────────────

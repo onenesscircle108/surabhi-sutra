@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -c ' *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(grep -n \"fetch\\(API_URL\\\\|fetch\\(WEBHOOK\\\\|fetch\\(\\\\`\\\\${API_URL\" /Users/sarthakalva/Surabhi_Sutra/js/app.js)",
+      "Bash(grep -n \"fetch\\(API_URL\\\\|fetch\\(WEBHOOK\\\\|fetch\\(\\\\`\\\\${API_URL\" /Users/sarthakalva/Surabhi_Sutra/js/product-detail.js)",
+      "Bash(git checkout *)",
+      "Bash(grep *)",
+      "Bash(sed -i '' 's|const API_BACKUP = '\\\\'''\\\\'';|const API_BACKUP = '\\\\''https://script.google.com/macros/s/AKfycbyFtuhsTT9gNuxPhTxufSoG-TiGmzsEG-t5KgsKRnocDgg2ULnIm5DsUs_IHjw4rK8JLg/exec'\\\\'';|g' /Users/sarthakalva/Surabhi_Sutra/js/app.js /Users/sarthakalva/Surabhi_Sutra/js/product-detail.js)",
+      "Bash(sed -i '' 's|const WEBHOOK_BACKUP = '\\\\'''\\\\'';|const WEBHOOK_BACKUP = '\\\\''https://script.google.com/macros/s/AKfycbyFtuhsTT9gNuxPhTxufSoG-TiGmzsEG-t5KgsKRnocDgg2ULnIm5DsUs_IHjw4rK8JLg/exec'\\\\'';|g' /Users/sarthakalva/Surabhi_Sutra/admin.html)"
+    ]
+  }
+}

@@ -956,6 +956,19 @@ function renderProduct(p) {
   if (stickyName)  stickyName.textContent  = p.name;
   if (stickyPrice) stickyPrice.textContent = `₹${p.price}`;
 
+  // Out-of-stock state
+  const atcBtn    = document.getElementById('atc-btn');
+  const stickyAtc = document.querySelector('.pd-sticky-atc');
+  const floatAtc  = document.querySelector('.pd-float-bar-btn');
+  const oos       = p.stock === 0;
+  [atcBtn, stickyAtc, floatAtc].forEach(btn => {
+    if (!btn) return;
+    btn.disabled   = oos;
+    btn.textContent = oos ? 'Out of Stock' : 'Add to Cart';
+    btn.style.opacity = oos ? '0.5' : '';
+    btn.style.cursor  = oos ? 'not-allowed' : '';
+  });
+
   renderGallery(p.images || []);
   renderBundle(p);
   populateFloatBar(p);
@@ -979,7 +992,8 @@ function parseProducts(raw) {
     price:       p.price,
     images:      safeParse(p.images, p.image_url ? [p.image_url] : []),
     benefits:    safeParse(p.benefits, []),
-    bundle:      p.bundle_enabled === 'yes'
+    bundle:      p.bundle_enabled === 'yes',
+    stock:       Number(p.quantity) || 0
   }));
 }
 

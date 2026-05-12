@@ -1454,3 +1454,11 @@ nav{
 .card-wishlist{position:absolute;top:8px;right:8px;background:rgba(255,255,255,.85);border:none;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:#ccc;transition:color .2s,background .2s;backdrop-filter:blur(4px);line-height:1;}
 .card-wishlist:hover{background:#fff;color:#e74c3c;}
 .card-wishlist.wishlisted{color:#e74c3c;}
+.product-card.oos{cursor:default;opacity:.75;}
+.card-oos-badge{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.38);color:#fff;font-size:12px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;border-radius:8px;}
+.card-oos-text{color:var(--text-light);font-size:13px;}
+/* WhatsApp floating button */
+.wa-float{position:fixed;bottom:88px;right:20px;z-index:900;width:52px;height:52px;border-radius:50%;background:#25d366;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,.25);transition:transform .2s;}
+.wa-float:hover{transform:scale(1.1);}
+.wa-float svg{width:28px;height:28px;fill:#fff;}
+@media(min-width:768px){.wa-float{bottom:32px;}}
