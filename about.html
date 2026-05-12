@@ -206,6 +206,18 @@
 </head>
 <body>
 
+<!-- SEARCH OVERLAY -->
+<div id="search-overlay" style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,0.55);align-items:flex-start;justify-content:center;" onclick="closeSearch()">
+  <div style="background:#fff;width:90%;max-width:600px;margin-top:80px;border-radius:8px;padding:1.5rem;box-shadow:0 8px 40px rgba(0,0,0,0.2);" onclick="event.stopPropagation()">
+    <div style="display:flex;gap:10px;align-items:center;margin-bottom:1rem;">
+      <svg viewBox="0 0 24 24" style="width:18px;height:18px;flex-shrink:0;stroke:currentColor;fill:none;stroke-width:2;color:#888;"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="search-input" placeholder="Search products…" oninput="liveSearch(this.value)" onkeydown="if(event.key==='Escape')closeSearch()" style="flex:1;border:none;outline:none;font-size:16px;font-family:inherit;"/>
+      <button onclick="closeSearch()" style="background:none;border:none;font-size:20px;cursor:pointer;color:#888;line-height:1;">✕</button>
+    </div>
+    <div id="search-results"></div>
+  </div>
+</div>
+
 <!-- ANNOUNCE BAR -->
 <div class="announce-bar"><span id="announce-bar-text"></span></div>
 <script>
@@ -236,7 +248,7 @@
   </ul>
 
   <div class="nav-right">
-    <button class="nav-icon-btn" title="Search" aria-label="Search" onclick="window.location.href='index.html?goto=shop'">
+    <button class="nav-icon-btn" title="Search" aria-label="Search" onclick="openSearch()">
       <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
     </button>
     <button class="nav-cart" onclick="window.location.href='index.html?goto=cart'">
@@ -490,6 +502,59 @@ function render() {
       if (el) el.textContent = count;
     });
   } catch {}
+}
+
+const API_URL_ABOUT = 'https://script.google.com/macros/s/AKfycbx8IDlm6gWem4fywOy1q3C3YHUrcEXlGq7O9bD51HoPVVak9wKJOAYZKXyW3LkNOZpQ/exec';
+const API_BACKUP_ABOUT = 'https://script.google.com/macros/s/AKfycbzU7DL2drV7tvr38ZoqkFEImAdtzzSPNyxyXmvBin2a3jbs04Rs7njf5FFCP6CT8KPIrw/exec';
+let aboutProducts = [];
+
+(async function loadAboutProducts(){
+  const CACHE_KEY = 'surabhi_products_cache';
+  try {
+    const cached = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null');
+    if (cached && cached.products && cached.products.length) aboutProducts = cached.products;
+  } catch {}
+  try {
+    const res = await fetch(API_URL_ABOUT + '?action=getProducts').then(r => r.json()).catch(async () =>
+      fetch(API_BACKUP_ABOUT + '?action=getProducts').then(r => r.json())
+    );
+    if (res.success && res.products) {
+      aboutProducts = res.products.map(p => {
+        try { p.images = typeof p.images === 'string' ? JSON.parse(p.images) : p.images; } catch { p.images = p.image_url ? [p.image_url] : []; }
+        return p;
+      });
+    }
+  } catch {}
+})();
+
+function openSearch() {
+  document.getElementById('search-overlay').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => document.getElementById('search-input').focus(), 50);
+}
+function closeSearch() {
+  document.getElementById('search-overlay').style.display = 'none';
+  document.body.style.overflow = '';
+}
+function liveSearch(q) {
+  const el = document.getElementById('search-results');
+  if (!el) return;
+  const query = (q || '').trim().toLowerCase();
+  if (!query) { el.innerHTML = ''; return; }
+  const hits = aboutProducts.filter(p =>
+    (p.name || '').toLowerCase().includes(query) ||
+    (p.category || '').toLowerCase().includes(query)
+  ).slice(0, 6);
+  const esc = s => String(s ?? '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  el.innerHTML = hits.length
+    ? hits.map(p => {
+        const img = Array.isArray(p.images) ? p.images[0] : p.image_url || '';
+        return `<div class="search-result-item" onclick="closeSearch();window.location.href='product-detail.html?id=${esc(p.id)}'">
+          ${img ? `<img src="${img}" class="search-thumb">` : '<div class="search-thumb search-thumb-empty"></div>'}
+          <div><div class="search-item-name">${p.name}</div><div class="search-item-price">₹${p.price}</div></div>
+        </div>`;
+      }).join('')
+    : '<p class="search-empty">No products found.</p>';
 }
 
 render();
