@@ -244,7 +244,11 @@ body{font-family:Arial,sans-serif;background:var(--beige);min-height:100vh;}
       <input type="text" id="login-otp" placeholder="6-digit OTP" maxlength="6" pattern="[0-9]*" inputmode="numeric" style="letter-spacing:6px;font-size:20px;text-align:center;" onkeydown="if(event.key==='Enter')doVerifyOTP()"/>
       <button id="otp-btn" onclick="doVerifyOTP()">Verify & Sign In</button>
       <p id="otp-error" style="color:red;font-size:12px;margin-top:0.5rem;"></p>
-      <button onclick="backToLogin()" style="background:none;border:none;color:var(--sage);font-size:12px;cursor:pointer;margin-top:0.75rem;width:100%;">← Use different credentials</button>
+      <div style="text-align:center;margin-top:0.75rem;font-size:12px;color:#888;">
+        <span id="resend-timer">Resend OTP in <strong id="resend-countdown">30</strong>s</span>
+        <button id="resend-btn" onclick="doResendOTP()" style="display:none;background:none;border:none;color:var(--sage);font-size:12px;cursor:pointer;text-decoration:underline;padding:0;">Resend OTP</button>
+      </div>
+      <button onclick="backToLogin()" style="background:none;border:none;color:var(--sage);font-size:12px;cursor:pointer;margin-top:0.5rem;width:100%;">← Use different credentials</button>
     </div>
   </div>
 </div>
@@ -1201,6 +1205,7 @@ async function doLogin() {
       document.getElementById('login-step1').style.display = 'none';
       document.getElementById('login-step2').style.display = 'block';
       setTimeout(() => document.getElementById('login-otp').focus(), 50);
+      startResendCountdown();
     } else {
       errEl.textContent = data.message || 'Login failed. Please check your credentials.';
       pwdEl.value = '';
@@ -1210,6 +1215,54 @@ async function doLogin() {
   } finally {
     btn.disabled = false;
     btn.textContent = 'Send OTP →';
+  }
+}
+
+let _resendTimer = null;
+function startResendCountdown() {
+  clearInterval(_resendTimer);
+  let secs = 30;
+  const timerEl    = document.getElementById('resend-timer');
+  const countEl    = document.getElementById('resend-countdown');
+  const resendBtn  = document.getElementById('resend-btn');
+  if (timerEl)   timerEl.style.display   = 'inline';
+  if (resendBtn) resendBtn.style.display = 'none';
+  if (countEl)   countEl.textContent     = secs;
+
+  _resendTimer = setInterval(() => {
+    secs--;
+    if (countEl) countEl.textContent = secs;
+    if (secs <= 0) {
+      clearInterval(_resendTimer);
+      if (timerEl)   timerEl.style.display   = 'none';
+      if (resendBtn) resendBtn.style.display = 'inline';
+    }
+  }, 1000);
+}
+
+async function doResendOTP() {
+  const resendBtn = document.getElementById('resend-btn');
+  const errEl     = document.getElementById('otp-error');
+  if (resendBtn) { resendBtn.disabled = true; resendBtn.textContent = 'Sending…'; }
+  if (errEl) errEl.textContent = '';
+
+  try {
+    // Re-use stored credentials — _adminEmail is already set from step 1
+    const pwdEl = document.getElementById('login-pwd');
+    const data  = await authFetch({
+      method: 'POST',
+      body: JSON.stringify({ action: 'verifyAdmin', email: _adminEmail, password: pwdEl ? pwdEl.value : '' })
+    });
+    if (data.success) {
+      document.getElementById('login-otp').value = '';
+      startResendCountdown();
+    } else {
+      if (errEl) errEl.textContent = data.message || 'Could not resend OTP. Please go back and try again.';
+      if (resendBtn) { resendBtn.disabled = false; resendBtn.textContent = 'Resend OTP'; }
+    }
+  } catch (e) {
+    if (errEl) errEl.textContent = 'Network error. Please try again.';
+    if (resendBtn) { resendBtn.disabled = false; resendBtn.textContent = 'Resend OTP'; }
   }
 }
 
