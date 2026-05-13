@@ -10,7 +10,7 @@ const PRODUCTS_SHEET  = 'Products Sheet';
 const ORDERS_SHEET    = 'Orders Sheet';
 const REVIEWS_SHEET   = 'Reviews';
 const ADMIN_SHEET     = 'Admin_id';
-const PRODUCT_COLUMNS = 10;
+const PRODUCT_COLUMNS = 12;
 const REVIEW_COLUMNS  = 5;
 const ADMIN_COLUMNS   = 4;
 const SCRIPT_VERSION  = '2026-05-12-backup-v2';
@@ -25,6 +25,7 @@ function doGet(e) {
     if (action === 'getAdmins')     return getAdmins();
     if (action === 'validatePromo') return validatePromo(e);
     if (action === 'getPromos')     return getPromos();
+    if (action === 'getVendors')    return getVendors();
 
     return jsonResponse({
       success: false,
@@ -56,6 +57,7 @@ function doPost(e) {
     if (data.action === 'savePromo')            return savePromo(data);
     if (data.action === 'deletePromo')          return deletePromo(data);
     if (data.action === 'togglePromo')          return togglePromo(data);
+    if (data.action === 'saveVendor')           return saveVendor(data);
 
     return jsonResponse({
       success: false,
@@ -169,7 +171,9 @@ function getProducts() {
         quantity: Number(row[6]) || 0,
         images: cleanJsonText(row[7], '[]'),
         benefits: cleanJsonText(row[8], '[]'),
-        bundle_enabled: toBundleFlag(row[9])
+        bundle_enabled: toBundleFlag(row[9]),
+        vendor_id: String(row[10] || '').trim(),
+        vendor_name: String(row[11] || '').trim()
       });
     }
 
@@ -216,7 +220,9 @@ function saveProduct(data) {
       Number(data.quantity)   || 0,
       cleanJsonText(data.images,   '[]'),
       cleanJsonText(data.benefits, '[]'),
-      toBundleFlag(data.bundle_enabled)
+      toBundleFlag(data.bundle_enabled),
+      String(data.vendor_id   || '').trim(),
+      String(data.vendor_name || '').trim()
     ]];
 
     const range = sheet.getRange(newRow, 1, 1, PRODUCT_COLUMNS);
@@ -772,6 +778,59 @@ function togglePromo(data) {
     return jsonResponse({ success: true, message: 'Promo updated.' });
   } catch (err) {
     return jsonResponse({ success: false, message: 'togglePromo error: ' + err.message });
+  } finally { try { lock.releaseLock(); } catch (_) {} }
+}
+
+/* ======================================================
+   VENDORS
+====================================================== */
+
+const VENDOR_PROP = 'SURABHI_VENDORS';
+
+function _getVendorMap() {
+  try {
+    return JSON.parse(PropertiesService.getScriptProperties().getProperty(VENDOR_PROP) || '{}');
+  } catch (_) { return {}; }
+}
+
+function _setVendorMap(map) {
+  PropertiesService.getScriptProperties().setProperty(VENDOR_PROP, JSON.stringify(map));
+}
+
+function _generateVendorId(map) {
+  let max = 0;
+  Object.keys(map).forEach(id => {
+    const m = id.match(/^VND-(\d+)$/);
+    if (m) max = Math.max(max, parseInt(m[1]));
+  });
+  return 'VND-' + String(max + 1).padStart(3, '0');
+}
+
+function getVendors() {
+  const map = _getVendorMap();
+  return jsonResponse({ success: true, vendors: Object.values(map) });
+}
+
+function saveVendor(data) {
+  const lock = LockService.getScriptLock();
+  try {
+    lock.waitLock(30000);
+    const name = String(data.name || '').trim();
+    if (!name) return jsonResponse({ success: false, message: 'Vendor name is required.' });
+
+    const map = _getVendorMap();
+    const existing = Object.values(map).find(v => v.name.toLowerCase() === name.toLowerCase());
+    if (existing) {
+      return jsonResponse({ success: true, vendor_id: existing.id, vendor_name: existing.name, is_new: false });
+    }
+
+    const id = _generateVendorId(map);
+    map[id] = { id, name, created: new Date().toISOString().slice(0, 10) };
+    _setVendorMap(map);
+    return jsonResponse({ success: true, vendor_id: id, vendor_name: name, is_new: true });
+
+  } catch (err) {
+    return jsonResponse({ success: false, message: 'saveVendor error: ' + err.message });
   } finally { try { lock.releaseLock(); } catch (_) {} }
 }
 ```

@@ -217,6 +217,17 @@ body{font-family:Arial,sans-serif;background:var(--beige);min-height:100vh;}
 }
 /* Sidebar low-stock badge */
 .menu-badge{display:inline-block;background:var(--red);color:#fff;font-size:9px;font-weight:700;min-width:16px;height:16px;border-radius:8px;padding:0 3px;line-height:16px;margin-left:4px;vertical-align:middle;}
+/* Vendor search */
+.vendor-search-wrap{position:relative;}
+.vendor-dropdown{position:absolute;left:0;right:0;top:100%;background:#fff;border:1px solid var(--border);border-top:none;border-radius:0 0 6px 6px;z-index:200;max-height:220px;overflow-y:auto;box-shadow:0 4px 12px rgba(0,0,0,.1);}
+.vendor-option{padding:10px 12px;cursor:pointer;font-size:13px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);}
+.vendor-option:last-child{border-bottom:none;}
+.vendor-option:hover{background:var(--beige);}
+.vendor-option-id{font-family:monospace;font-size:11px;background:#f0e8dc;color:var(--brown);padding:2px 6px;border-radius:3px;white-space:nowrap;}
+.vendor-option-new{color:var(--sage);font-style:italic;}
+.vendor-selected-row{display:flex;align-items:center;gap:10px;margin-top:8px;padding:8px 12px;background:#f7f3ee;border:1px solid var(--border);border-radius:6px;}
+.vendor-selected-name{font-size:13px;font-weight:600;color:var(--brown);flex:1;}
+.vendor-change-btn{background:none;border:none;color:#999;cursor:pointer;font-size:12px;padding:0;}
 </style>
 </head>
 <body>
@@ -383,6 +394,28 @@ body{font-family:Arial,sans-serif;background:var(--beige);min-height:100vh;}
             <option value="no">No — hide bundle builder</option>
           </select>
         </div>
+
+        <!-- VENDOR -->
+        <input type="hidden" id="p-vendor-id"/>
+        <input type="hidden" id="p-vendor-name"/>
+        <div class="form-group">
+          <label>Vendor</label>
+          <div class="vendor-search-wrap" id="vendor-search-wrap">
+            <input type="text" id="vendor-search-input"
+              placeholder="Search by vendor name or ID… or type a new name"
+              autocomplete="off"
+              oninput="vendorSearch(this.value)"
+              onfocus="vendorSearch(this.value)"
+              onblur="setTimeout(hideVendorDropdown,200)"/>
+            <div class="vendor-dropdown" id="vendor-dropdown" style="display:none;"></div>
+          </div>
+          <div class="vendor-selected-row" id="vendor-selected-row" style="display:none;">
+            <span class="vendor-selected-name" id="vendor-selected-name"></span>
+            <span class="product-id-badge" id="vendor-selected-id"></span>
+            <button type="button" class="vendor-change-btn" onclick="clearVendorSelection()">✕ Change</button>
+          </div>
+        </div>
+
         <div class="form-group">
           <label>Product Images (up to 6) — Paste Google Drive share links</label>
           <div class="image-slots" id="image-slots"></div>
@@ -402,7 +435,7 @@ body{font-family:Arial,sans-serif;background:var(--beige);min-height:100vh;}
         <table class="data-table">
           <thead>
             <tr>
-              <th>ID</th><th>Images</th><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Bundle</th><th>Actions</th>
+              <th>ID</th><th>Images</th><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Vendor</th><th>Bundle</th><th>Actions</th>
             </tr>
           </thead>
           <tbody id="prod-tbody">
@@ -1113,6 +1146,7 @@ const DEFAULT_BUNDLE_SETTINGS = {
 
 let products = [];
 let orders   = [];
+let vendors  = [];
 
 function safeJSON(str, fallback) { try { return JSON.parse(str) || fallback; } catch { return fallback; } }
 
@@ -1144,7 +1178,9 @@ function normalizeProduct(p) {
     quantity:       parseInt(p?.quantity)     || 0,
     images:         typeof p?.images   === 'string' ? p.images   : JSON.stringify(p?.images   || []),
     benefits:       typeof p?.benefits === 'string' ? p.benefits : JSON.stringify(p?.benefits || []),
-    bundle_enabled: normalizeBundleFlag(p?.bundle_enabled)
+    bundle_enabled: normalizeBundleFlag(p?.bundle_enabled),
+    vendor_id:      String(p?.vendor_id   || '').trim(),
+    vendor_name:    String(p?.vendor_name || '').trim()
   };
 }
 
@@ -1187,8 +1223,17 @@ async function loadOrders() {
   }
 }
 
+async function loadVendors() {
+  try {
+    const data = await apiFetch(WEBHOOK + '?action=getVendors');
+    if (data.success) vendors = data.vendors || [];
+  } catch (err) {
+    console.error('loadVendors failed:', err);
+  }
+}
+
 async function initializeAdminData() {
-  await Promise.all([loadProducts(), loadOrders()]);
+  await Promise.all([loadProducts(), loadOrders(), loadVendors()]);
   renderDashboard(); renderProducts(); renderOrders();
 }
 
@@ -1367,7 +1412,7 @@ async function showSection(id, btn) {
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   if (id === 'dashboard')   renderDashboard();
-  if (id === 'products')    { await loadProducts(); renderProducts(); }
+  if (id === 'products')    { await Promise.all([loadProducts(), loadVendors()]); renderProducts(); }
   if (id === 'content')     renderContentEditor();
   if (id === 'welcome')     renderWelcomeEditor();
   if (id === 'bundle')      renderBundleEditor();
@@ -1704,6 +1749,91 @@ function addBenefitRow(icon, body) {
 }
 
 // ─── FORM OPEN / CLOSE ─────────────────────────────────────
+// ─── VENDOR SEARCH ─────────────────────────────────────────
+function vendorSearch(q) {
+  const dropdown = document.getElementById('vendor-dropdown');
+  const query    = (q || '').trim().toLowerCase();
+
+  // Build matched list
+  const matched = query
+    ? vendors.filter(v =>
+        v.name.toLowerCase().includes(query) ||
+        v.id.toLowerCase().includes(query)
+      )
+    : vendors;
+
+  let html = matched.map(v =>
+    `<div class="vendor-option" onmousedown="selectVendorFromDropdown('${escA(v.id)}','${escA(v.name)}')">
+      <span class="vendor-option-id">${v.id}</span>
+      <span>${v.name}</span>
+    </div>`
+  ).join('');
+
+  // "Add as new vendor" — only if query is non-empty and not an exact match
+  const exactMatch = vendors.some(v => v.name.toLowerCase() === query);
+  if (query && !exactMatch) {
+    html += `<div class="vendor-option vendor-option-new" onmousedown="addNewVendor('${escA(q.trim())}')">
+      + Add "<strong>${escA(q.trim())}</strong>" as new vendor
+    </div>`;
+  }
+
+  dropdown.innerHTML = html || '<div style="padding:10px 12px;font-size:13px;color:#aaa;">No vendors yet. Type a name to add one.</div>';
+  dropdown.style.display = 'block';
+}
+
+function hideVendorDropdown() {
+  const d = document.getElementById('vendor-dropdown');
+  if (d) d.style.display = 'none';
+}
+
+function selectVendorFromDropdown(id, name) {
+  setVendorSelection(id, name);
+  hideVendorDropdown();
+}
+
+function setVendorSelection(id, name) {
+  document.getElementById('p-vendor-id').value   = id;
+  document.getElementById('p-vendor-name').value = name;
+  document.getElementById('vendor-search-input').value = '';
+  document.getElementById('vendor-search-wrap').style.display  = 'none';
+  document.getElementById('vendor-selected-row').style.display = 'flex';
+  document.getElementById('vendor-selected-name').textContent  = name;
+  document.getElementById('vendor-selected-id').textContent    = id;
+}
+
+function clearVendorSelection() {
+  document.getElementById('p-vendor-id').value   = '';
+  document.getElementById('p-vendor-name').value = '';
+  document.getElementById('vendor-search-input').value = '';
+  document.getElementById('vendor-search-wrap').style.display  = '';
+  document.getElementById('vendor-selected-row').style.display = 'none';
+  hideVendorDropdown();
+}
+
+async function addNewVendor(name) {
+  if (!name) return;
+  const input = document.getElementById('vendor-search-input');
+  if (input) { input.disabled = true; input.value = 'Creating vendor…'; }
+  try {
+    const data = await apiFetch(WEBHOOK, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action: 'saveVendor', name })
+    });
+    if (data.success) {
+      // Update local vendors list
+      if (data.is_new) vendors.push({ id: data.vendor_id, name: data.vendor_name });
+      setVendorSelection(data.vendor_id, data.vendor_name);
+    } else {
+      alert('Could not create vendor: ' + (data.message || 'Unknown error'));
+      if (input) { input.disabled = false; input.value = name; }
+    }
+  } catch (err) {
+    alert('Network error. Please try again.');
+    if (input) { input.disabled = false; input.value = name; }
+  }
+}
+
 function openAddForm() {
   // Clear BOTH id fields — this is a brand new product
   document.getElementById('p-id').value          = '';
@@ -1716,6 +1846,7 @@ function openAddForm() {
   document.getElementById('p-price').value          = '';
   document.getElementById('p-qty').value            = '';
   document.getElementById('p-bundle-enabled').value = 'yes';
+  clearVendorSelection();
   document.getElementById('form-title').textContent = 'Add New Product';
   document.getElementById('save-btn').textContent   = 'Save Product';
   document.getElementById('save-btn').disabled      = false;
@@ -1731,6 +1862,7 @@ function closeForm() {
   document.getElementById('p-original-id').value     = '';
   document.getElementById('p-id-display').style.display = 'none';
   document.getElementById('save-btn').disabled       = false;
+  clearVendorSelection();
 }
 
 // ─── EDIT PRODUCT ──────────────────────────────────────────
@@ -1755,6 +1887,13 @@ function editProduct(pid) {
   document.getElementById('p-price').value = product.price;
   document.getElementById('p-qty').value   = product.quantity;
   document.getElementById('p-bundle-enabled').value = normalizeBundleFlag(product.bundle_enabled);
+
+  // Vendor
+  if (product.vendor_id) {
+    setVendorSelection(product.vendor_id, product.vendor_name);
+  } else {
+    clearVendorSelection();
+  }
 
   // Images
   initImageSlots();
@@ -1819,7 +1958,7 @@ async function saveProduct() {
   const payload = {
     action:         'saveProduct',
     id:             productId,
-    original_id:    originalId || productId,  // GAS uses this to locate the existing row
+    original_id:    originalId || productId,
     name:           name,
     category:       category,
     description:    description,
@@ -1828,7 +1967,9 @@ async function saveProduct() {
     bundle_enabled: bundleValue,
     image_url:      images[0] || '',
     images:         JSON.stringify(images),
-    benefits:       JSON.stringify(benefits)
+    benefits:       JSON.stringify(benefits),
+    vendor_id:      document.getElementById('p-vendor-id').value.trim(),
+    vendor_name:    document.getElementById('p-vendor-name').value.trim()
   };
 
   const btn = document.getElementById('save-btn');
@@ -1880,13 +2021,16 @@ async function deleteProduct(id) {
 function renderProducts() {
   const tbody = document.getElementById('prod-tbody');
   if (!products.length) {
-    tbody.innerHTML = '<tr><td colspan="8" class="empty-state">No products yet.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="9" class="empty-state">No products yet.</td></tr>';
     return;
   }
   tbody.innerHTML = products.map(p => {
     const imgs      = safeJSON(p.images, []);
     const thumbs    = imgs.slice(0,3).map(img => '<img src="' + img + '" onerror="this.style.display=\'none\'"/>').join('');
     const bundleYes = isBundleEnabledFlag(p.bundle_enabled);
+    const vendorCell = p.vendor_id
+      ? '<span class="product-id-badge">' + p.vendor_id + '</span> ' + (p.vendor_name||'')
+      : '<span style="color:#bbb;">—</span>';
     return '<tr>' +
       '<td><span class="product-id-badge">' + p.id + '</span></td>' +
       '<td><div class="thumb-strip">' + (thumbs || '—') + '</div></td>' +
@@ -1894,6 +2038,7 @@ function renderProducts() {
       '<td>' + p.category + '</td>' +
       '<td>₹' + p.price.toLocaleString() + '</td>' +
       '<td>' + p.quantity + '</td>' +
+      '<td style="font-size:12px;">' + vendorCell + '</td>' +
       '<td><span style="color:' + (bundleYes ? '#4A7C59' : '#aaa') + ';font-weight:600;">' + (bundleYes ? 'Yes' : 'No') + '</span></td>' +
       '<td>' +
         '<button class="btn btn-sm" onclick="editProduct(\'' + p.id + '\')">Edit</button>' +
