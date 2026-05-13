@@ -255,12 +255,14 @@ function toggleWishlist(id, e){
 
 function updateWishlistBadge(){
   const badge = document.getElementById('wishlist-badge');
-  if(!badge) return;
-  if(wishlist.length > 0){
-    badge.textContent = wishlist.length;
-    badge.style.display = 'flex';
-  } else {
-    badge.style.display = 'none';
+  const mobileBadge = document.getElementById('mobile-wishlist-count');
+  if(badge){
+    if(wishlist.length > 0){ badge.textContent = wishlist.length; badge.style.display = 'flex'; }
+    else { badge.style.display = 'none'; }
+  }
+  if(mobileBadge){
+    if(wishlist.length > 0){ mobileBadge.textContent = wishlist.length; mobileBadge.style.display = 'inline'; }
+    else { mobileBadge.style.display = 'none'; }
   }
 }
 

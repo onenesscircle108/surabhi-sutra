@@ -86,6 +86,9 @@
     <a onclick="showPage('home');toggleMobileMenu()">Home</a>
     <a onclick="showPage('shop');toggleMobileMenu()">Shop</a>
     <a onclick="window.location.href='about.html'">About</a>
+    <a onclick="toggleMobileMenu();openWishlistDrawer()" style="position:relative;">
+      Wishlist <span id="mobile-wishlist-count" style="display:none;background:var(--terracotta);color:#fff;font-size:11px;padding:1px 6px;border-radius:10px;margin-left:4px;vertical-align:middle;"></span>
+    </a>
     <button class="btn-primary" onclick="toggleMobileMenu();openCartDrawer()">
       Cart (<span id="mobile-cart-count">0</span>)
     </button>
