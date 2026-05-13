@@ -726,7 +726,11 @@ nav{ z-index:600; }
 .pd-beige-bg{background:var(--beige);}
 
 /* make body have bottom padding on mobile for sticky bar */
-@media(max-width:768px){body{padding-bottom:76px;}}
+@media(max-width:768px){
+  body{padding-bottom:76px;}
+  /* suppress float bar on mobile — sticky bar already serves same purpose */
+  .pd-float-bar{display:none!important;}
+}
 
 /* Draggable cursor */
 .dragging{cursor:grabbing!important;user-select:none;}

@@ -281,6 +281,8 @@ nav{
 .nav-cart:hover{background:var(--brown);}
 @media(max-width:768px){
   .nav-icon-btn{display:none;}
+  /* keep wishlist heart visible in mobile nav */
+  .nav-wishlist-wrap .nav-icon-btn{display:flex;}
 }
 
 /* PAGE */
@@ -1477,7 +1479,7 @@ nav{
 @media(max-width:540px){.ritual-grid{grid-template-columns:repeat(2,1fr);gap:8px;}}
 
 /* ── WISHLIST HEART BUTTON ── */
-.card-wishlist{position:absolute;top:8px;right:8px;background:rgba(255,255,255,.85);border:none;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:#ccc;transition:color .2s,background .2s;backdrop-filter:blur(4px);line-height:1;}
+.card-wishlist{position:absolute;top:8px;right:8px;background:rgba(255,255,255,.9);border:none;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:#999;transition:color .2s,background .2s;backdrop-filter:blur(4px);line-height:1;box-shadow:0 1px 6px rgba(0,0,0,.12);}
 .card-wishlist:hover{background:#fff;color:#e74c3c;}
 .card-wishlist.wishlisted{color:#e74c3c;}
 .product-card.oos{cursor:default;opacity:.75;}
