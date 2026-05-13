@@ -4,6 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Surabhi Admin</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{--sage:#4A7C59;--brown:#7D5A3C;--cream:#FAF6F0;--beige:#F0E8DC;--border:#DDD0BC;--red:#E74C3C;}
@@ -210,6 +211,12 @@ body{font-family:Arial,sans-serif;background:var(--beige);min-height:100vh;}
   .image-slots{grid-template-columns:1fr!important;}
   .section-card{padding:0.75rem;}
 }
+/* Charts grid responsive */
+@media(max-width:768px){
+  #charts-wrap{grid-template-columns:1fr!important;}
+}
+/* Sidebar low-stock badge */
+.menu-badge{display:inline-block;background:var(--red);color:#fff;font-size:9px;font-weight:700;min-width:16px;height:16px;border-radius:8px;padding:0 3px;line-height:16px;margin-left:4px;vertical-align:middle;}
 </style>
 </head>
 <body>
@@ -258,7 +265,7 @@ body{font-family:Arial,sans-serif;background:var(--beige);min-height:100vh;}
     <div class="sidebar-logo">SURABHI ADMIN</div>
     <ul class="menu">
       <li><button class="nav-btn active" onclick="showSection('dashboard',this)">📊 Dashboard</button></li>
-      <li><button class="nav-btn" onclick="showSection('products',this)">📦 Products</button></li>
+      <li><button class="nav-btn" onclick="showSection('products',this)">📦 Products<span class="menu-badge" id="low-stock-nav-badge" style="display:none;">0</span></button></li>
       <li><button class="nav-btn" onclick="showSection('content',this)">✍️ Site Content</button></li>
       <li><button class="nav-btn" onclick="showSection('welcome',this)">👋 Welcome Screen</button></li>
       <li><button class="nav-btn" onclick="showSection('bundle',this)">🎁 Bundle</button></li>
@@ -298,7 +305,7 @@ body{font-family:Arial,sans-serif;background:var(--beige);min-height:100vh;}
 
       <!-- Low Stock Alert -->
       <div class="form-box" id="low-stock-box" style="display:none;">
-        <h3 style="color:var(--red);margin-bottom:1rem;">⚠️ Low Stock Alert</h3>
+        <h3 style="color:var(--red);margin-bottom:1rem;">⚠️ Low Stock Alert (qty ≤ 5)</h3>
         <table class="data-table"><thead><tr><th>Product</th><th>Category</th><th>Qty Left</th></tr></thead>
         <tbody id="low-stock-tbody"></tbody></table>
       </div>
@@ -308,6 +315,18 @@ body{font-family:Arial,sans-serif;background:var(--beige);min-height:100vh;}
         <h3 style="margin-bottom:1rem;">Recent Orders</h3>
         <table class="data-table"><thead><tr><th>Order ID</th><th>Customer</th><th>Amount</th><th>Status</th></tr></thead>
         <tbody id="recent-orders-tbody"></tbody></table>
+      </div>
+
+      <!-- Analytics Charts -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:1rem;" id="charts-wrap">
+        <div class="form-box" style="margin:0;">
+          <h3 style="margin-bottom:1rem;">Revenue — Last 30 Days</h3>
+          <canvas id="chart-revenue" height="200"></canvas>
+        </div>
+        <div class="form-box" style="margin:0;">
+          <h3 style="margin-bottom:1rem;">Top 5 Products by Revenue</h3>
+          <canvas id="chart-top-products" height="200"></canvas>
+        </div>
       </div>
     </div>
 
@@ -742,6 +761,7 @@ body{font-family:Arial,sans-serif;background:var(--beige);min-height:100vh;}
     <div id="orders" class="section">
       <div class="page-title">Customer Orders</div>
       <div id="orders-alert"></div>
+      <button class="btn" onclick="exportOrdersCSV()" style="margin-bottom:1rem;">⬇ Export CSV</button>
       <div class="data-table-wrap">
         <table class="data-table">
           <thead>
@@ -1364,6 +1384,9 @@ async function showSection(id, btn) {
 }
 
 // ─── DASHBOARD ─────────────────────────────────────────────
+let _chartRevenue = null;
+let _chartTopProds = null;
+
 function renderDashboard() {
   const total    = orders.reduce((s,o)=>s+(o.total_amount||0),0);
   const now      = new Date();
@@ -1378,13 +1401,28 @@ function renderDashboard() {
   document.getElementById('stat-avg').textContent     = '₹'+avg.toLocaleString();
   document.getElementById('stat-pending').textContent = pending.length;
 
-  // Low stock (qty < 10)
-  const LOW = 10;
-  const lowStock = products.filter(p=>p.quantity>=0 && p.quantity<LOW).sort((a,b)=>a.quantity-b.quantity);
+  // Low stock (qty ≤ 5)
+  const LOW = 5;
+  const lowStock = products.filter(p=>p.quantity>=0 && p.quantity<=LOW).sort((a,b)=>a.quantity-b.quantity);
   const lsBox = document.getElementById('low-stock-box');
   const lsTbody = document.getElementById('low-stock-tbody');
-  if(lowStock.length){ lsBox.style.display=''; lsTbody.innerHTML=lowStock.map(p=>`<tr><td>${p.name}</td><td>${p.category}</td><td style="font-weight:700;color:var(--red);">${p.quantity}</td></tr>`).join(''); }
-  else lsBox.style.display='none';
+  if(lowStock.length){
+    lsBox.style.display='';
+    lsTbody.innerHTML=lowStock.map(p=>`<tr>
+      <td><strong>${p.name}</strong></td>
+      <td>${p.category}</td>
+      <td style="font-weight:700;color:${p.quantity===0?'#721c24':'var(--red)'};">
+        ${p.quantity===0?'OUT OF STOCK':p.quantity}
+      </td>
+    </tr>`).join('');
+    // Sidebar badge
+    const badge = document.getElementById('low-stock-nav-badge');
+    if(badge){ badge.textContent=lowStock.length; badge.style.display='inline-block'; }
+  } else {
+    lsBox.style.display='none';
+    const badge = document.getElementById('low-stock-nav-badge');
+    if(badge) badge.style.display='none';
+  }
 
   // Recent orders (last 5)
   const roBox   = document.getElementById('recent-orders-box');
@@ -1392,6 +1430,101 @@ function renderDashboard() {
   const recent  = [...orders].reverse().slice(0,5);
   if(recent.length){ roBox.style.display=''; roTbody.innerHTML=recent.map(o=>`<tr><td><strong>${o.order_id}</strong></td><td>${o.customer_name}</td><td>₹${(o.total_amount||0).toLocaleString()}</td><td><span class="badge badge-${o.status||'pending'}">${o.status||'pending'}</span></td></tr>`).join(''); }
   else roBox.style.display='none';
+
+  // Analytics charts
+  renderAnalyticsCharts();
+}
+
+function renderAnalyticsCharts() {
+  if(typeof Chart === 'undefined') return;
+
+  // ── Revenue last 30 days ──
+  const days = 30;
+  const labels = [];
+  const revenueData = [];
+  const today = new Date();
+  for(let i=days-1; i>=0; i--){
+    const d = new Date(today);
+    d.setDate(today.getDate()-i);
+    const key = d.toLocaleDateString('en-IN',{day:'2-digit',month:'short'});
+    labels.push(key);
+    const dayRevenue = orders
+      .filter(o=>{ const od=new Date(o.timestamp); return od.toDateString()===d.toDateString(); })
+      .reduce((s,o)=>s+(o.total_amount||0),0);
+    revenueData.push(dayRevenue);
+  }
+  const ctxR = document.getElementById('chart-revenue')?.getContext('2d');
+  if(ctxR){
+    if(_chartRevenue) _chartRevenue.destroy();
+    _chartRevenue = new Chart(ctxR,{
+      type:'bar',
+      data:{
+        labels,
+        datasets:[{
+          label:'Revenue (₹)',
+          data:revenueData,
+          backgroundColor:'rgba(74,124,89,0.65)',
+          borderColor:'#4A7C59',
+          borderWidth:1,
+          borderRadius:3
+        }]
+      },
+      options:{
+        responsive:true,
+        plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'₹'+c.parsed.y.toLocaleString()}}},
+        scales:{
+          x:{ticks:{maxTicksLimit:10,font:{size:10}},grid:{display:false}},
+          y:{ticks:{callback:v=>'₹'+v.toLocaleString(),font:{size:10}},beginAtZero:true}
+        }
+      }
+    });
+  }
+
+  // ── Top 5 products by revenue ──
+  const productRevenue = {};
+  orders.forEach(o=>{
+    if(!o.items) return;
+    let parsed;
+    try{ parsed=JSON.parse(o.items); }catch{ return; }
+    if(!Array.isArray(parsed)) return;
+    parsed.forEach(entry=>{
+      const match = String(entry).match(/^(.+?)\s*×(\d+)$/);
+      if(!match) return;
+      const name = match[1].trim();
+      const qty  = parseInt(match[2])||1;
+      const prod = products.find(p=>p.name.trim()===name);
+      const price= prod ? prod.price : 0;
+      productRevenue[name] = (productRevenue[name]||0) + qty*price;
+    });
+  });
+  const sorted = Object.entries(productRevenue).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  const ctxP = document.getElementById('chart-top-products')?.getContext('2d');
+  if(ctxP){
+    if(_chartTopProds) _chartTopProds.destroy();
+    _chartTopProds = new Chart(ctxP,{
+      type:'bar',
+      data:{
+        labels:sorted.map(([n])=>n.length>20?n.slice(0,18)+'…':n),
+        datasets:[{
+          label:'Revenue (₹)',
+          data:sorted.map(([,v])=>v),
+          backgroundColor:'rgba(125,90,60,0.65)',
+          borderColor:'#7D5A3C',
+          borderWidth:1,
+          borderRadius:3
+        }]
+      },
+      options:{
+        indexAxis:'y',
+        responsive:true,
+        plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'₹'+c.parsed.x.toLocaleString()}}},
+        scales:{
+          x:{ticks:{callback:v=>'₹'+v.toLocaleString(),font:{size:10}},beginAtZero:true,grid:{display:false}},
+          y:{ticks:{font:{size:11}}}
+        }
+      }
+    });
+  }
 }
 
 // ─── SITE CONTENT ──────────────────────────────────────────
@@ -1768,6 +1901,28 @@ function renderProducts() {
       '</td>' +
     '</tr>';
   }).join('');
+}
+
+// ─── ORDERS CSV EXPORT ─────────────────────────────────────
+function exportOrdersCSV() {
+  if (!orders.length) { showAlert('orders-alert', 'No orders to export.', 'error'); return; }
+  const headers = ['Order ID','Customer Name','Email','Phone','Address','Items','Total (₹)','Date','Status'];
+  const rows = orders.map(o => [
+    o.order_id, o.customer_name, o.customer_email, o.customer_phone,
+    o.customer_address, o.items, o.total_amount,
+    o.timestamp ? new Date(o.timestamp).toLocaleDateString('en-IN') : '',
+    o.status || 'pending'
+  ].map(v => `"${String(v||'').replace(/"/g,'""')}"`));
+  const csv = [headers.join(','), ...rows.map(r=>r.join(','))].join('\r\n');
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = `surabhi-orders-${new Date().toISOString().slice(0,10)}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 }
 
 // ─── RENDER ORDERS ─────────────────────────────────────────

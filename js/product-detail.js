@@ -1421,6 +1421,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   initFloatBar();
   initFomo();
+
+  // Back to top
+  const btt = document.getElementById('back-to-top');
+  if(btt) window.addEventListener('scroll', ()=>{ btt.classList.toggle('visible', window.scrollY>350); }, {passive:true});
 });
 
 // ─────────────────────────────

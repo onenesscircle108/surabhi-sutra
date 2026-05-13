@@ -1462,3 +1462,34 @@ nav{
 .wa-float:hover{transform:scale(1.1);}
 .wa-float svg{width:28px;height:28px;fill:#fff;}
 @media(min-width:768px){.wa-float{bottom:32px;}}
+
+/* ── WISHLIST DRAWER ── */
+.wishlist-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1100;opacity:0;pointer-events:none;transition:opacity .3s;}
+.wishlist-overlay.open{opacity:1;pointer-events:auto;}
+.wishlist-drawer{position:fixed;top:0;right:0;width:380px;max-width:100vw;height:100%;background:#fff;z-index:1101;transform:translateX(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;box-shadow:-4px 0 24px rgba(0,0,0,.12);}
+.wishlist-drawer.open{transform:translateX(0);}
+.wishlist-drawer-head{padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.wishlist-drawer-head span{font-size:15px;font-weight:700;color:var(--text-dark);letter-spacing:.5px;}
+.wishlist-close{background:none;border:none;font-size:20px;cursor:pointer;color:#888;line-height:1;padding:4px;}
+.wishlist-body{flex:1;overflow-y:auto;padding:1.25rem 1.5rem;}
+.wishlist-empty{text-align:center;padding:3rem 1rem;color:var(--text-light);font-size:14px;line-height:1.7;}
+.wishlist-empty button{margin-top:1rem;}
+.wishlist-item{display:grid;grid-template-columns:72px 1fr auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--border);}
+.wishlist-item:last-child{border-bottom:none;}
+.wishlist-thumb{width:72px;height:72px;border-radius:6px;object-fit:cover;background:var(--beige);cursor:pointer;}
+.wishlist-info{min-width:0;}
+.wishlist-name{font-size:13px;font-weight:600;color:var(--text-dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;}
+.wishlist-name:hover{color:var(--terracotta);}
+.wishlist-price{font-size:13px;color:var(--text-mid);margin-top:3px;}
+.wishlist-atc{font-size:11px;padding:6px 12px;margin-top:6px;}
+.wishlist-remove{background:none;border:none;color:#ccc;cursor:pointer;font-size:18px;line-height:1;padding:4px;transition:color .2s;}
+.wishlist-remove:hover{color:#e74c3c;}
+/* Nav heart badge */
+.nav-wishlist-wrap{position:relative;display:inline-flex;}
+.wishlist-badge{position:absolute;top:-5px;right:-6px;background:var(--terracotta);color:#fff;font-size:9px;font-weight:700;min-width:16px;height:16px;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:0 3px;line-height:1;}
+
+/* ── BACK TO TOP ── */
+.back-to-top{position:fixed;bottom:160px;right:20px;z-index:850;width:40px;height:40px;border-radius:50%;background:var(--brown);color:#fff;border:none;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 12px rgba(0,0,0,.2);opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;}
+.back-to-top.visible{opacity:1;pointer-events:auto;}
+.back-to-top:hover{transform:scale(1.1);}
+@media(min-width:768px){.back-to-top{bottom:90px;}}

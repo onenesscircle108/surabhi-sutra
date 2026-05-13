@@ -246,11 +246,94 @@ function toggleWishlist(id, e){
   if(idx === -1) wishlist.push(sid);
   else wishlist.splice(idx, 1);
   localStorage.setItem('surabhi_wishlist', JSON.stringify(wishlist));
-  // refresh the heart on all visible cards for this product
   document.querySelectorAll(`.card-wishlist[data-id="${CSS.escape(sid)}"]`).forEach(btn=>{
     btn.classList.toggle('wishlisted', isWishlisted(sid));
     btn.title = isWishlisted(sid) ? 'Remove from wishlist' : 'Add to wishlist';
   });
+  updateWishlistBadge();
+}
+
+function updateWishlistBadge(){
+  const badge = document.getElementById('wishlist-badge');
+  if(!badge) return;
+  if(wishlist.length > 0){
+    badge.textContent = wishlist.length;
+    badge.style.display = 'flex';
+  } else {
+    badge.style.display = 'none';
+  }
+}
+
+function openWishlistDrawer(){
+  renderWishlistDrawer();
+  document.getElementById('wishlist-overlay')?.classList.add('open');
+  document.getElementById('wishlist-drawer')?.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeWishlistDrawer(){
+  document.getElementById('wishlist-overlay')?.classList.remove('open');
+  document.getElementById('wishlist-drawer')?.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function renderWishlistDrawer(){
+  const body  = document.getElementById('wishlist-body');
+  const count = document.getElementById('wishlist-count');
+  if(!body) return;
+  if(count) count.textContent = wishlist.length;
+
+  if(!wishlist.length){
+    body.innerHTML = `
+      <div class="wishlist-empty">
+        <p>Your wishlist is empty.<br>Tap the ♥ on any product to save it here.</p>
+        <button class="btn-primary" onclick="closeWishlistDrawer();showPage('shop')">Browse Products</button>
+      </div>`;
+    return;
+  }
+
+  const items = wishlist.map(sid=>{
+    const p = products.find(x=>String(x.id)===sid);
+    if(!p) return '';
+    const img = p.images?.[0] || '';
+    const oos = p.stock === 0;
+    return `
+      <div class="wishlist-item">
+        ${img ? `<img class="wishlist-thumb" src="${img}" alt="${escapeAttr(p.name)}" loading="lazy" onclick="closeWishlistDrawer();openProduct('${escapeAttr(p.id)}')">` :
+                `<div class="wishlist-thumb" style="background:var(--beige);"></div>`}
+        <div class="wishlist-info">
+          <div class="wishlist-name" onclick="closeWishlistDrawer();openProduct('${escapeAttr(p.id)}')">${escapeAttr(p.name)}</div>
+          <div class="wishlist-price">${oos ? '<span style="color:#999;">Out of stock</span>' : `₹${p.price}`}</div>
+          ${oos ? '' : `<button class="btn-primary wishlist-atc" onclick="addToCartWishlist('${escapeAttr(p.id)}')">Add to Cart</button>`}
+        </div>
+        <button class="wishlist-remove" onclick="removeFromWishlist('${escapeAttr(p.id)}')" title="Remove">&#x2715;</button>
+      </div>`;
+  }).join('');
+
+  body.innerHTML = items || `<div class="wishlist-empty"><p>Some saved items are no longer available.</p></div>`;
+}
+
+function removeFromWishlist(id){
+  const sid = String(id);
+  wishlist = wishlist.filter(x=>x!==sid);
+  localStorage.setItem('surabhi_wishlist', JSON.stringify(wishlist));
+  document.querySelectorAll(`.card-wishlist[data-id="${CSS.escape(sid)}"]`).forEach(btn=>{
+    btn.classList.remove('wishlisted');
+    btn.title = 'Add to wishlist';
+  });
+  updateWishlistBadge();
+  renderWishlistDrawer();
+}
+
+function addToCartWishlist(id){
+  const p = products.find(x=>String(x.id)===id);
+  if(!p) return;
+  const idx = cart.findIndex(i=>i.id===p.id);
+  if(idx>-1) cart[idx].qty++;
+  else cart.push({id:p.id, name:p.name, price:p.price, qty:1});
+  localStorage.setItem('surabhi_cart', JSON.stringify(cart));
+  updateCartUI();
+  showToast(`${p.name} added to cart`);
 }
 
 function productCard(p){
@@ -938,6 +1021,15 @@ document.addEventListener('DOMContentLoaded',()=>{
   fetchProducts();
   fetchReviews();
   updateCartUI();
+  updateWishlistBadge();
   initMarquee();
   renderRitualSection();
+
+  // Back to top
+  const btt = document.getElementById('back-to-top');
+  if(btt){
+    window.addEventListener('scroll', ()=>{
+      btt.classList.toggle('visible', window.scrollY > 350);
+    }, {passive:true});
+  }
 });

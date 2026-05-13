@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Page Not Found — Surabhi Sutra</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#3D2B1F">
+  <style>
+    .notfound-wrap{
+      min-height:80vh;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      padding:3rem 1.5rem;
+      background:var(--cream);
+    }
+    .notfound-code{
+      font-family:'Cormorant Garamond',Georgia,serif;
+      font-size:clamp(80px,20vw,160px);
+      font-weight:600;
+      color:var(--terracotta);
+      line-height:1;
+      margin-bottom:.5rem;
+      opacity:.25;
+    }
+    .notfound-icon{font-size:48px;margin-bottom:1rem;}
+    .notfound-title{
+      font-family:'Cormorant Garamond',Georgia,serif;
+      font-size:clamp(22px,5vw,36px);
+      font-weight:600;
+      color:var(--text-dark);
+      margin-bottom:1rem;
+    }
+    .notfound-body{
+      font-family:Inter,sans-serif;
+      font-size:15px;
+      color:var(--text-mid);
+      max-width:420px;
+      line-height:1.7;
+      margin-bottom:2rem;
+    }
+    .notfound-actions{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;}
+  </style>
+</head>
+<body>
+
+<div class="announce-bar"><span>Sale: Buy 1 Get 1 Free + 20% Off · Free shipping above ₹339 · Cash on Delivery available</span></div>
+
+<nav>
+  <div class="nav-logo" onclick="window.location.href='index.html'">SURABHI SUTRA</div>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="index.html?goto=shop">Shop</a></li>
+    <li><a href="about.html">About</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="index.html?goto=shop" class="nav-cart">Shop</a>
+  </div>
+</nav>
+
+<div class="notfound-wrap">
+  <div class="notfound-code">404</div>
+  <div class="notfound-icon">🌿</div>
+  <h1 class="notfound-title">This Page Has Wandered Off</h1>
+  <p class="notfound-body">
+    The page you're looking for may have been moved, renamed, or it never existed.
+    Let's guide you back to your ritual.
+  </p>
+  <div class="notfound-actions">
+    <button class="btn-primary" onclick="window.location.href='index.html'">Go to Homepage</button>
+    <button onclick="window.location.href='index.html?goto=shop'" style="padding:12px 28px;background:transparent;color:var(--text-dark);border:1.5px solid var(--border);border-radius:2px;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;font-family:Inter,sans-serif;">Browse Products</button>
+  </div>
+</div>
+
+<footer class="site-footer" style="border-top:1px solid var(--border);">
+  <div class="site-footer-bottom" style="text-align:center;padding:1.5rem;font-size:12px;color:var(--text-light);">
+    &copy; 2025 Surabhi Sutra. All rights reserved.
+  </div>
+</footer>
+
+</body>
+</html>

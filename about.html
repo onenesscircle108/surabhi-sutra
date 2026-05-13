@@ -561,6 +561,12 @@ function liveSearch(q) {
 render();
 renderFooter();
 initAnnounceBar();
+
+const _btt = document.getElementById('back-to-top');
+if(_btt) window.addEventListener('scroll', ()=>{ _btt.classList.toggle('visible', window.scrollY>350); }, {passive:true});
 </script>
+
+<!-- Back to Top -->
+<button class="back-to-top" id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">&#8593;</button>
 </body>
 </html>
