@@ -8,7 +8,7 @@ const ADMIN_SHEET     = 'Admin_id';
 const PRODUCT_COLUMNS = 12;
 const REVIEW_COLUMNS  = 5;
 const ADMIN_COLUMNS   = 4;
-const SCRIPT_VERSION  = '2026-05-12-v2';
+const SCRIPT_VERSION  = '2026-05-13-v3';
 
 function doGet(e) {
   try {
