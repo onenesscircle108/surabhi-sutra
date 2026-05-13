@@ -1027,6 +1027,13 @@ async function apiFetch(url, options){
   }
 }
 
+// Auth calls must ONLY hit primary — OTP state is per-script, backup must not generate a second email
+async function authFetch(options){
+  const res = await fetch(WEBHOOK, options);
+  if(!res.ok) throw new Error(`HTTP ${res.status}`);
+  return res.json();
+}
+
 // ─── BUNDLE FLAG ───────────────────────────────────────────
 function normalizeBundleFlag(raw) {
   const s = String(raw ?? 'yes').trim().toLowerCase();
@@ -1181,7 +1188,7 @@ async function doLogin() {
   btn.textContent = 'Sending OTP…';
 
   try {
-    const data = await apiFetch(WEBHOOK, {
+    const data = await authFetch({
       method: 'POST',
       body: JSON.stringify({ action: 'verifyAdmin', email, password })
     });
@@ -1223,7 +1230,7 @@ async function doVerifyOTP() {
   btn.textContent = 'Verifying…';
 
   try {
-    const data = await apiFetch(WEBHOOK, {
+    const data = await authFetch({
       method: 'POST',
       body: JSON.stringify({ action: 'verifyAdminOTP', email: _adminEmail, otp })
     });
@@ -2789,7 +2796,7 @@ async function doAddAdmin() {
   if (pwd.length < 6) { al.innerHTML = '<div class="alert alert-error">Password must be at least 6 characters.</div>'; return; }
 
   try {
-    const data = await apiFetch(WEBHOOK, { method:'POST', body: JSON.stringify({ action:'saveAdmin', name, email, password:pwd }) });
+    const data = await authFetch({ method:'POST', body: JSON.stringify({ action:'saveAdmin', name, email, password:pwd }) });
     if (data.success) {
       al.innerHTML = '<div class="alert alert-success">Admin added successfully.</div>';
       document.getElementById('new-admin-name').value  = '';
@@ -2807,7 +2814,7 @@ async function doDeleteAdmin(id, email) {
   if (!confirm(`Remove admin access for ${email}?`)) return;
   const al = document.getElementById('admins-alert');
   try {
-    const data = await apiFetch(WEBHOOK, { method:'POST', body: JSON.stringify({ action:'deleteAdmin', id }) });
+    const data = await authFetch({ method:'POST', body: JSON.stringify({ action:'deleteAdmin', id }) });
     if (data.success) {
       al.innerHTML = '<div class="alert alert-success">Admin removed.</div>';
       await loadAdmins();
@@ -2830,7 +2837,7 @@ async function doChangePassword() {
   if (newPwd.length < 6)             { al.innerHTML = '<div class="alert alert-error">New password must be at least 6 characters.</div>'; return; }
 
   try {
-    const data = await apiFetch(WEBHOOK, { method:'POST', body: JSON.stringify({ action:'updateAdminPassword', email, old_password:oldPwd, new_password:newPwd }) });
+    const data = await authFetch({ method:'POST', body: JSON.stringify({ action:'updateAdminPassword', email, old_password:oldPwd, new_password:newPwd }) });
     if (data.success) {
       al.innerHTML = '<div class="alert alert-success">Password updated! You will be logged out now.</div>';
       document.getElementById('acc-old-pwd').value   = '';
