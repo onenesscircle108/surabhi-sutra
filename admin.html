@@ -1091,6 +1091,30 @@ async function authFetch(options){
   return res.json();
 }
 
+// ─── SETTINGS SYNC ─────────────────────────────────────────
+// Save a settings key to localStorage AND the server so all devices see changes
+async function apiSaveSettings(key, valueObj) {
+  const jsonStr = JSON.stringify(valueObj);
+  localStorage.setItem(key, jsonStr);
+  try {
+    await apiFetch(WEBHOOK, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'saveSettings', settings: { [key]: jsonStr } })
+    });
+  } catch(e) { console.warn('Settings sync failed for', key, e); }
+}
+
+// Load all settings from server into localStorage on admin startup
+async function loadAllSettings() {
+  try {
+    const data = await apiFetch(WEBHOOK + '?action=getSettings');
+    if (data && data.success && data.settings) {
+      Object.entries(data.settings).forEach(([k, v]) => { if (v != null) localStorage.setItem(k, v); });
+    }
+  } catch(e) { console.warn('loadAllSettings failed', e); }
+}
+
 // ─── BUNDLE FLAG ───────────────────────────────────────────
 function normalizeBundleFlag(raw) {
   const s = String(raw ?? 'yes').trim().toLowerCase();
@@ -1233,7 +1257,7 @@ async function loadVendors() {
 }
 
 async function initializeAdminData() {
-  await Promise.all([loadProducts(), loadOrders(), loadVendors()]);
+  await Promise.all([loadAllSettings(), loadProducts(), loadOrders(), loadVendors()]);
   renderDashboard(); renderProducts(); renderOrders();
 }
 
@@ -1651,8 +1675,8 @@ function collectSiteContent() {
     whatsappPhone:   document.getElementById('content-whatsapp-phone').value.trim().replace(/\D/g,'')
   });
 }
-function saveSiteContent()  { localStorage.setItem('surabhi_site_content', JSON.stringify(collectSiteContent())); showAlert('content-alert','Website text updated.','success'); }
-function resetSiteContent() { localStorage.setItem('surabhi_site_content', JSON.stringify(DEFAULT_SITE_CONTENT)); renderContentEditor(); showAlert('content-alert','Reset to defaults.','success'); }
+async function saveSiteContent()  { await apiSaveSettings('surabhi_site_content', collectSiteContent()); showAlert('content-alert','Website text updated.','success'); }
+async function resetSiteContent() { await apiSaveSettings('surabhi_site_content', DEFAULT_SITE_CONTENT); renderContentEditor(); showAlert('content-alert','Reset to defaults.','success'); }
 
 // ─── WELCOME SCREEN ────────────────────────────────────────
 function getWelcomeScreen() { try { return {...DEFAULT_WELCOME,...JSON.parse(localStorage.getItem('surabhi_welcome')||'{}')}; } catch { return DEFAULT_WELCOME; } }
@@ -1667,8 +1691,8 @@ function collectWelcomeScreen() {
     tagline: document.getElementById('welcome-tagline-input').value.trim() || DEFAULT_WELCOME.tagline
   };
 }
-function saveWelcomeScreen() { localStorage.setItem('surabhi_welcome', JSON.stringify(collectWelcomeScreen())); showAlert('welcome-alert','Welcome screen updated.','success'); }
-function resetWelcomeScreen() { localStorage.setItem('surabhi_welcome', JSON.stringify(DEFAULT_WELCOME)); renderWelcomeEditor(); showAlert('welcome-alert','Reset to defaults.','success'); }
+async function saveWelcomeScreen() { await apiSaveSettings('surabhi_welcome', collectWelcomeScreen()); showAlert('welcome-alert','Welcome screen updated.','success'); }
+async function resetWelcomeScreen() { await apiSaveSettings('surabhi_welcome', DEFAULT_WELCOME); renderWelcomeEditor(); showAlert('welcome-alert','Reset to defaults.','success'); }
 
 // ─── BUNDLE SETTINGS ───────────────────────────────────────
 function getBundleSettings() { try { return mergeBundleSettings(JSON.parse(localStorage.getItem('surabhi_bundle_settings')||'{}')); } catch { return mergeBundleSettings({}); } }
@@ -1711,8 +1735,8 @@ function collectBundleSettings() {
     }))
   });
 }
-function saveBundleSettings()  { localStorage.setItem('surabhi_bundle_settings', JSON.stringify(collectBundleSettings())); showAlert('bundle-alert','Bundle settings updated.','success'); }
-function resetBundleSettings() { localStorage.setItem('surabhi_bundle_settings', JSON.stringify(DEFAULT_BUNDLE_SETTINGS)); renderBundleEditor(); showAlert('bundle-alert','Reset to defaults.','success'); }
+async function saveBundleSettings()  { await apiSaveSettings('surabhi_bundle_settings', collectBundleSettings()); showAlert('bundle-alert','Bundle settings updated.','success'); }
+async function resetBundleSettings() { await apiSaveSettings('surabhi_bundle_settings', DEFAULT_BUNDLE_SETTINGS); renderBundleEditor(); showAlert('bundle-alert','Reset to defaults.','success'); }
 
 // ─── IMAGE SLOTS ───────────────────────────────────────────
 function initImageSlots() {
@@ -2231,13 +2255,13 @@ function collectRitualSlots(){
   }));
 }
 
-function saveRitualSettings(){
-  localStorage.setItem('surabhi_ritual', JSON.stringify({slots:collectRitualSlots()}));
+async function saveRitualSettings(){
+  await apiSaveSettings('surabhi_ritual', {slots:collectRitualSlots()});
   showAlert('instagram-alert','Ritual grid saved.','success');
 }
 
-function resetRitualSettings(){
-  localStorage.setItem('surabhi_ritual', JSON.stringify({slots:RITUAL_SLOT_DEFAULTS}));
+async function resetRitualSettings(){
+  await apiSaveSettings('surabhi_ritual', {slots:RITUAL_SLOT_DEFAULTS});
   renderInstagramEditor();
   showAlert('instagram-alert','Reset to emoji defaults.','success');
 }
@@ -2638,7 +2662,7 @@ function renderProductPageEditor() {
   renderHowToEditor();
 }
 
-function saveProductPageSettings() {
+async function saveProductPageSettings() {
   const settings = {
     promo_messages: (document.getElementById('pp-promo-messages')?.value || '').trim(),
     subtitle:       (document.getElementById('pp-subtitle')?.value || '').trim() || DEFAULT_SUBTITLE,
@@ -2649,7 +2673,7 @@ function saveProductPageSettings() {
     ing_tab:        readIngTab(),
     howto_tab:      readHowTo()
   };
-  localStorage.setItem('surabhi_product_page_settings', JSON.stringify(settings));
+  await apiSaveSettings('surabhi_product_page_settings', settings);
   const al = document.getElementById('pp-alert');
   if (al) { al.innerHTML = '<div class="alert alert-success">Product page settings saved!</div>'; setTimeout(() => al.innerHTML = '', 2500); }
 }
@@ -2680,13 +2704,13 @@ function renderFomoEditor() {
   document.getElementById('fomo-names-raw').value  = s.names_raw;
 }
 
-function saveFomoSettings() {
+async function saveFomoSettings() {
   const settings = {
     interval:  parseInt(document.getElementById('fomo-interval').value)  || DEFAULT_FOMO.interval,
     duration:  parseInt(document.getElementById('fomo-duration').value)  || DEFAULT_FOMO.duration,
     names_raw: (document.getElementById('fomo-names-raw').value || '').trim()
   };
-  localStorage.setItem('surabhi_fomo_settings', JSON.stringify(settings));
+  await apiSaveSettings('surabhi_fomo_settings', settings);
   showAlert('fomo-alert', 'FOMO settings saved!', 'success');
 }
 
@@ -2810,14 +2834,14 @@ function readFaqs() {
   })).filter(f => f.q);
 }
 
-function saveAboutSettings() {
+async function saveAboutSettings() {
   const settings = {
     ...collectAboutSettings(),
     faq_title: document.getElementById('ab-faq-title')?.value.trim() || 'Frequently Asked Questions',
     faq_sub:   document.getElementById('ab-faq-sub')?.value.trim()   || '',
     faqs:      readFaqs()
   };
-  localStorage.setItem('surabhi_about_settings', JSON.stringify(settings));
+  await apiSaveSettings('surabhi_about_settings', settings);
   const al = document.getElementById('about-alert');
   if (al) { al.innerHTML = '<div class="alert alert-success">About page saved!</div>'; setTimeout(() => al.innerHTML = '', 2500); }
 }
@@ -2929,7 +2953,7 @@ function readRpSection(row) {
   return sec;
 }
 
-function saveReturnsSettings() {
+async function saveReturnsSettings() {
   const settings = {
     eyebrow:       document.getElementById('rp-eyebrow')?.value.trim()       || '',
     heading:       document.getElementById('rp-heading')?.value.trim()       || '',
@@ -2939,7 +2963,7 @@ function saveReturnsSettings() {
     contact_text:  document.getElementById('rp-contact-text')?.value.trim()  || '',
     sections: Array.from(document.querySelectorAll('#rp-sections-list .pp-usage-item-edit')).map(readRpSection)
   };
-  localStorage.setItem('surabhi_returns_settings', JSON.stringify(settings));
+  await apiSaveSettings('surabhi_returns_settings', settings);
   const al = document.getElementById('returns-alert');
   if (al) { al.innerHTML = '<div class="alert alert-success">Return policy saved!</div>'; setTimeout(() => al.innerHTML = '', 2500); }
 }
@@ -2986,14 +3010,14 @@ function addAnnounceMsg() {
   document.getElementById('ab-msg-list')?.insertAdjacentHTML('beforeend', announceMsgHTML(''));
 }
 
-function saveAnnounceSettings() {
+async function saveAnnounceSettings() {
   const messages = Array.from(document.querySelectorAll('#ab-msg-list .pp-usage-item-edit input'))
     .map(i => i.value.trim()).filter(Boolean);
   const settings = {
     messages: messages.length ? messages : DEFAULT_ANNOUNCE_ADMIN.messages,
     interval: parseInt(document.getElementById('ab-interval')?.value) || DEFAULT_ANNOUNCE_ADMIN.interval
   };
-  localStorage.setItem('surabhi_announce_settings', JSON.stringify(settings));
+  await apiSaveSettings('surabhi_announce_settings', settings);
   const al = document.getElementById('announce-alert');
   if (al) { al.innerHTML = '<div class="alert alert-success">Announce bar saved!</div>'; setTimeout(() => al.innerHTML = '', 2500); }
 }
@@ -3084,7 +3108,7 @@ function readFooterRows(containerId, fields) {
   });
 }
 
-function saveFooterSettings() {
+async function saveFooterSettings() {
   const settings = {
     brand_desc:     document.getElementById('ft-brand-desc')?.value.trim()     || '',
     socials:        readFooterRows('ft-socials-list', ['name','url','label']).filter(s => s.name || s.url),
@@ -3093,7 +3117,7 @@ function saveFooterSettings() {
     office_address: document.getElementById('ft-office-address')?.value.trim() || '',
     copyright:      document.getElementById('ft-copyright')?.value.trim()      || ''
   };
-  localStorage.setItem('surabhi_footer_settings', JSON.stringify(settings));
+  await apiSaveSettings('surabhi_footer_settings', settings);
   const al = document.getElementById('footer-alert');
   if (al) { al.innerHTML = '<div class="alert alert-success">Footer saved!</div>'; setTimeout(() => al.innerHTML = '', 2500); }
 }

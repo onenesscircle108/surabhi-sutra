@@ -4,6 +4,18 @@
 const API_URL    = 'https://script.google.com/macros/s/AKfycbxhSxNjWxs_icFHQX8z_45AWQB3RMLKmni6iV5iU2M_DYHGIrzr9z3ahPV-MpvpQuqj/exec';
 const API_BACKUP = 'https://script.google.com/macros/s/AKfycbwYI1umfvIInW8UYUjWyTJXjt7abykH78h6GOcohsyAIUAoM_Lb4FfvVcIWkr35WVVk0g/exec';
 
+// Fetch all site settings from the server and store them in localStorage
+// so every page on every device always reflects what was saved in the admin
+async function loadSettings() {
+  try {
+    const res  = await fetch(API_URL + '?action=getSettings');
+    const data = await res.json();
+    if (data && data.success && data.settings) {
+      Object.entries(data.settings).forEach(([k, v]) => { if (v != null) localStorage.setItem(k, v); });
+    }
+  } catch(e) { /* silently fall back to localStorage */ }
+}
+
 async function apiFetch(url, options){
   const backupUrl = API_BACKUP ? url.replace(API_URL, API_BACKUP) : null;
   const isWrite   = options && options.method === 'POST';
@@ -1001,7 +1013,9 @@ function renderRitualSection(){
   }catch(e){}
 }
 
-document.addEventListener('DOMContentLoaded',()=>{
+document.addEventListener('DOMContentLoaded', async ()=>{
+  // Load server settings first so all pages show admin-configured content
+  await loadSettings();
   applySiteContent();
   loadWelcomeContent();
 

@@ -558,9 +558,18 @@ function liveSearch(q) {
     : '<p class="search-empty">No products found.</p>';
 }
 
-render();
-renderFooter();
-initAnnounceBar();
+// Load settings from server so admin changes show on all devices, then render
+(async function initAbout() {
+  try {
+    const data = await fetch(API_URL_ABOUT + '?action=getSettings').then(r => r.json());
+    if (data && data.success && data.settings) {
+      Object.entries(data.settings).forEach(([k, v]) => { if (v != null) localStorage.setItem(k, v); });
+    }
+  } catch(e) {}
+  render();
+  renderFooter();
+  initAnnounceBar();
+})();
 
 const _btt = document.getElementById('back-to-top');
 if(_btt) window.addEventListener('scroll', ()=>{ _btt.classList.toggle('visible', window.scrollY>350); }, {passive:true});

@@ -8,7 +8,7 @@ const ADMIN_SHEET     = 'Admin_id';
 const PRODUCT_COLUMNS = 12;
 const REVIEW_COLUMNS  = 5;
 const ADMIN_COLUMNS   = 4;
-const SCRIPT_VERSION  = '2026-05-13-v3';
+const SCRIPT_VERSION  = '2026-05-15-v4';
 
 function doGet(e) {
   try {
@@ -21,6 +21,7 @@ function doGet(e) {
     if (action === 'validatePromo') return validatePromo(e);
     if (action === 'getPromos')     return getPromos();
     if (action === 'getVendors')    return getVendors();
+    if (action === 'getSettings')   return getSettings();
 
     return jsonResponse({
       success: false,
@@ -53,6 +54,7 @@ function doPost(e) {
     if (data.action === 'deletePromo')          return deletePromo(data);
     if (data.action === 'togglePromo')          return togglePromo(data);
     if (data.action === 'saveVendor')           return saveVendor(data);
+    if (data.action === 'saveSettings')         return saveSettings(data);
 
     return jsonResponse({
       success: false,
@@ -1079,5 +1081,35 @@ function syncToBackup() {
   } finally {
     try { lock.releaseLock(); } catch (_) {}
   }
+}
+
+// ── SITE SETTINGS ─────────────────────────────────────────────────────────
+const SETTINGS_PROP = 'SURABHI_SETTINGS';
+
+function getSettings() {
+  try {
+    const raw = PropertiesService.getScriptProperties().getProperty(SETTINGS_PROP) || '{}';
+    return jsonResponse({ success: true, settings: JSON.parse(raw) });
+  } catch(e) {
+    return jsonResponse({ success: true, settings: {} });
+  }
+}
+
+function saveSettings(data) {
+  const lock = LockService.getScriptLock();
+  lock.waitLock(10000);
+  try {
+    const props = PropertiesService.getScriptProperties();
+    let current = {};
+    try { current = JSON.parse(props.getProperty(SETTINGS_PROP) || '{}'); } catch(e) {}
+    const incoming = data.settings || {};
+    Object.keys(incoming).forEach(function(k) {
+      if (incoming[k] !== undefined && incoming[k] !== null) current[k] = incoming[k];
+    });
+    props.setProperty(SETTINGS_PROP, JSON.stringify(current));
+    return jsonResponse({ success: true });
+  } catch(e) {
+    return jsonResponse({ success: false, message: 'saveSettings error: ' + e.message });
+  } finally { try { lock.releaseLock(); } catch(_) {} }
 }
 ```
