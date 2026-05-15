@@ -999,8 +999,13 @@ function renderRitualSection(){
       if(slot.videoUrl && slot.videoUrl.trim()){
         const ytId = getYouTubeId(slot.videoUrl);
         if(ytId){
-          media = `<iframe src="https://www.youtube.com/embed/${ytId}?autoplay=1&mute=1&loop=1&playlist=${ytId}&controls=0&modestbranding=1&playsinline=1"
-            frameborder="0" allow="autoplay; encrypted-media" allowfullscreen loading="lazy"></iframe>`;
+          // Thumbnail + tap-to-open: works reliably on all mobile browsers
+          const thumb = `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`;
+          const ytUrl = slot.videoUrl.includes('shorts') ? `https://www.youtube.com/shorts/${ytId}` : `https://www.youtube.com/watch?v=${ytId}`;
+          media = `<a href="${ytUrl}" target="_blank" rel="noopener noreferrer" class="ritual-yt-link">
+            <img src="${thumb}" alt="${slot.caption||'Video'}" loading="lazy" onerror="this.style.display='none'">
+            <div class="ritual-play-btn"><svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><circle cx="30" cy="30" r="30" fill="rgba(0,0,0,0.55)"/><polygon points="24,18 46,30 24,42" fill="#fff"/></svg></div>
+          </a>`;
         } else {
           media = `<video autoplay muted loop playsinline><source src="${slot.videoUrl}"></video>`;
         }

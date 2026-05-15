@@ -1475,6 +1475,11 @@ nav{
 .ritual-slot-emoji{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:3rem;}
 .ritual-slot video,.ritual-slot iframe{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border:none;}
 .ritual-slot-caption{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.55));color:#fff;font-size:11px;padding:20px 10px 8px;line-height:1.3;}
+.ritual-yt-link{display:block;position:absolute;inset:0;}
+.ritual-yt-link img{width:100%;height:100%;object-fit:cover;display:block;}
+.ritual-play-btn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:52px;height:52px;transition:transform .2s;}
+.ritual-play-btn svg{width:52px;height:52px;}
+.ritual-slot:hover .ritual-play-btn{transform:translate(-50%,-50%) scale(1.12);}
 @media(max-width:900px){.ritual-grid{grid-template-columns:repeat(3,1fr);}}
 @media(max-width:540px){.ritual-grid{grid-template-columns:repeat(2,1fr);gap:8px;}}
 
