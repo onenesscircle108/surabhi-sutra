@@ -551,7 +551,15 @@
     }
   }catch(e){}
   if('serviceWorker' in navigator){
-    navigator.serviceWorker.register('sw.js');
+    navigator.serviceWorker.register('sw.js').then(reg => {
+      // If a new SW takes over an existing one, reload to get fresh files
+      if(navigator.serviceWorker.controller){
+        let reloading = false;
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+          if(!reloading){ reloading = true; window.location.reload(); }
+        });
+      }
+    });
   }
 })();
 </script>
