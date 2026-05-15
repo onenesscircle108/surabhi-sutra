@@ -1,4 +1,4 @@
-const CACHE = 'surabhi-v3';
+const CACHE = 'surabhi-v4';
 const PRECACHE = [
   '/',
   '/index.html',
@@ -21,9 +21,16 @@ self.addEventListener('install', e => {
 
 self.addEventListener('activate', e => {
   e.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
-    ).then(() => self.clients.claim())
+    caches.keys()
+      .then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k))))
+      .then(() => self.clients.claim())
+      .then(() => self.clients.matchAll({ type: 'window' }))
+      .then(clients => {
+        // Force every open tab to reload so they get fresh files immediately
+        clients.forEach(client => {
+          try { client.navigate(client.url); } catch(_) {}
+        });
+      })
   );
 });
 
