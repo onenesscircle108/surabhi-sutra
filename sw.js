@@ -1,4 +1,4 @@
-const CACHE = 'surabhi-v2';
+const CACHE = 'surabhi-v3';
 const PRECACHE = [
   '/',
   '/index.html',
@@ -34,17 +34,14 @@ self.addEventListener('fetch', e => {
   if (url.hostname.includes('google') || url.hostname.includes('googleapis')) return;
   if (url.hostname.includes('fonts')) return;
 
+  // Network-first: always fetch fresh content, fall back to cache when offline
   e.respondWith(
-    caches.match(e.request).then(cached => {
-      const network = fetch(e.request).then(res => {
-        if (res && res.status === 200 && url.origin === self.location.origin) {
-          const clone = res.clone();
-          caches.open(CACHE).then(c => c.put(e.request, clone));
-        }
-        return res;
-      });
-      // Serve cache first, fall back to network
-      return cached || network;
-    })
+    fetch(e.request).then(res => {
+      if (res && res.status === 200 && url.origin === self.location.origin) {
+        const clone = res.clone();
+        caches.open(CACHE).then(c => c.put(e.request, clone));
+      }
+      return res;
+    }).catch(() => caches.match(e.request))
   );
 });
