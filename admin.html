@@ -1107,10 +1107,33 @@ async function apiSaveSettings(key, valueObj) {
 
 // Load all settings from server into localStorage on admin startup
 async function loadAllSettings() {
+  const SETTINGS_KEYS = [
+    'surabhi_site_content', 'surabhi_welcome', 'surabhi_bundle_settings',
+    'surabhi_ritual', 'surabhi_product_page_settings', 'surabhi_fomo_settings',
+    'surabhi_about_settings', 'surabhi_returns_settings', 'surabhi_announce_settings',
+    'surabhi_footer_settings'
+  ];
   try {
     const data = await apiFetch(WEBHOOK + '?action=getSettings');
     if (data && data.success && data.settings) {
-      Object.entries(data.settings).forEach(([k, v]) => { if (v != null) localStorage.setItem(k, v); });
+      const serverSettings = data.settings;
+      Object.entries(serverSettings).forEach(([k, v]) => { if (v != null) localStorage.setItem(k, v); });
+      // Bootstrap: push any localStorage settings that the server doesn't have yet
+      const missingOnServer = {};
+      SETTINGS_KEYS.forEach(k => {
+        if (!serverSettings[k]) {
+          const localVal = localStorage.getItem(k);
+          if (localVal) missingOnServer[k] = localVal;
+        }
+      });
+      if (Object.keys(missingOnServer).length > 0) {
+        console.log('Bootstrapping server with local settings:', Object.keys(missingOnServer));
+        await apiFetch(WEBHOOK, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'saveSettings', settings: missingOnServer })
+        });
+      }
     }
   } catch(e) { console.warn('loadAllSettings failed', e); }
 }
