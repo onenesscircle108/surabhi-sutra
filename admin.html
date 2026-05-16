@@ -293,6 +293,7 @@ body{font-family:Arial,sans-serif;background:var(--beige);min-height:100vh;}
     </ul>
     <div style="font-size:11px;color:rgba(255,255,255,.4);padding:0 4px;margin-bottom:0.5rem;" id="sidebar-admin-email"></div>
     <!-- Desktop: full buttons -->
+    <button class="logout-btn desktop-only" style="background:#C8922A;" onclick="syncAllToServer()" id="sync-btn">☁ Sync All to Server</button>
     <button class="logout-btn desktop-only" onclick="goToSite()">← Back to Website</button>
     <button class="logout-btn desktop-only" onclick="doLogout()">Logout</button>
     <!-- Mobile: compact icons appended to tab strip via CSS -->
@@ -1099,7 +1100,7 @@ async function apiSaveSettings(key, valueObj) {
   try {
     await apiFetch(WEBHOOK, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify({ action: 'saveSettings', settings: { [key]: jsonStr } })
     });
   } catch(e) { console.warn('Settings sync failed for', key, e); }
@@ -1130,12 +1131,45 @@ async function loadAllSettings() {
         console.log('Bootstrapping server with local settings:', Object.keys(missingOnServer));
         await apiFetch(WEBHOOK, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify({ action: 'saveSettings', settings: missingOnServer })
         });
       }
     }
   } catch(e) { console.warn('loadAllSettings failed', e); }
+}
+
+async function syncAllToServer() {
+  const btn = document.getElementById('sync-btn');
+  btn.textContent = '⏳ Syncing...';
+  btn.disabled = true;
+  try {
+    const allSettings = {};
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && k.startsWith('surabhi_') && !['surabhi_cart','surabhi_wishlist','surabhi_orders','surabhi_products'].includes(k)) {
+        allSettings[k] = localStorage.getItem(k);
+      }
+    }
+    if (Object.keys(allSettings).length === 0) {
+      btn.textContent = '☁ Nothing to Sync';
+      setTimeout(() => { btn.textContent = '☁ Sync All to Server'; btn.disabled = false; }, 2000);
+      return;
+    }
+    await apiFetch(WEBHOOK, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action: 'saveSettings', settings: allSettings })
+    });
+    btn.textContent = '✓ Synced!';
+    btn.style.background = '#2e7d32';
+    setTimeout(() => { btn.textContent = '☁ Sync All to Server'; btn.style.background = '#C8922A'; btn.disabled = false; }, 3000);
+  } catch(e) {
+    btn.textContent = '✗ Failed';
+    btn.style.background = '#c62828';
+    setTimeout(() => { btn.textContent = '☁ Sync All to Server'; btn.style.background = '#C8922A'; btn.disabled = false; }, 3000);
+    console.error('Sync failed:', e);
+  }
 }
 
 // ─── BUNDLE FLAG ───────────────────────────────────────────
