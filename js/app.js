@@ -1,7 +1,7 @@
 // ─────────────────────────────
 // CONFIG
 // ─────────────────────────────
-const API_URL    = 'https://script.google.com/macros/s/AKfycbwgcfNxdD-rUC2YFa8d4YoukfONMQGBd2_uXTxtEVNUrvbQ9eonXLwNZVhjuq1D4YW7/exec';
+const API_URL    = 'https://script.google.com/macros/s/AKfycbzgh7y89WugShU7-krKksV2XYZcJjVaJjc9yrhinPpxB71LbUDS7Zyn3neSiMQhC18L/exec';
 const API_BACKUP = 'https://script.google.com/macros/s/AKfycbxXwd33kgv46EhF9Q2gxWwykC5bxnose6MhziJCOxStHFAEV5SjpxsGED8n66MWZyy4uw/exec';
 
 // Fetch all site settings from the server and store them in localStorage
