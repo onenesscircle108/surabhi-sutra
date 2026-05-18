@@ -54,6 +54,7 @@ let currentProduct = null;
 let currentQty = 1;
 let currentSlide = 0;
 let galleryTimer = null;
+let selectedBundle = null;
 
 // ─────────────────────────────
 // BUNDLE SETTINGS
@@ -567,7 +568,19 @@ function changeQty(n){
 }
 
 function addToCartFromPage(){
-  addToCart(currentProduct.id,currentProduct.name,currentProduct.price,currentQty);
+  if(selectedBundle){
+    const total = Math.round(currentProduct.price * selectedBundle.qty * (1 - selectedBundle.discountRate));
+    cart.push({
+      id:'bundle-'+Date.now(),
+      name:`${currentProduct.name} (Bundle ×${selectedBundle.qty})`,
+      price:total,
+      qty:1
+    });
+    localStorage.setItem('surabhi_cart',JSON.stringify(cart));
+    updateCartUI();
+  } else {
+    addToCart(currentProduct.id,currentProduct.name,currentProduct.price,currentQty);
+  }
   const btn = document.getElementById('atc-btn');
   if(!btn) return;
   btn.textContent = 'Added ✓';
@@ -595,21 +608,9 @@ function addToCart(id,name,price,qty=1){
 }
 
 function addBundle(qty,discountRate,cardEl){
-  const total = Math.round(currentProduct.price * qty * (1-discountRate));
-
   document.querySelectorAll('.bundle-card').forEach(c=>c.classList.remove('selected'));
   if(cardEl) cardEl.classList.add('selected');
-
-  cart.push({
-    id:'bundle-'+Date.now(),
-    name:`${currentProduct.name} (Bundle ×${qty})`,
-    price:total,
-    qty:1
-  });
-
-  localStorage.setItem('surabhi_cart',JSON.stringify(cart));
-  updateCartUI();
-  showToast('Bundle added to cart!');
+  selectedBundle = {qty, discountRate};
 }
 
 function updateCartUI(){
