@@ -330,26 +330,61 @@ nav{
   transform:rotate(-20deg);
 }
 
+/* Clock-sweep colour animation on hero text */
+@property --clock-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+@keyframes clock-sweep {
+  from { --clock-angle: 0deg; }
+  to   { --clock-angle: 360deg; }
+}
+
 .hero-eyebrow{
   font-size:11px;
   font-weight:700;
   letter-spacing:3px;
   text-transform:uppercase;
-  color:var(--text-light);
   margin-bottom:0;
+  background: conic-gradient(
+    from var(--clock-angle) at 50% 50%,
+    var(--terracotta) 0%,
+    #C8922A 25%,
+    var(--sage) 50%,
+    #C8922A 75%,
+    var(--terracotta) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: clock-sweep 6s linear infinite;
 }
 
 .hero-title{
   font-family:'Cormorant Garamond',Georgia,serif;
   font-size:clamp(3rem,6vw,5.5rem);
   font-weight:600;
-  color:var(--text-dark);
   line-height:1.02;
   letter-spacing:-1px;
   margin-bottom:0;
+  background: conic-gradient(
+    from var(--clock-angle) at 50% 50%,
+    var(--text-dark)  0%,
+    var(--terracotta) 30%,
+    #C8922A           50%,
+    var(--terracotta) 70%,
+    var(--text-dark)  100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: clock-sweep 9s linear infinite;
 }
 
-.hero-title span{color:var(--terracotta);}
+/* Children of hero-title must not override the gradient fill */
+.hero-title span,
+.hero-title em { color: inherit; -webkit-text-fill-color: inherit; }
 
 .hero-sub{
   max-width:460px;
