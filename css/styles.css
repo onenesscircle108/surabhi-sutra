@@ -350,9 +350,9 @@ nav{
   background: conic-gradient(
     from var(--clock-angle) at 50% 50%,
     var(--terracotta) 0%,
-    #C8922A 25%,
-    var(--sage) 50%,
-    #C8922A 75%,
+    var(--amber)      25%,
+    var(--sage)       50%,
+    var(--amber)      75%,
     var(--terracotta) 100%
   );
   -webkit-background-clip: text;
@@ -370,11 +370,11 @@ nav{
   margin-bottom:0;
   background: conic-gradient(
     from var(--clock-angle) at 50% 50%,
-    var(--text-dark)  0%,
-    var(--terracotta) 30%,
-    #C8922A           50%,
-    var(--terracotta) 70%,
-    var(--text-dark)  100%
+    var(--brown)      0%,
+    var(--terracotta) 25%,
+    var(--amber)      50%,
+    var(--sand)       75%,
+    var(--brown)      100%
   );
   -webkit-background-clip: text;
   background-clip: text;
